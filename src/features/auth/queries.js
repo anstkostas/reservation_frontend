@@ -1,5 +1,10 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { login as apiLogin, me as apiMe, logout as apiLogout } from './api'
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  login as apiLogin,
+  me as apiMe,
+  logout as apiLogout,
+  signup as apiSignup,
+} from "./api";
 
 /**
  * Fetch the current user
@@ -9,10 +14,10 @@ import { login as apiLogin, me as apiMe, logout as apiLogout } from './api'
  * @return {object} current user
  */
 export function useCurrentUserQuery() {
-  return useQuery(['me'], apiMe, {
+  return useQuery(["me"], apiMe, {
     staleTime: 1000 * 60 * 5, // 5 minutes cache overriding default 1min queryClient setting
     retry: false,
-  })
+  });
 }
 
 /**
@@ -20,9 +25,13 @@ export function useCurrentUserQuery() {
  * const { mutate, mutateAsync, data, error, isLoading, isError, isSuccess, reset } = useMutation({ ... });
  */
 export function useLoginMutation() {
-  return useMutation(apiLogin)
+  return useMutation(apiLogin);
 }
 
 export function useLogoutMutation() {
-  return useMutation(apiLogout)
+  return useMutation(apiLogout);
+}
+
+export function useSignupMutation() {
+  return useMutation(apiSignup);
 }
