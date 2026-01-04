@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../hooks";
 
-export default function LoginForm() {
+export default function LoginForm({ onSwitchToSignup }) {
   const { login, isLoggingIn, loginError, currentUser } = useAuth();
 
   const {
@@ -93,6 +93,13 @@ export default function LoginForm() {
       >
         {isLoggingIn ? "Logging in..." : "Login"}
       </button>
+
+      <p className="text-sm text-center">
+        Don’t have an account?{" "}
+        <button type="button" onClick={onSwitchToSignup} className="underline">
+          Sign up
+        </button>
+      </p>
     </form>
   );
 }
