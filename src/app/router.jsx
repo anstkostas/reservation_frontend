@@ -1,21 +1,22 @@
 import { Routes, Route } from "react-router-dom";
+import Navbar from "@/layouts/Navbar";
+import SplashPage from "@/pages/SplashPage";
 import ProtectedRoute from "@/features/auth/components/ProtectedRoute";
-import HomePage from "@/features/home/HomePage";
-import LoginPage from "@/pages/LoginPage";
+import LoginPage from "@/features/auth/pages/LoginPage";
 
 export default function Router() {
   return (
-    <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route
-        path="/home"
-        element={
-          <ProtectedRoute>
-            <HomePage />
-          </ProtectedRoute>
-        }
-      />
-      {/* other routes */}
-    </Routes>
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<SplashPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/reservation"
+          element={<ProtectedRoute>{/* <Reservation /> */}</ProtectedRoute>}
+        />
+        {/* other routes */}
+      </Routes>
+    </>
   );
 }
