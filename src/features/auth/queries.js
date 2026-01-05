@@ -14,7 +14,9 @@ import {
  * @return {object} current user
  */
 export function useCurrentUserQuery() {
-  return useQuery(["me"], apiMe, {
+  return useQuery({
+    queryKey: ["me"],
+    queryFn: apiMe,
     staleTime: 1000 * 60 * 5, // 5 minutes cache overriding default 1min queryClient setting
     retry: false,
   });

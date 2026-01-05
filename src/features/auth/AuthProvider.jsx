@@ -1,4 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
+import { AuthContext } from "./AuthContext";
 import {
   useCurrentUserQuery,
   useLoginMutation,
@@ -6,34 +7,35 @@ import {
   useSignupMutation,
 } from "./queries";
 
-/**
- * .invalidateQueries(["me"]) forces a refetch of the current user data, currentUser becomes truthy.
- */
-export function useAuth() {
-  const queryClient = useQueryClient(); // get the QueryClient instance defined in providers.jsx(nearest QueryClientProvider in React tree)
+export function AuthProvider({ children }) {
+  const queryClient = useQueryClient();
+
   const {
     data: currentUser,
     isLoading: isLoadingUser,
     error: userError,
     refetch: refetchUser,
   } = useCurrentUserQuery();
+
   const loginMutation = useLoginMutation({
     onSuccess: () => {
-      queryClient.invalidateQueries(["me"]); // refresh current user after login
+      queryClient.invalidateQueries(["me"]);
     },
   });
-  const logoutMutation = useLogoutMutation({
-    onSuccess: () => {
-      queryClient.setQueryData(["me"], null); // clear current user after logout
-    },
-  });
+
   const signupMutation = useSignupMutation({
     onSuccess: () => {
       queryClient.invalidateQueries(["me"]);
     },
   });
 
-  return {
+  const logoutMutation = useLogoutMutation({
+    onSuccess: () => {
+      queryClient.setQueryData(["me"], null);
+    },
+  });
+
+  const value = {
     currentUser,
     isLoadingUser,
     userError,
@@ -46,18 +48,20 @@ export function useAuth() {
     resetLogin: loginMutation.reset,
     loginStatus: loginMutation.status,
 
-    logout: logoutMutation.mutate,
-    logoutAsync: logoutMutation.mutateAsync,
-    isLoggingOut: logoutMutation.isLoading,
-    logoutError: logoutMutation.error,
-    resetLogout: logoutMutation.reset,
-    logoutStatus: logoutMutation.status,
-
     signup: signupMutation.mutate,
     signupAsync: signupMutation.mutateAsync,
     isSigningUp: signupMutation.isLoading,
     signupError: signupMutation.error,
     resetSignup: signupMutation.reset,
     signupStatus: signupMutation.status,
+
+    logout: logoutMutation.mutate,
+    logoutAsync: logoutMutation.mutateAsync,
+    isLoggingOut: logoutMutation.isLoading,
+    logoutError: logoutMutation.error,
+    resetLogout: logoutMutation.reset,
+    logoutStatus: logoutMutation.status,
   };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
