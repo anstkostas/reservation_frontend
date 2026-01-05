@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useAuth } from "../hooks";
+import { useAuth } from "@/features/auth/useAuth"
 
 export default function LoginForm({ onSwitchToSignup }) {
   const { login, isLoggingIn, loginError, currentUser } = useAuth();

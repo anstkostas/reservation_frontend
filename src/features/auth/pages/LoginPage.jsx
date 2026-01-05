@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoginForm from "@/features/auth/components/LoginForm";
 import SignupForm from "@/features/auth/components/SignupForm";
-import { useAuth } from "@/features/auth/hooks";
+import { useAuth } from "@/features/auth/useAuth";
 
 export default function LoginPage() {
   const { currentUser, isLoadingUser } = useAuth();
@@ -10,11 +10,8 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   // From comes from ./src/features/auth/components/ProtectedRoute.jsx
-  const from = location.state?.from?.pathname || "/splash";
-
-  // auth mode: login | signup
+  const from = location.state?.from?.pathname || "/";
   const [mode, setMode] = useState("login");
-
   useEffect(() => {
     if (!isLoadingUser && currentUser) {
       // navigate to intended page after login

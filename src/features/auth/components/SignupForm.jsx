@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useAuth } from "../hooks";
+import { useAuth } from "@/features/auth/useAuth"
 import { useState, useEffect } from "react";
 import { useUnownedRestaurantsQuery } from "@/features/restaurants/queries";
 
