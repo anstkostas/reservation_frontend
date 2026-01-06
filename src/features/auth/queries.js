@@ -26,14 +26,23 @@ export function useCurrentUserQuery() {
  * useMutation is like useQuery, but for mutations (POST, PUT, DELETE requests)
  * const { mutate, mutateAsync, data, error, isLoading, isError, isSuccess, reset } = useMutation({ ... });
  */
-export function useLoginMutation() {
-  return useMutation(apiLogin);
+export function useLoginMutation(options) {
+  return useMutation({
+    mutationFn: apiLogin,
+    ...options,
+  });
 }
 
-export function useLogoutMutation() {
-  return useMutation(apiLogout);
+export function useLogoutMutation(options) {
+  return useMutation({
+    mutationFn: apiLogout,
+    ...options,
+  });
 }
 
-export function useSignupMutation() {
-  return useMutation(apiSignup);
+export function useSignupMutation(options) {
+  return useMutation({
+    mutationFn: apiSignup,
+    ...options,
+  });
 }

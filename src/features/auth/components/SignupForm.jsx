@@ -17,7 +17,7 @@ export default function SignupForm({ onSwitchToLogin }) {
   } = useForm();
 
   const {
-    data: restaurants = [],
+    data: response = {},
     isLoading: isLoadingRestaurants,
     error: restaurantsError,
   } = useUnownedRestaurantsQuery({ enabled: isOwner });
@@ -153,7 +153,7 @@ export default function SignupForm({ onSwitchToLogin }) {
           {!isLoadingRestaurants && !restaurantsError && (
             <select {...register("restaurantId")}>
               <option value="">Select a restaurant…</option>
-              {restaurants.map((restaurant) => (
+              {response.data.map((restaurant) => (
                 <option key={restaurant.id} value={restaurant.id}>
                   {restaurant.name}
                 </option>

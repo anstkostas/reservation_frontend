@@ -6,7 +6,9 @@ import { getUnownedRestaurants } from "./api";
  * Query is disabled by default and enabled explicitly by the caller
  */
 export function useUnownedRestaurantsQuery({ enabled }) {
-  return useQuery(["unowned-restaurants"], getUnownedRestaurants, {
+  return useQuery({
+    queryKey: ["/unowned-restaurants"],
+    queryFn: getUnownedRestaurants,
     enabled,
     staleTime: 1000 * 60 * 5,
     retry: false,

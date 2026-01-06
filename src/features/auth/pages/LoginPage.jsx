@@ -11,7 +11,10 @@ export default function LoginPage() {
 
   // From comes from ./src/features/auth/components/ProtectedRoute.jsx
   const from = location.state?.from?.pathname || "/";
-  const [mode, setMode] = useState("login");
+  const [mode, setMode] = useState(
+    location.state?.mode === "signup" ? "signup" : "login"
+  );
+
   useEffect(() => {
     if (!isLoadingUser && currentUser) {
       // navigate to intended page after login
