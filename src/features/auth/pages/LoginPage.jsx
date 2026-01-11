@@ -17,19 +17,24 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!isLoadingUser && currentUser) {
-      // navigate to intended page after login
-      navigate(from, { replace: true }); // Remove login page from history, no back navigation
+      let target = from;
+      if (target === "/" || target === "/login") {
+        target = currentUser.role === "owner" ? "/owner-dashboard" : "/my-reservations";
+      }
+      navigate(target, { replace: true });
     }
   }, [isLoadingUser, currentUser, navigate, from]);
 
   if (isLoadingUser || currentUser) return null;
 
   // Show login form only if not logged in
-  if (mode === "login") {
-    return <LoginForm onSwitchToSignup={() => setMode("signup")} />;
-  } else if (mode === "signup") {
-    return <SignupForm onSwitchToLogin={() => setMode("login")} />;
-  } else {
-    return null;
-  }
+  return (
+    <div className="flex-1 flex items-center justify-center bg-muted/40 p-4">
+      {mode === "login" ? (
+        <LoginForm onSwitchToSignup={() => setMode("signup")} />
+      ) : mode === "signup" ? (
+        <SignupForm onSwitchToLogin={() => setMode("login")} />
+      ) : null}
+    </div>
+  );
 }
