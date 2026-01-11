@@ -8,8 +8,7 @@ import { apiFetch } from '@/lib/fetch'
 export function login(credentials) {
   return apiFetch('/auth/login', {
     method: 'POST',
-    body: JSON.stringify(credentials),
-    auth: false,
+    body: credentials,
   })
 }
 
@@ -22,7 +21,7 @@ export function me() {
 }
 
 export function logout() {
-  return apiFetch('/auth/logout', { method: 'POST', auth: false })
+  return apiFetch('/auth/logout', { method: 'POST' })
 }
 
 /**
@@ -39,7 +38,7 @@ export function logout() {
 export function signup(data) {
   return apiFetch('/auth/signup', {
     method: 'POST',
-    body: JSON.stringify(data),
+    body: data,
     auth: false,
   })
 }
