@@ -19,6 +19,7 @@ export function useCurrentUserQuery() {
     queryFn: apiMe,
     staleTime: 1000 * 60 * 5, // 5 minutes cache overriding default 1min queryClient setting
     retry: false,
+    select: (res) => res.data,
   });
 }
 
