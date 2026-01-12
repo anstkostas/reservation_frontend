@@ -31,7 +31,8 @@ export function AuthProvider({ children }) {
 
   const logoutMutation = useLogoutMutation({
     onSuccess: () => {
-      queryClient.setQueryData(["me"], null);
+      queryClient.resetQueries({ queryKey: ["me"] });
+      queryClient.invalidateQueries(); // clear all other queries (e.g. user-specific fetched reservations)
     },
   });
 
