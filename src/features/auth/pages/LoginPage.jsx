@@ -9,25 +9,27 @@ export default function LoginPage() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // From comes from ./src/features/auth/components/ProtectedRoute.jsx
-  const from = location.state?.from?.pathname || "/";
+  // From is a string URL
+  const from = location.state?.from || "/";
   const [mode, setMode] = useState(
     location.state?.mode === "signup" ? "signup" : "login"
   );
 
   useEffect(() => {
     if (!isLoadingUser && currentUser) {
-      let target = from;
-      if (target === "/" || target === "/login") {
-        target = currentUser.role === "owner" ? "/owner-dashboard" : "/my-reservations";
+      let target;
+      if (currentUser.role === "owner") {
+        target = "/owner-dashboard";
+      } else {
+        target = from === "/" || from === "/login" ? "/my-reservations" : from;
       }
+
       navigate(target, { replace: true });
     }
   }, [isLoadingUser, currentUser, navigate, from]);
 
   if (isLoadingUser || currentUser) return null;
 
-  // Show login form only if not logged in
   return (
     <div className="flex-1 flex items-center justify-center bg-muted/40 p-4">
       {mode === "login" ? (
