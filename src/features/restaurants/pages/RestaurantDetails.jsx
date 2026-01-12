@@ -1,11 +1,25 @@
-import { useParams } from "react-router-dom";
+import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useRestaurant } from "../useRestaurants";
+import { useAuth } from "@/features/auth/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { ReservationCreateModal } from "@/features/reservations/components/ReservationCreateModal";
 
 export default function RestaurantDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { currentUser } = useAuth();
   const { data: restaurant, isLoading, error } = useRestaurant(id);
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+
+  const handleBookClick = () => {
+    if (!currentUser) {
+      navigate("/login", { state: { from: `/restaurants/${id}` } });
+      return;
+    }
+    setIsBookingOpen(true);
+  };
 
   if (isLoading)
     return (
@@ -65,13 +79,24 @@ export default function RestaurantDetails() {
                   Secure your table for an unforgettable dining experience.
                 </p>
               </div>
-              <Button className="w-full text-lg py-6 shadow-lg shadow-primary/20" size="lg">
+              <Button
+                className="w-full text-lg py-6 cursor-pointer shadow-lg shadow-primary/20"
+                size="lg"
+                onClick={handleBookClick}
+              >
                 Book a Table
               </Button>
             </CardContent>
           </Card>
         </div>
       </div>
+
+      <ReservationCreateModal
+        restaurantId={restaurant.id}
+        restaurantName={restaurant.name}
+        open={isBookingOpen}
+        onOpenChange={setIsBookingOpen}
+      />
     </div>
   );
 }
