@@ -26,8 +26,9 @@ export function getOwnerReservations() {
   return apiFetch('/reservations/owner-reservations');
 }
 
-export function completeReservation(id) {
-  return apiFetch(`/reservations/${id}/complete`, {
+export function resolveReservation(id, status) {
+  return apiFetch(`/reservations/${id}/resolve`, {
     method: 'POST',
+    body: { status },
   });
 }

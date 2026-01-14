@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getMyReservations, cancelReservation, updateReservation, createReservation, getOwnerReservations, completeReservation } from "./api";
+import { getMyReservations, cancelReservation, updateReservation, createReservation, getOwnerReservations, resolveReservation } from "./api";
 
 export function useMyReservationsQuery() {
   return useQuery({
@@ -51,11 +51,11 @@ export function useOwnerReservationsQuery() {
   });
 }
 
-export function useCompleteReservationMutation() {
+export function useResolveReservationMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: completeReservation,
+    mutationFn: ({ id, status }) => resolveReservation(id, status),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["owner-reservations"] });
     },
