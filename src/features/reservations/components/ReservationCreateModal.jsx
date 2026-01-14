@@ -68,7 +68,7 @@ export function ReservationCreateModal({ restaurantId, restaurantName, open, onO
       {
         onSuccess: (res) => {
           if (res.success) {
-            toast.success(`Table booked at ${restaurantName}!`, {
+            toast.success(res.message || `Table booked at ${restaurantName}!`, {
               description: `${format(new Date(data.date), 'EEE, MMM d')} at ${data.time}`
             });
             onOpenChange(false);
