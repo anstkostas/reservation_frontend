@@ -5,7 +5,6 @@ import { useAuth } from "@/features/auth/useAuth";
 export default function SplashPage() {
   const { currentUser, isLoadingUser } = useAuth();
   const navigate = useNavigate();
-
   const handlePrimaryCTA = () => {
     if (currentUser) {
       if (currentUser.role === "owner") {
