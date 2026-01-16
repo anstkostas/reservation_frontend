@@ -5,6 +5,7 @@ import { useAuth } from "@/features/auth/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ReservationCreateModal } from "@/features/reservations/components/ReservationCreateModal";
+import { toast } from "sonner";
 
 export default function RestaurantDetails() {
   const { id } = useParams();
@@ -18,7 +19,11 @@ export default function RestaurantDetails() {
       navigate("/login", { state: { from: `/restaurants/${id}` } });
       return;
     }
-    setIsBookingOpen(true);
+    if (currentUser.role == "customer") {
+      setIsBookingOpen(true);
+    } else {
+      toast.error("You cannot book a table as an owner");
+    }
   };
 
   if (isLoading)
@@ -70,25 +75,27 @@ export default function RestaurantDetails() {
             </CardContent>
           </Card>
         </div>
-        <div className="space-y-6">
-          <Card className="border-primary/20 shadow-md">
-            <CardContent className="p-6 space-y-6">
-              <div>
-                <h3 className="text-xl font-semibold">Make a Reservation</h3>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Secure your table for an unforgettable dining experience.
-                </p>
-              </div>
-              <Button
-                className="w-full text-lg py-6 cursor-pointer shadow-lg shadow-primary/20"
-                size="lg"
-                onClick={handleBookClick}
-              >
-                Book a Table
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+        {currentUser?.role != "owner" && (
+          <div className="space-y-6">
+            <Card className="border-primary/20 shadow-md">
+              <CardContent className="p-6 space-y-6">
+                <div>
+                  <h3 className="text-xl font-semibold">Make a Reservation</h3>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Secure your table for an unforgettable dining experience.
+                  </p>
+                </div>
+                <Button
+                  className="w-full text-lg py-6 cursor-pointer shadow-lg shadow-primary/20"
+                  size="lg"
+                  onClick={handleBookClick}
+                >
+                  Book a Table
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
 
       <ReservationCreateModal
