@@ -3,7 +3,8 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { Form } from "@/components/ui/form";
+import { DateFormField, PersonsFormField, TimeFormField } from "@/components/FormFields";
 import { useCancelReservationMutation, useUpdateReservationMutation } from "../queries";
 import {
   Dialog,
@@ -13,27 +14,28 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { CalendarIcon, Clock, Users, MapPin, Phone } from "lucide-react";
+import { formSchema } from "../schemas";
 
-// Validation schema
-const formSchema = z.object({
-  date: z.string().min(1, "Date is required"),
-  time: z.string().min(1, "Time is required"),
-  persons: z.coerce.number().min(1, "At least 1 person").max(20, "Max 20 persons"),
-});
-
+/**
+ * Modal to view and manage an existing reservation.
+ * 
+ * Logic:
+ * - Dual Mode: View Mode (Display only) vs Edit Mode (Update details).
+ * - State Management: Resets form state whenever the `reservation` prop changes or modal opens.
+ * - Actions: 
+ *   - Cancel: Deletes the reservation (with confirmation).
+ *   - Update: Mutates the existing reservation (optimistic update via React Query).
+ * - Conditional UI: Displays different buttons based on `status` (e.g., active vs completed).
+ * 
+ * @param {object} props
+ * @param {object} props.reservation - The full reservation object to display.
+ * @param {boolean} props.open - Modal visibility.
+ * @param {function} props.onOpenChange - State setter.
+ */
 export function ReservationDetailModal({ reservation, open, onOpenChange }) {
   const [isEditing, setIsEditing] = useState(false);
 
@@ -117,51 +119,9 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
           {isEditing ? (
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} id="edit-reservation-form" className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="date"
-                  render={({ field }) => (
-                    <FormItem className="grid grid-cols-4 items-center gap-4 space-y-0">
-                      <FormLabel className="text-right">Date</FormLabel>
-                      <div className="col-span-3">
-                        <FormControl>
-                          <Input type="date" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="time"
-                  render={({ field }) => (
-                    <FormItem className="grid grid-cols-4 items-center gap-4 space-y-0">
-                      <FormLabel className="text-right">Time</FormLabel>
-                      <div className="col-span-3">
-                        <FormControl>
-                          <Input type="time" step="900" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="persons"
-                  render={({ field }) => (
-                    <FormItem className="grid grid-cols-4 items-center gap-4 space-y-0">
-                      <FormLabel className="text-right">Persons</FormLabel>
-                      <div className="col-span-3">
-                        <FormControl>
-                          <Input type="number" min="1" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
-                />
+                <DateFormField control={form.control} />
+                <TimeFormField control={form.control} />
+                <PersonsFormField control={form.control} />
               </form>
             </Form>
           ) : (
