@@ -112,9 +112,6 @@ function EmptyState({ type }) {
       <p className="text-muted-foreground max-w-sm mb-6">
         You don't have any active bookings at the moment. Explore our restaurants and book your next meal!
       </p>
-      <Button asChild>
-        <Link to="/restaurants">Find a Restaurant</Link>
-      </Button>
     </div>
   );
 }
