@@ -1,17 +1,11 @@
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { useAuth } from "@/features/auth/useAuth";
+import { loginSchema } from "@/features/auth/schemas";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { EmailFormField, PasswordFormField } from "@/components/FormFields";
 import {
   Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import {
   Card,
@@ -22,11 +16,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-const loginSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
-  password: z.string().min(1, { message: "Password is required" }),
-});
-
+/**
+ * Login Form Component.
+ * 
+ * Logic:
+ * - Uses `useAuth` hook to perform the login mutation.
+ * - Handles server-side validation errors (e.g., 401 Unauthorized) and maps them to form fields.
+ * - Auto-redirects/conditionally renders content if `currentUser` is already present.
+ * 
+ * @param {object} props
+ * @param {function} props.onSwitchToSignup - Callback to toggle to the signup view.
+ */
 export default function LoginForm({ onSwitchToSignup }) {
   const { loginAsync, isLoggingIn, currentUser } = useAuth();
 
@@ -82,32 +82,9 @@ export default function LoginForm({ onSwitchToSignup }) {
               </div>
             )}
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="m@example.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input type="password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <EmailFormField control={form.control} />
+            <PasswordFormField control={form.control} />
+
             <Button type="submit" className="w-full cursor-pointer" disabled={isLoggingIn}>
               {isLoggingIn ? "Logging in..." : "Login"}
             </Button>
