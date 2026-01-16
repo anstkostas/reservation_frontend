@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { format, addDays } from "date-fns";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useCreateReservationMutation } from "../queries";
-
+import { formSchema } from "../schemas";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,39 +15,26 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Form } from "@/components/ui/form";
+import { DateFormField } from "@/components/FormFields";
+import { TimeFormField } from "@/components/FormFields";
+import { PersonsFormField } from "@/components/FormFields";
 
-
-const formSchema = z.object({
-  date: z.string().refine((val) => new Date(val) >= new Date(new Date().setHours(0, 0, 0, 0)), {
-    message: "Date cannot be in the past",
-  }),
-  time: z.string().min(1, "Please select a time"),
-  persons: z.coerce.number().min(1, "At least 1 person").max(20, "Max 20 people"),
-});
-
-// Generate time slots (12:00 to 23:00, every 30 mins)
-const timeSlots = [];
-for (let h = 12; h <= 23; h++) {
-  timeSlots.push(`${h.toString().padStart(2, '0')}:00`);
-  timeSlots.push(`${h.toString().padStart(2, '0')}:30`);
-}
-
+/**
+ * Modal for creating a new reservation.
+ * 
+ * Logic:
+ * - Multi-step process (currently single form step).
+ * - Uses `useCreateReservationMutation` to optimistically create the booking.
+ * - Validates date/time/persons via Zod schema before submission.
+ * - Handles toast notifications for success/failure feedback.
+ * 
+ * @param {object} props
+ * @param {string} props.restaurantId - The target restaurant ID.
+ * @param {string} props.restaurantName - Display name for the modal header.
+ * @param {boolean} props.open - Modal visibility state.
+ * @param {function} props.onOpenChange - State setter for visibility.
+ */
 export function ReservationCreateModal({ restaurantId, restaurantName, open, onOpenChange }) {
   const [step, setStep] = useState(1); // 1 = Form, 2 = Success (optional, or just close)
   const createMutation = useCreateReservationMutation();
@@ -93,64 +79,11 @@ export function ReservationCreateModal({ restaurantId, restaurantName, open, onO
             at <span className="font-semibold text-foreground">{restaurantName}</span>
           </DialogDescription>
         </DialogHeader>
-
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="date"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Date</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} min={format(new Date(), 'yyyy-MM-dd')} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="time"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Time</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select time" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="max-h-[200px]">
-                        {timeSlots.map((time) => (
-                          <SelectItem key={time} value={time}>
-                            {time}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="persons"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Persons</FormLabel>
-                    <FormControl>
-                      <Input type="number" min={1} max={20} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
+            <DateFormField control={form.control} />
+            <TimeFormField control={form.control} />
+            <PersonsFormField control={form.control} />
             <DialogFooter className="pt-4">
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Cancel
