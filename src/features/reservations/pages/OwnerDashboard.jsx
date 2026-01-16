@@ -1,19 +1,9 @@
 import { useState } from "react";
-import { format } from "date-fns";
 import { Search, CheckCircle2, Users, Calendar, Clock, History, CalendarDays, XCircle } from "lucide-react";
 import { toast } from "sonner";
-
 import { useOwnerReservationsQuery, useResolveReservationMutation } from "../queries";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import {
   Card,
   CardContent,
@@ -23,6 +13,8 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import OwnerTableViewMobile from "../components/OwnerTableViewMobile";
+import OwnerTableViewTabletDesktop from "../components/OwnerTableViewTabletDesktop";
 
 export default function OwnerDashboard() {
   const { data: reservations, isLoading, error } = useOwnerReservationsQuery();
@@ -70,105 +62,25 @@ export default function OwnerDashboard() {
     );
   }
 
-  const canUpdate = (dateString, timeString) => {
+  function canUpdate(dateString, timeString) {
     const reservationTime = new Date(`${dateString}T${timeString}`);
     const now = new Date();
     return reservationTime <= now;
-  };
+  }
 
-  const renderTable = (data, showActions = false) => (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Customer</TableHead>
-            <TableHead>Date & Time</TableHead>
-            <TableHead>Guests</TableHead>
-            <TableHead>Status</TableHead>
-            {showActions && <TableHead className="text-right">Actions</TableHead>}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={showActions ? 5 : 4} className="h-24 text-center">
-                No reservations found.
-              </TableCell>
-            </TableRow>
-          ) : (
-            data.map((res) => (
-              <TableRow key={res.id}>
-                <TableCell>
-                  <div className="font-medium">
-                    {res.customer?.firstname} {res.customer?.lastname}
-                  </div>
-                  <div className="text-sm text-muted-foreground">{res.customer?.email}</div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex flex-col gap-1 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-3 w-3" />
-                      {format(new Date(res.date), "MMM d, yyyy")}
-                    </div>
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Clock className="h-3 w-3" />
-                      {res.time}
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4 text-muted-foreground" />
-                    {res.persons}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <Badge variant="outline" className={
-                    res.status === 'active' ? "bg-green-50 text-green-700 border-green-200" :
-                      res.status === 'completed' ? "bg-blue-50 text-blue-700 border-blue-200" :
-                        res.status === 'no-show' ? "bg-red-50 text-red-700 border-red-200" :
-                          "bg-gray-100 text-gray-700 border-gray-200"
-                  }>
-                    {res.status.charAt(0).toUpperCase() + res.status.slice(1)}
-                  </Badge>
-                </TableCell>
-                {showActions && (
-                  <TableCell className="text-right">
-                    {canUpdate(res.date, res.time) ? (
-                      <div className="flex justify-end gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="text-green-600 hover:text-green-700 hover:bg-green-50"
-                          onClick={() => handleResolve(res.id, 'completed')}
-                          disabled={resolveMutation.isPending}
-                        >
-                          <CheckCircle2 className="mr-2 h-4 w-4" />
-                          Complete
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                          onClick={() => handleResolve(res.id, 'no-show')}
-                          disabled={resolveMutation.isPending}
-                        >
-                          <XCircle className="h-4 w-4" />
-                          No-show
-                        </Button>
-                      </div>
-                    ) : (
-                      <span className="text-xs text-muted-foreground italic">Arriving soon</span>
-                    )}
-                  </TableCell>
-                )}
-              </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
-    </div>
-  );
+  function renderTable(activeReservations, showActions) {
+    return (
+      <>
+        <div className="hidden md:block rounded-md border">
+          <OwnerTableViewTabletDesktop activeReservations={activeReservations} canUpdate={canUpdate} handleResolve={handleResolve} resolveMutation={resolveMutation} showActions={showActions} />
+        </div>
+
+        <div className="md:hidden space-y-4">
+          <OwnerTableViewMobile activeReservations={activeReservations} canUpdate={canUpdate} handleResolve={handleResolve} resolveMutation={resolveMutation} showActions={showActions} />
+        </div>
+      </>
+    );
+  }
 
   return (
     <div className="container mx-auto p-6 space-y-8 animate-in fade-in duration-500">
