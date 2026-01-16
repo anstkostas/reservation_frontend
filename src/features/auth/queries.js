@@ -7,11 +7,15 @@ import {
 } from "./api";
 
 /**
- * Fetch the current user
- * This hook wraps /auth/me
- * useQuery is used to fetch(GET) and cache the current user data
- * const { data, error, isLoading, isSuccess, isError, isFetching, refetch, status } = useQuery({ ... });
- * @return {object} current user
+ * React Query hook to manage the current user state.
+ * 
+ * Logic:
+ * - Query Key: `['me']` (Unique identifier for this data)
+ * - Cache Policy: 5 minutes (`staleTime`). Data remains fresh for 5 mins unless invalidated.
+ * - Retry Policy: Disabled. If auth check fails (401), do not retry immediately.
+ * - Selection: Extracts `res.data` to return the user object directly.
+ * 
+ * @returns {UseQueryResult} Query result containing `data` (User) and status flags.
  */
 export function useCurrentUserQuery() {
   return useQuery({
@@ -24,8 +28,15 @@ export function useCurrentUserQuery() {
 }
 
 /**
- * useMutation is like useQuery, but for mutations (POST, PUT, DELETE requests)
- * const { mutate, mutateAsync, data, error, isLoading, isError, isSuccess, reset } = useMutation({ ... });
+ * Mutation hook for handling user login.
+ * 
+ * Logic:
+ * - Wraps the `apiLogin` function.
+ * - Used by `AuthProvider` to expose login functionality.
+ * - On success, the `AuthProvider` will invalidate `['me']` to refresh user state.
+ * 
+ * @param {object} options - React Query mutation options (e.g., onSuccess, onError).
+ * @returns {UseMutationResult} Mutation result with `mutate` function.
  */
 export function useLoginMutation(options) {
   return useMutation({
@@ -34,6 +45,16 @@ export function useLoginMutation(options) {
   });
 }
 
+/**
+ * Mutation hook for handling user logout.
+ * 
+ * Logic:
+ * - Wraps `apiLogout`.
+ * - IMPORTANT: On success, the query cache (`['me']`) MUST be reset to null to reflect logged-out state.
+ * 
+ * @param {object} options - React Query mutation options.
+ * @returns {UseMutationResult} Mutation result.
+ */
 export function useLogoutMutation(options) {
   return useMutation({
     mutationFn: apiLogout,
@@ -41,6 +62,16 @@ export function useLogoutMutation(options) {
   });
 }
 
+/**
+ * Mutation hook for user registration.
+ * 
+ * Logic:
+ * - Wraps `apiSignup`.
+ * - Treated similarly to login since signup automatically authenticates the user.
+ * 
+ * @param {object} options - React Query mutation options.
+ * @returns {UseMutationResult} Mutation result.
+ */
 export function useSignupMutation(options) {
   return useMutation({
     mutationFn: apiSignup,
