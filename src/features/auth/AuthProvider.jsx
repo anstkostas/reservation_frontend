@@ -7,6 +7,20 @@ import {
   useSignupMutation,
 } from "./queries";
 
+/**
+ * Global Authentication Provider.
+ * 
+ * Purpose:
+ * - Orchestrates the entire auth lifecycle (check session, login, signup, logout).
+ * - Connects React Query mutations with the global QueryClient to manage cache invalidation.
+ * 
+ * State Logic:
+ * - `currentUser`: Derived from `useCurrentUserQuery` (`['me']` key).
+ * - `login/signup`: On success, invalidates `['me']` to force a re-fetch of the user, ensuring the UI reflects the authenticated state.
+ * - `logout`: On success, explicitly resets `['me']` to null and invalidates ALL other queries to clear sensitive data (e.g., user's reservations) from the cache.
+ * 
+ * @param {React.ReactNode} props.children - Child components to wrap.
+ */
 export function AuthProvider({ children }) {
   const queryClient = useQueryClient();
 
