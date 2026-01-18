@@ -5,6 +5,21 @@ import { LogOut, LayoutDashboard, CalendarDays } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
 
+/**
+ * User Profile Dropdown Menu.
+ * 
+ * Logic:
+ * - Displays user info (Avatar, Name, Email, Role).
+ * - **Role-Based Navigation**: 
+ *   - Renders "Dashboard" link if `activeUser` is an 'owner'.
+ *   - Renders "My Reservations" link if `activeUser` is a 'customer'.
+ * - Handles Logout via `handleLogout` callback.
+ * 
+ * @param {object} props
+ * @param {object} props.currentUser - The authenticated user object.
+ * @param {function} props.handleLogout - Callback to trigger logout mutation.
+ * @param {boolean} props.isLoggingOut - Loading state for the logout action.
+ */
 export default function NavbarDropdownMenu({ currentUser, handleLogout, isLoggingOut }) {
   return (
     <>

@@ -8,6 +8,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { CalendarDays, History, UtensilsCrossed } from "lucide-react";
 
+/**
+ * Customer "My Reservations" Page.
+ * 
+ * Logic:
+ * - Fetches logged-in user's entire reservation history.
+ * - Tabbed Interface: Separates 'Upcoming' vs 'History' (past, canceled).
+ * - Interaction: Clicking a card opens `ReservationDetailModal`.
+ * - Empty States: Displays specific messaging/actions (e.g., "Book a Table") when lists are empty.
+ * 
+ * @component
+ */
 export default function ReservationHistory() {
   const { data: reservations, isLoading, error } = useMyReservationsQuery();
   const [selectedReservation, setSelectedReservation] = useState(null);
@@ -56,11 +67,11 @@ export default function ReservationHistory() {
 
       <Tabs defaultValue="upcoming" className="w-full">
         <TabsList className="grid w-full max-w-[400px] grid-cols-2 mb-8">
-          <TabsTrigger value="upcoming">
+          <TabsTrigger value="upcoming" className="cursor-pointer">
             <CalendarDays className="mr-2 h-4 w-4" />
             Upcoming ({upcoming.length})
           </TabsTrigger>
-          <TabsTrigger value="history">
+          <TabsTrigger value="history" className="cursor-pointer">
             <History className="mr-2 h-4 w-4" />
             History ({history.length})
           </TabsTrigger>
