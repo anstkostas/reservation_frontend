@@ -21,10 +21,9 @@ import { TimeFormField } from "@/components/FormFields";
 import { PersonsFormField } from "@/components/FormFields";
 
 /**
- * Modal for creating a new reservation.
+ * Modal for the customer to make a new reservation.
  * 
  * Logic:
- * - Multi-step process (currently single form step).
  * - Uses `useCreateReservationMutation` to optimistically create the booking.
  * - Validates date/time/persons via Zod schema before submission.
  * - Handles toast notifications for success/failure feedback.

@@ -21,7 +21,7 @@ import { CalendarIcon, Clock, Users, MapPin, Phone } from "lucide-react";
 import { formSchema } from "../schemas";
 
 /**
- * Modal to view and manage an existing reservation.
+ * Modal for the customer to view and manage an existing reservation.
  * 
  * Logic:
  * - Dual Mode: View Mode (Display only) vs Edit Mode (Update details).

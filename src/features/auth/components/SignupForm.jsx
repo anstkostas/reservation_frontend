@@ -22,7 +22,7 @@ import SignupRestaurantDetails from "./signup/SignupRestaurantDetails";
  * Logic:
  * - Dynamic Role Selection: Toggles between 'customer' and 'owner'.
  * - Conditional Validation: If 'owner' is selected, fetches and displays a list of unowned restaurants.
- * - Restaurant Claiming: Allows new owners to claim a venue during signup.
+ * - Restaurant Claiming: Allows new owners to claim a restaurant during signup.
  * - Integration: Uses `useAuth` for the actual signup mutation and `useUnownedRestaurantsQuery` for the data.
  * 
  * @param {object} props
