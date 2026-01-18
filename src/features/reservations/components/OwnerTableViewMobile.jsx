@@ -5,6 +5,21 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle2, XCircle } from "lucide-react";
 import { ReservationStatusBadge } from "./ReservationStatusBadge";
 
+/**
+ * Mobile-optimized view for the Owner Dashboard.
+ * 
+ * Logic:
+ * - Renders a list of Cards instead of a table.
+ * - Displays active reservations with "Complete" or "No-show" actions if the reservation time has arrived.
+ * - Handles empty state rendering.
+ * 
+ * @param {object} props
+ * @param {Array} props.activeReservations - The list of active bookings.
+ * @param {function} props.canUpdate - Helper to check if the current time allows status updates.
+ * @param {function} props.handleResolve - Callback to resolve a reservation.
+ * @param {object} props.resolveMutation - Mutation state for loading indicators.
+ * @param {boolean} props.showActions - Whether to show action buttons (true for Active tab).
+ */
 export default function OwnerTableViewMobile({ activeReservations, canUpdate, handleResolve, resolveMutation, showActions }) {
 
   if (activeReservations.length === 0) {
