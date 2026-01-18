@@ -2,6 +2,18 @@
 
 A modern, responsive web application for managing restaurant reservations. Built for **Customers** to book tables and **Restaurant Owners** to manage their stores.
 
+> **TIP**  
+> To quickly run the entire application, please refer to the **Quick connect** section at the end of the backend documentation.
+
+## Table of Contents
+- [Tech Stack](#tech-stack)
+- [Key Libraries & Decisions](#key-libraries--decisions)
+- [Data Flow](#data-flow)
+- [User Paths](#user-paths)
+- [Project Structure](#project-structure)
+- [Setup Instructions](#setup-instructions)
+- [Error Handling](#error-handling)
+
 ## Tech Stack
 *   **Core**: [React 19](https://react.dev/) + [Vite](https://vitejs.dev/)
 *   **Routing**: [React Router DOM](https://reactrouter.com/)
