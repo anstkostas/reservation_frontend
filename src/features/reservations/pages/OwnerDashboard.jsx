@@ -16,6 +16,21 @@ import { Badge } from "@/components/ui/badge";
 import OwnerTableViewMobile from "../components/OwnerTableViewMobile";
 import OwnerTableViewTabletDesktop from "../components/OwnerTableViewTabletDesktop";
 
+/**
+ * Main Dashboard for Restaurant Owners.
+ * 
+ * Logic:
+ * - Data Fetching: Fetches ALL reservations for the owners restaurant.
+ * - Client-Side Filtering: 
+ *   - Search: Filters by customer name/email.
+ *   - Tabs: Splits data into 'Active' (upcoming) and 'History' (completed/no-show).
+ * - Sorting:
+ *   - Active: Ascending by date (soonest first).
+ *   - History: Descending by date (most recent first).
+ * - Actions: Allows marking reservations as 'completed' or 'no-show'.
+ * 
+ * @component
+ */
 export default function OwnerDashboard() {
   const { data: reservations, isLoading, error } = useOwnerReservationsQuery();
   const resolveMutation = useResolveReservationMutation();
@@ -94,7 +109,7 @@ export default function OwnerDashboard() {
         <div className="relative w-full md:w-72">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search by customer name..."
+            placeholder="Search by name or email..."
             className="pl-8"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -104,11 +119,11 @@ export default function OwnerDashboard() {
 
       <Tabs defaultValue="active" className="w-full">
         <TabsList className="grid w-full max-w-[400px] grid-cols-2 mb-8">
-          <TabsTrigger value="active">
+          <TabsTrigger value="active" className="cursor-pointer">
             <CalendarDays className="mr-2 h-4 w-4" />
             Active ({activeReservations.length})
           </TabsTrigger>
-          <TabsTrigger value="history">
+          <TabsTrigger value="history" className="cursor-pointer">
             <History className="mr-2 h-4 w-4" />
             History ({historyReservations.length})
           </TabsTrigger>
