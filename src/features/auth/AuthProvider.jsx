@@ -33,13 +33,13 @@ export function AuthProvider({ children }) {
 
   const loginMutation = useLoginMutation({
     onSuccess: () => {
-      queryClient.invalidateQueries(["me"]);
+      queryClient.invalidateQueries({ queryKey: ["me"] });
     },
   });
 
   const signupMutation = useSignupMutation({
     onSuccess: () => {
-      queryClient.invalidateQueries(["me"]);
+      queryClient.invalidateQueries({ queryKey: ["me"] });
     },
   });
 
@@ -58,21 +58,21 @@ export function AuthProvider({ children }) {
 
     login: loginMutation.mutate,
     loginAsync: loginMutation.mutateAsync,
-    isLoggingIn: loginMutation.isLoading,
+    isLoggingIn: loginMutation.isPending,
     loginError: loginMutation.error,
     resetLogin: loginMutation.reset,
     loginStatus: loginMutation.status,
 
     signup: signupMutation.mutate,
     signupAsync: signupMutation.mutateAsync,
-    isSigningUp: signupMutation.isLoading,
+    isSigningUp: signupMutation.isPending,
     signupError: signupMutation.error,
     resetSignup: signupMutation.reset,
     signupStatus: signupMutation.status,
 
     logout: logoutMutation.mutate,
     logoutAsync: logoutMutation.mutateAsync,
-    isLoggingOut: logoutMutation.isLoading,
+    isLoggingOut: logoutMutation.isPending,
     logoutError: logoutMutation.error,
     resetLogout: logoutMutation.reset,
     logoutStatus: logoutMutation.status,

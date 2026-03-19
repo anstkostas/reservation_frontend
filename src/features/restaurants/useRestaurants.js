@@ -1,3 +1,4 @@
+// @deprecated — superseded by queries.js. No longer imported anywhere.
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "../../lib/fetch";
 

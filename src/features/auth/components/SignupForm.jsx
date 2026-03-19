@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "@/features/auth/schemas";
 import { useAuth } from "@/features/auth/useAuth";
+// Cross-feature import: unowned restaurants are only used in the signup flow, so the query lives in restaurants but is consumed here
 import { useUnownedRestaurantsQuery } from "@/features/restaurants/queries";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
@@ -63,7 +64,7 @@ export default function SignupForm({ onSwitchToLogin }) {
         restaurantId: data.isOwner ? data.restaurantId : null,
       });
     } catch (err) {
-      console.log(err);
+      console.error("[LOG] SignupForm.onSubmit:", err.stack);
       if (err.details?.length) {
         err.details.forEach(({ field, message }) => {
           form.setError(field, { message });

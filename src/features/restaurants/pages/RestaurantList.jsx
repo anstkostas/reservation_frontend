@@ -1,6 +1,11 @@
-import { useRestaurants } from "../useRestaurants";
+import { useRestaurants } from "../queries";
 import { RestaurantCard } from "../components/RestaurantCard";
 
+/**
+ * Displays the full grid of available restaurants.
+ *
+ * @component
+ */
 export default function RestaurantList() {
   const { data: restaurants, isLoading, error } = useRestaurants();
 

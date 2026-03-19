@@ -5,7 +5,7 @@ import { getUnownedRestaurants, getRestaurants, getRestaurant } from "./api";
  * Query to fetch unowned restaurants. Used in the SignupForm.
  * 
  * Logic:
- * - Query Key: `['/unowned-restaurants']`
+ * - Query Key: `['unowned-restaurants']`
  * - Enabled Status: Managed by the SignupForm's checkbox.
  * - Stale Time: 5 minutes.
  * - Selection: Returns `res.data`.
@@ -16,7 +16,7 @@ import { getUnownedRestaurants, getRestaurants, getRestaurant } from "./api";
  */
 export function useUnownedRestaurantsQuery({ enabled }) {
   return useQuery({
-    queryKey: ["/unowned-restaurants"],
+    queryKey: ["unowned-restaurants"],
     queryFn: getUnownedRestaurants,
     enabled,
     staleTime: 1000 * 60 * 5,

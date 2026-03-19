@@ -41,14 +41,9 @@ export default function ReservationHistory() {
     );
   }
 
-  const upcoming = reservations?.filter(r => r.status === 'active') || [];
-  const history = reservations?.filter(r => r.status !== 'active') || [];
-
-  // Sort upcoming by date ascending (soonest first)
-  upcoming.sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
-
-  // Sort history by date descending (most recent first)
-  history.sort((a, b) => new Date(`${b.date}T${b.time}`) - new Date(`${a.date}T${a.time}`));
+  // Sort upcoming by date ASC (soonest first), history by date DESC (most recent first)
+  const upcoming = (reservations?.filter(r => r.status === 'active') ?? []).toSorted((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
+  const history = (reservations?.filter(r => r.status !== 'active') ?? []).toSorted((a, b) => new Date(`${b.date}T${b.time}`) - new Date(`${a.date}T${a.time}`));
 
   return (
     <div className="container mx-auto py-8 px-4 md:px-6 lg:px-8">
@@ -113,7 +108,7 @@ export default function ReservationHistory() {
   );
 }
 
-function EmptyState({ type }) {
+function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center border-2 border-dashed rounded-lg bg-muted/50">
       <div className="bg-background p-4 rounded-full mb-4 shadow-sm">

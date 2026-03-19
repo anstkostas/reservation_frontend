@@ -15,6 +15,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+/**
+ * Conditional restaurant-claim section for the owner signup flow.
+ *
+ * Logic:
+ * - Renders an "Are you a restaurant owner?" checkbox.
+ * - When checked, reveals a restaurant selector populated with unowned restaurants.
+ * - Handles three secondary states: loading, API error, and no available restaurants.
+ *
+ * @param {object} props
+ * @param {object} props.form - React Hook Form instance from the parent `SignupForm`.
+ * @param {Array} props.unownedRestaurants - List of restaurants without an owner.
+ * @param {boolean} props.isLoadingRestaurants - Whether the restaurant list is still loading.
+ * @param {Error|null} props.restaurantsError - Error from the unowned restaurants query, if any.
+ */
 export default function SignupRestaurantDetails({
   form,
   unownedRestaurants,
@@ -68,11 +82,9 @@ export default function SignupRestaurantDetails({
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a restaurant to manage" />
-                      </SelectTrigger>
-                    </FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a restaurant to manage" />
+                    </SelectTrigger>
                     <SelectContent>
                       {restaurantsData.map((restaurant) => (
                         <SelectItem

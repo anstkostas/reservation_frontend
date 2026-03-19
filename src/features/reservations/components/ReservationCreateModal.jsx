@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format, addDays } from "date-fns";
@@ -35,7 +34,6 @@ import { PersonsFormField } from "@/components/FormFields";
  * @param {function} props.onOpenChange - State setter for visibility.
  */
 export function ReservationCreateModal({ restaurantId, restaurantName, open, onOpenChange }) {
-  const [step, setStep] = useState(1); // 1 = Form, 2 = Success (optional, or just close)
   const createMutation = useCreateReservationMutation();
 
   const form = useForm({

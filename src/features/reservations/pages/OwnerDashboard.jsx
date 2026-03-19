@@ -37,7 +37,6 @@ export default function OwnerDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleResolve = (id, status) => {
-    const action = status === 'completed' ? 'Check in' : 'no-show';
     const loadingMsg = 'Processing...';
 
     toast.promise(resolveMutation.mutateAsync({ id, status }), {
@@ -54,12 +53,9 @@ export default function OwnerDashboard() {
     return customerName.includes(searchLower) || customerEmail.includes(searchLower);
   }) || [];
 
-  const activeReservations = filteredReservations.filter(r => r.status === 'active');
-  const historyReservations = filteredReservations.filter(r => r.status !== 'active');
-
   // Sort: Active by date ASC (soonest), History by date DESC (recent)
-  activeReservations.sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
-  historyReservations.sort((a, b) => new Date(`${b.date}T${b.time}`) - new Date(`${a.date}T${a.time}`));
+  const activeReservations = filteredReservations.filter(r => r.status === 'active').toSorted((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
+  const historyReservations = filteredReservations.filter(r => r.status !== 'active').toSorted((a, b) => new Date(`${b.date}T${b.time}`) - new Date(`${a.date}T${a.time}`));
 
   if (isLoading) {
     return (

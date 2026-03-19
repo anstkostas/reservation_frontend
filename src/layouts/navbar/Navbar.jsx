@@ -1,20 +1,32 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/features/auth/useAuth";
 import { Button } from "@/components/ui/button";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { UtensilsCrossed } from "lucide-react";
+import { toast } from "sonner";
 import NavbarSheet from "./components/NavbarSheet";
 import NavbarDropdownMenu from "./components/NavbarDropdownMenu";
 
+/**
+ * Global navigation bar.
+ *
+ * Logic:
+ * - Shows a "Log in" button when the user is not authenticated (hidden on the login page to avoid redundancy).
+ * - Shows a `NavbarDropdownMenu` when the user is logged in, with role-aware navigation links.
+ * - Handles logout via `logoutAsync`; surfaces errors as a toast if the request fails.
+ */
 export default function Navbar() {
-  const { currentUser, logout, isLoggingOut, isLoadingUser } = useAuth();
+  const { currentUser, logoutAsync, isLoggingOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";
 
   const handleLogout = async () => {
-    await logout();
-    navigate("/");
+    try {
+      await logoutAsync();
+      navigate("/");
+    } catch (err) {
+      toast.error(err?.message || "Logout failed. Please try again.");
+    }
   };
 
   return (

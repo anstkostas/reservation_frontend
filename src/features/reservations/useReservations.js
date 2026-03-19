@@ -1,3 +1,4 @@
+// @deprecated — superseded by queries.js. Contains stale endpoints and v4 TanStack Query syntax. Not imported anywhere.
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "../../lib/fetch";
 

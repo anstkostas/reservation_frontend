@@ -9,6 +9,12 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
+/**
+ * Card component displaying a restaurant's preview in the listing grid.
+ *
+ * @param {object} props
+ * @param {object} props.restaurant - Restaurant data object from the API.
+ */
 export function RestaurantCard({ restaurant }) {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
@@ -27,7 +33,7 @@ export function RestaurantCard({ restaurant }) {
       </CardHeader>
       <CardContent>
         <div className="text-sm text-muted-foreground">
-          Capacity: {restaurant.capacity} persons
+          Capacity: {restaurant.capacity} Tables
         </div>
       </CardContent>
       <CardFooter>

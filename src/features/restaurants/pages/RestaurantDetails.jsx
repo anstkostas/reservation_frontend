@@ -1,12 +1,22 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useRestaurant } from "../useRestaurants";
+import { useRestaurant } from "../queries";
 import { useAuth } from "@/features/auth/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ReservationCreateModal } from "@/features/reservations/components/ReservationCreateModal";
 import { toast } from "sonner";
 
+/**
+ * Restaurant detail page with a booking call-to-action.
+ *
+ * Logic:
+ * - Fetches a single restaurant by `id` URL param.
+ * - Hides the booking panel for owners — they cannot book their own (or any) restaurant.
+ * - Unauthenticated users are redirected to `/login` with the current path preserved for post-login redirect.
+ *
+ * @component
+ */
 export default function RestaurantDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -19,7 +29,7 @@ export default function RestaurantDetails() {
       navigate("/login", { state: { from: `/restaurants/${id}` } });
       return;
     }
-    if (currentUser.role == "customer") {
+    if (currentUser.role === "customer") {
       setIsBookingOpen(true);
     } else {
       toast.error("You cannot book a table as an owner");
@@ -75,7 +85,7 @@ export default function RestaurantDetails() {
             </CardContent>
           </Card>
         </div>
-        {currentUser?.role != "owner" && (
+        {currentUser?.role !== "owner" && (
           <div className="space-y-6">
             <Card className="border-primary/20 shadow-md">
               <CardContent className="p-6 space-y-6">

@@ -14,6 +14,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -38,6 +48,7 @@ import { formSchema } from "../schemas";
  */
 export function ReservationDetailModal({ reservation, open, onOpenChange }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isCancelConfirmOpen, setIsCancelConfirmOpen] = useState(false);
 
   const cancelMutation = useCancelReservationMutation();
   const updateMutation = useUpdateReservationMutation();
@@ -55,6 +66,7 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
   useEffect(() => {
     if (open && reservation) {
       setIsEditing(false);
+      setIsCancelConfirmOpen(false);
       form.reset({
         date: reservation.date,
         time: reservation.time,
@@ -63,19 +75,21 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
       cancelMutation.reset();
       updateMutation.reset();
     }
-  }, [open, reservation, form]);
+  }, [open, reservation, form, cancelMutation.reset, updateMutation.reset]);
 
   if (!reservation) return null;
 
-  const handleCancelReservation = async () => {
-    if (confirm("Are you sure you want to cancel this reservation?")) {
-      try {
-        const res = await cancelMutation.mutateAsync(reservation.id);
-        toast.success(res.message || "Reservation canceled successfully");
-        onOpenChange(false);
-      } catch (err) {
-        toast.error(err.message || "Failed to cancel reservation");
-      }
+  const handleCancelReservation = () => {
+    setIsCancelConfirmOpen(true);
+  };
+
+  const handleConfirmCancel = async () => {
+    try {
+      const res = await cancelMutation.mutateAsync(reservation.id);
+      toast.success(res.message || "Reservation canceled successfully");
+      onOpenChange(false);
+    } catch (err) {
+      toast.error(err.message || "Failed to cancel reservation");
     }
   };
 
@@ -89,7 +103,7 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
       setIsEditing(false);
     } catch (err) {
       toast.error(err.message || "Failed to update reservation");
-      console.error("Failed to update", err);
+      console.error("[LOG] ReservationDetailModal.onSubmit:", err.stack);
     }
   };
 
@@ -100,6 +114,28 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
   };
 
   return (
+    <>
+    <AlertDialog open={isCancelConfirmOpen} onOpenChange={setIsCancelConfirmOpen}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Cancel Reservation</AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to cancel this reservation? This cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Keep Reservation</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={handleConfirmCancel}
+            disabled={cancelMutation.isPending}
+            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+          >
+            {cancelMutation.isPending && <AiOutlineLoading3Quarters className="mr-2 h-4 w-4 animate-spin" />}
+            Yes, Cancel
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -193,5 +229,6 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
         </DialogFooter>
       </DialogContent>
     </Dialog>
+    </>
   );
 }
