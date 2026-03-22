@@ -64,7 +64,7 @@ export default function SignupForm({ onSwitchToLogin }) {
         restaurantId: data.isOwner ? data.restaurantId : null,
       });
     } catch (err) {
-      console.error("[LOG] SignupForm.onSubmit:", err.stack);
+      console.error("[LOG] SignupForm.onSubmit:", err.message);
       if (err.details?.length) {
         err.details.forEach(({ field, message }) => {
           form.setError(field, { message });

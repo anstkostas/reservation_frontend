@@ -45,6 +45,7 @@ export default function LoginForm({ onSwitchToSignup }) {
       await loginAsync(data);
       reset({ password: "" });
     } catch (err) {
+      console.error("[LOG] LoginForm.onSubmit:", err.message);
       if (err.details?.length) {
         err.details.forEach(({ field, message }) => {
           setError(field, { message });
