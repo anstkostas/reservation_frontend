@@ -3,12 +3,14 @@ import { CalendarIcon, Clock, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+/** Maps reservation status values to Shadcn Badge variant names. */
+const STATUS_BADGE_VARIANT = {
+  active: "default",      // primary
+  completed: "secondary", // gray
+  canceled: "destructive", // red
+};
+
 export function ReservationCard({ reservation, onClick }) {
-  const statusColors = {
-    active: "default", // primary
-    completed: "secondary", // gray
-    canceled: "destructive", // red
-  };
 
   return (
     <Card
@@ -22,7 +24,7 @@ export function ReservationCard({ reservation, onClick }) {
               {reservation.restaurantName || `Restaurant #${reservation.restaurantId}`}
             </CardTitle>
           </div>
-          <Badge variant={statusColors[reservation.status] || "outline"} className="capitalize">
+          <Badge variant={STATUS_BADGE_VARIANT[reservation.status] || "outline"} className="capitalize">
             {reservation.status}
           </Badge>
         </div>

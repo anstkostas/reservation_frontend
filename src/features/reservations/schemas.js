@@ -1,4 +1,8 @@
 import * as z from "zod";
+import {
+  RESERVATION_MIN_BUFFER_MINUTES,
+  RESERVATION_BOOKING_WINDOW_MONTHS,
+} from "@/lib/constants";
 
 export const formSchema = z
   .object({
@@ -9,17 +13,23 @@ export const formSchema = z
   .refine(
     (data) => {
       const scheduledAt = new Date(`${data.date}T${data.time}`);
-      const minTime = new Date(Date.now() + 30 * 60 * 1000);
+      const minTime = new Date(Date.now() + RESERVATION_MIN_BUFFER_MINUTES * 60 * 1000);
       return scheduledAt >= minTime;
     },
-    { message: "Reservation must be at least 30 minutes from now", path: ["time"] }
+    {
+      message: `Reservation must be at least ${RESERVATION_MIN_BUFFER_MINUTES} minutes from now`,
+      path: ["time"],
+    }
   )
   .refine(
     (data) => {
       const scheduledAt = new Date(`${data.date}T${data.time}`);
       const maxTime = new Date();
-      maxTime.setMonth(maxTime.getMonth() + 2);
+      maxTime.setMonth(maxTime.getMonth() + RESERVATION_BOOKING_WINDOW_MONTHS);
       return scheduledAt <= maxTime;
     },
-    { message: "Reservation must be within 2 months from today", path: ["date"] }
+    {
+      message: `Reservation must be within ${RESERVATION_BOOKING_WINDOW_MONTHS} months from today`,
+      path: ["date"],
+    }
   );
