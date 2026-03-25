@@ -65,7 +65,7 @@ export default function OwnerTableViewMobile({
           </div>
           <div className="flex items-center gap-2 p-2 rounded-md bg-muted/50 col-span-2">
             <Users className="h-4 w-4 text-primary" />
-            <span className="font-medium">{activeReservation.persons} People</span>
+            <span className="font-medium">{activeReservation.people} People</span>
           </div>
         </div>
 

@@ -64,7 +64,7 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
     defaultValues: {
       date: "",
       time: "",
-      persons: 1,
+      people: 1,
     },
   });
 
@@ -82,7 +82,7 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
       formReset({
         date: format(scheduled, "yyyy-MM-dd"),
         time: format(scheduled, "HH:mm"),
-        persons: reservation.persons,
+        people: reservation.people,
       });
       cancelMutation.reset();
       updateMutation.reset();
@@ -121,7 +121,7 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
       const res = await updateMutation.mutateAsync({
         id: reservation.id,
         scheduledAt,
-        persons: values.persons,
+        people: values.people,
       });
       toast.success(res.message || "Reservation updated successfully");
       setIsEditing(false);
@@ -205,7 +205,7 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
                 </div>
                 <div className="flex items-center gap-3">
                   <Users className="h-5 w-5 text-primary" />
-                  <span className="text-lg">{reservation.persons} people</span>
+                  <span className="text-lg">{reservation.people} people</span>
                 </div>
                 {reservation.restaurantAddress && (
                   <div className="flex items-center gap-3">

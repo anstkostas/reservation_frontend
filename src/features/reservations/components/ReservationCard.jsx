@@ -40,7 +40,7 @@ export function ReservationCard({ reservation, onClick }) {
           </div>
           <div className="flex items-center gap-2 text-muted-foreground">
             <Users className="h-4 w-4" />
-            <span>{reservation.persons} people</span>
+            <span>{reservation.people} people</span>
           </div>
         </div>
       </CardContent>

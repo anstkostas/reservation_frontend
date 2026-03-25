@@ -79,7 +79,7 @@ export default function OwnerTableViewTabletDesktop({
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Users className="h-4 w-4 text-muted-foreground" />
-                    {activeReservation.persons}
+                    {activeReservation.people}
                   </div>
                 </TableCell>
                 <TableCell>

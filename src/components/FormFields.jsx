@@ -71,7 +71,7 @@ export function PersonsFormField({ control }) {
     <>
       <FormField
         control={control}
-        name="persons"
+        name="people"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Persons</FormLabel>

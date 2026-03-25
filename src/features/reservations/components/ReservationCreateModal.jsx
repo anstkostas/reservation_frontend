@@ -24,7 +24,7 @@ import { PersonsFormField } from "@/components/FormFields";
  *
  * Logic:
  * - Uses `useCreateReservationMutation` to optimistically create the booking.
- * - Validates date/time/persons via Zod schema before submission.
+ * - Validates date/time/people via Zod schema before submission.
  * - Handles toast notifications for success/failure feedback.
  *
  * @param {object} props
@@ -41,7 +41,7 @@ export function ReservationCreateModal({ restaurantId, restaurantName, open, onO
     defaultValues: {
       date: format(new Date(), "yyyy-MM-dd"),
       time: "19:00",
-      persons: 2,
+      people: 2,
     },
   });
 
@@ -52,7 +52,7 @@ export function ReservationCreateModal({ restaurantId, restaurantName, open, onO
       const res = await createMutation.mutateAsync({
         restaurantId,
         scheduledAt: scheduledAtDate.toISOString(),
-        persons: data.persons,
+        people: data.people,
       });
       if (res.success) {
         toast.success(res.message || `Table booked at ${restaurantName}!`, {
@@ -70,7 +70,7 @@ export function ReservationCreateModal({ restaurantId, restaurantName, open, onO
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-106.25">
         <DialogHeader>
           <DialogTitle>Book a Table</DialogTitle>
           <DialogDescription>
