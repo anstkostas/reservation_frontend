@@ -36,7 +36,7 @@ export function cancelReservation(id) {
  * - Only the customer who made the reservation can update this info.
  *
  * @param {string} id - Reservation ID.
- * @param {object} data - { scheduledAt, persons } — scheduledAt is an ISO datetime string
+ * @param {object} data - { scheduledAt, people } — scheduledAt is an ISO datetime string
  * @returns {Promise<object>} Updated reservation.
  */
 export function updateReservation(id, data) {
@@ -55,7 +55,7 @@ export function updateReservation(id, data) {
  * - Availability is 1 reservation -> 1 table removed from restaurant's remaining tables.
  *
  * @param {string} restaurantId - Target restaurant.
- * @param {object} data - { scheduledAt, persons } — scheduledAt is an ISO datetime string
+ * @param {object} data - { scheduledAt, people } — scheduledAt is an ISO datetime string
  * @returns {Promise<object>} New reservation details.
  */
 export function createReservation(restaurantId, data) {

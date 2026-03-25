@@ -51,7 +51,7 @@ export function useUpdateReservationMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, ...data }) => updateReservation(id, data), // Expects object { id, date, time, persons }
+    mutationFn: ({ id, ...data }) => updateReservation(id, data), // Expects object { id, scheduledAt, people }
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["my-reservations"] });
     },
