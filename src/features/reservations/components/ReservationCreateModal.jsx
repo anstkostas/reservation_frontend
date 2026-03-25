@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format, addDays } from "date-fns";
+import { format } from "date-fns";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useCreateReservationMutation } from "../queries";
@@ -45,26 +45,21 @@ export function ReservationCreateModal({ restaurantId, restaurantName, open, onO
     },
   });
 
-  const onSubmit = (data) => {
-    createMutation.mutate(
-      { restaurantId, ...data },
-      {
-        onSuccess: (res) => {
-          if (res.success) {
-            toast.success(res.message || `Table booked at ${restaurantName}!`, {
-              description: `${format(new Date(data.date), 'EEE, MMM d')} at ${data.time}`
-            });
-            onOpenChange(false);
-            form.reset();
-          } else {
-            toast.error(res.message || "Failed to book table");
-          }
-        },
-        onError: (err) => {
-          toast.error(err.message || "Something went wrong. Please try again.");
-        }
+  const onSubmit = async (data) => {
+    try {
+      const res = await createMutation.mutateAsync({ restaurantId, ...data });
+      if (res.success) {
+        toast.success(res.message || `Table booked at ${restaurantName}!`, {
+          description: `${format(new Date(data.date), 'EEE, MMM d')} at ${data.time}`
+        });
+        onOpenChange(false);
+        form.reset();
+      } else {
+        toast.error(res.message || "Failed to book table");
       }
-    );
+    } catch (err) {
+      toast.error(err.message || "Something went wrong. Please try again.");
+    }
   };
 
   return (
