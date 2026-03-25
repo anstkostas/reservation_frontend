@@ -45,6 +45,13 @@ import { formSchema } from "../schemas";
  * @param {boolean} props.open - Modal visibility.
  * @param {function} props.onOpenChange - State setter.
  */
+/** Maps reservation status values to Shadcn Badge variant names. */
+const STATUS_BADGE_VARIANT = {
+  active: "default",
+  completed: "secondary",
+  canceled: "destructive",
+};
+
 export function ReservationDetailModal({ reservation, open, onOpenChange }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isCancelConfirmOpen, setIsCancelConfirmOpen] = useState(false);
@@ -61,15 +68,18 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
     },
   });
 
-  // Reset form and state when modal opens or reservation changes
+  // Destructure form.reset — useForm may recreate its return object, but individual
+  // method refs are stable, so we use formReset in deps instead of the full form object
+  const { reset: formReset } = form;
+
+  // Reset form values when modal opens or reservation changes.
+  // State resets (isEditing, isCancelConfirmOpen) are handled in handleOpenChange on close.
   useEffect(() => {
     if (open && reservation) {
-      setIsEditing(false);
-      setIsCancelConfirmOpen(false);
       // Split scheduledAt into local date/time strings for the form pickers.
       // format() uses local time — do NOT use toISOString() which returns UTC.
       const scheduled = new Date(reservation.scheduledAt);
-      form.reset({
+      formReset({
         date: format(scheduled, "yyyy-MM-dd"),
         time: format(scheduled, "HH:mm"),
         persons: reservation.persons,
@@ -77,7 +87,16 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
       cancelMutation.reset();
       updateMutation.reset();
     }
-  }, [open, reservation, form, cancelMutation.reset, updateMutation.reset]);
+  }, [open, reservation, formReset, cancelMutation, updateMutation]);
+
+  // Reset UI state on close so the modal opens fresh next time
+  const handleOpenChange = (newOpen) => {
+    if (!newOpen) {
+      setIsEditing(false);
+      setIsCancelConfirmOpen(false);
+    }
+    onOpenChange(newOpen);
+  };
 
   if (!reservation) return null;
 
@@ -112,12 +131,6 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
     }
   };
 
-  const statusColors = {
-    active: "default",
-    completed: "secondary",
-    canceled: "destructive",
-  };
-
   return (
     <>
       <AlertDialog open={isCancelConfirmOpen} onOpenChange={setIsCancelConfirmOpen}>
@@ -141,12 +154,12 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="sm:max-w-[425px]">
+      <Dialog open={open} onOpenChange={handleOpenChange}>
+        <DialogContent className="sm:max-w-106.25">
           <DialogHeader>
             <div className="flex justify-between items-center pr-4">
               <DialogTitle>Reservation Details</DialogTitle>
-              <Badge variant={statusColors[reservation.status]} className="capitalize">
+              <Badge variant={STATUS_BADGE_VARIANT[reservation.status]} className="capitalize">
                 {reservation.status}
               </Badge>
             </div>

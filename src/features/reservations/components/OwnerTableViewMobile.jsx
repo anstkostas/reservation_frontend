@@ -73,7 +73,7 @@ export default function OwnerTableViewMobile({
           <div className="pt-2 flex flex-wrap justify-evenly gap-3">
             <Button
               variant="outline"
-              className="w-[130px] text-green-600 hover:text-green-700 hover:bg-green-50 border-green-200"
+              className="w-32.5 text-green-600 hover:text-green-700 hover:bg-green-50 border-green-200"
               onClick={() => handleResolve(activeReservation.id, "completed")}
               disabled={resolveMutation.isPending}
             >
@@ -82,7 +82,7 @@ export default function OwnerTableViewMobile({
             </Button>
             <Button
               variant="outline"
-              className="w-[130px] text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+              className="w-32.5 text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
               onClick={() => handleResolve(activeReservation.id, "no-show")}
               disabled={resolveMutation.isPending}
             >

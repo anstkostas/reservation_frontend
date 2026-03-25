@@ -5,7 +5,7 @@ export function ReservationStatusBadge({ status }) {
     <>
       <Badge
         variant="outline"
-        className={`min-w-[80px] justify-center ${
+        className={`min-w-20 justify-center ${
           status === "active"
             ? "bg-green-50 text-green-700 border-green-200"
             : status === "completed"

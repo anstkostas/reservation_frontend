@@ -91,7 +91,7 @@ export default function OwnerTableViewTabletDesktop({
                       <div className="flex justify-end gap-2">
                         <Button
                           variant="outline"
-                          className="w-[130px] text-green-600 hover:text-green-700 hover:bg-green-50"
+                          className="w-32.5 text-green-600 hover:text-green-700 hover:bg-green-50"
                           onClick={() => handleResolve(activeReservation.id, "completed")}
                           disabled={resolveMutation.isPending}
                         >
@@ -100,7 +100,7 @@ export default function OwnerTableViewTabletDesktop({
                         </Button>
                         <Button
                           variant="outline"
-                          className="w-[130px] text-red-600 hover:text-red-700 hover:bg-red-50"
+                          className="w-32.5 text-red-600 hover:text-red-700 hover:bg-red-50"
                           onClick={() => handleResolve(activeReservation.id, "no-show")}
                           disabled={resolveMutation.isPending}
                         >

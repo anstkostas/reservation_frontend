@@ -50,7 +50,7 @@ export function TimeFormField({ control }) {
                   <SelectValue placeholder="Select time" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent className="max-h-[200px]">
+              <SelectContent className="max-h-50">
                 {timeSlots.map((time) => (
                   <SelectItem key={time} value={time}>
                     {time}

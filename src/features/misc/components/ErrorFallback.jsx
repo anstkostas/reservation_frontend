@@ -11,7 +11,7 @@ export default function ErrorFallback({ error, resetErrorBoundary }) {
           </div>
         </div>
         <h1 className="text-3xl font-bold tracking-tight">Something went wrong</h1>
-        <p className="text-muted-foreground max-w-[500px] mx-auto">
+        <p className="text-muted-foreground max-w-125 mx-auto">
           We're sorry, but the application encountered an unexpected error.
         </p>
       </div>

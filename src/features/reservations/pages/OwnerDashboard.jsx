@@ -133,7 +133,7 @@ export default function OwnerDashboard() {
       </div>
 
       <Tabs defaultValue="active" className="w-full">
-        <TabsList className="grid w-full max-w-[400px] grid-cols-2 mb-8">
+        <TabsList className="grid w-full max-w-100 grid-cols-2 mb-8">
           <TabsTrigger value="active" className="cursor-pointer">
             <CalendarDays className="mr-2 h-4 w-4" />
             Active ({activeReservations.length})
