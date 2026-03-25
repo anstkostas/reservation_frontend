@@ -61,10 +61,10 @@ export default function OwnerDashboard() {
   // Sort: Active by date ASC (soonest), History by date DESC (recent)
   const activeReservations = filteredReservations
     .filter((r) => r.status === "active")
-    .toSorted((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
+    .toSorted((a, b) => new Date(a.scheduledAt) - new Date(b.scheduledAt));
   const historyReservations = filteredReservations
     .filter((r) => r.status !== "active")
-    .toSorted((a, b) => new Date(`${b.date}T${b.time}`) - new Date(`${a.date}T${a.time}`));
+    .toSorted((a, b) => new Date(b.scheduledAt) - new Date(a.scheduledAt));
 
   if (isLoading) {
     return (
@@ -82,10 +82,8 @@ export default function OwnerDashboard() {
     );
   }
 
-  function canUpdate(dateString, timeString) {
-    const reservationTime = new Date(`${dateString}T${timeString}`);
-    const now = new Date();
-    return reservationTime <= now;
+  function canUpdate(scheduledAt) {
+    return new Date(scheduledAt) <= new Date();
   }
 
   function renderTable(activeReservations, showActions) {

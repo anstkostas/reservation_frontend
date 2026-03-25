@@ -54,12 +54,14 @@ export default function OwnerTableViewMobile({
           <div className="flex items-center gap-2 p-2 rounded-md bg-muted/50">
             <Calendar className="h-4 w-4 text-primary" />
             <span className="font-medium">
-              {format(new Date(activeReservation.date), "MMM d, yyyy")}
+              {format(new Date(activeReservation.scheduledAt), "MMM d, yyyy")}
             </span>
           </div>
           <div className="flex items-center gap-2 p-2 rounded-md bg-muted/50">
             <Clock className="h-4 w-4 text-primary" />
-            <span className="font-medium">{activeReservation.time}</span>
+            <span className="font-medium">
+              {format(new Date(activeReservation.scheduledAt), "HH:mm")}
+            </span>
           </div>
           <div className="flex items-center gap-2 p-2 rounded-md bg-muted/50 col-span-2">
             <Users className="h-4 w-4 text-primary" />
@@ -67,7 +69,7 @@ export default function OwnerTableViewMobile({
           </div>
         </div>
 
-        {showActions && canUpdate(activeReservation.date, activeReservation.time) && (
+        {showActions && canUpdate(activeReservation.scheduledAt) && (
           <div className="pt-2 flex flex-wrap justify-evenly gap-3">
             <Button
               variant="outline"
@@ -89,7 +91,7 @@ export default function OwnerTableViewMobile({
             </Button>
           </div>
         )}
-        {!canUpdate(activeReservation.date, activeReservation.time) && (
+        {!canUpdate(activeReservation.scheduledAt) && (
           <div className="text-center text-xs text-muted-foreground italic pt-2 border-t">
             Arriving soon
           </div>

@@ -44,10 +44,10 @@ export default function ReservationHistory() {
 
   // Sort upcoming by date ASC (soonest first), history by date DESC (most recent first)
   const upcoming = (reservations?.filter((r) => r.status === "active") ?? []).toSorted(
-    (a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`)
+    (a, b) => new Date(a.scheduledAt) - new Date(b.scheduledAt)
   );
   const history = (reservations?.filter((r) => r.status !== "active") ?? []).toSorted(
-    (a, b) => new Date(`${b.date}T${b.time}`) - new Date(`${a.date}T${a.time}`)
+    (a, b) => new Date(b.scheduledAt) - new Date(a.scheduledAt)
   );
 
   return (

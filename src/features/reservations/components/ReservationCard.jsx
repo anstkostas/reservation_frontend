@@ -32,7 +32,8 @@ export function ReservationCard({ reservation, onClick }) {
           <div className="flex items-center gap-2 font-medium">
             <CalendarIcon className="h-4 w-4 text-primary" />
             <span>
-              {format(new Date(reservation.date), "EEE, MMM d")} • {reservation.time.slice(0, 5)}
+              {format(new Date(reservation.scheduledAt), "EEE, MMM d")} •{" "}
+              {format(new Date(reservation.scheduledAt), "HH:mm")}
             </span>
           </div>
           <div className="flex items-center gap-2 text-muted-foreground">

@@ -53,11 +53,11 @@ export default function OwnerTableViewTabletDesktop({
                   <div className="flex flex-col gap-1 text-sm">
                     <div className="flex items-center gap-2">
                       <Calendar className="h-3 w-3" />
-                      {format(new Date(activeReservation.date), "MMM d, yyyy")}
+                      {format(new Date(activeReservation.scheduledAt), "MMM d, yyyy")}
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Clock className="h-3 w-3" />
-                      {activeReservation.time}
+                      {format(new Date(activeReservation.scheduledAt), "HH:mm")}
                     </div>
                   </div>
                 </TableCell>
@@ -72,7 +72,7 @@ export default function OwnerTableViewTabletDesktop({
                 </TableCell>
                 <TableCell className="text-right">
                   {showActions &&
-                    (canUpdate(activeReservation.date, activeReservation.time) ? (
+                    (canUpdate(activeReservation.scheduledAt) ? (
                       <div className="flex justify-end gap-2">
                         <Button
                           variant="outline"
