@@ -1,5 +1,7 @@
 import { normalizeApiError } from "./apiError.js";
-const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000/api";
+
+const BASE_URL = import.meta.env.VITE_API_URL;
+if (!BASE_URL) throw new Error("[fetch] VITE_API_URL is not set — add it to your .env file");
 
 /**
  * Generic fetch wrapper for API requests
