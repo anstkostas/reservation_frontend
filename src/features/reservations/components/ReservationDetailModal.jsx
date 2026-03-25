@@ -26,8 +26,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { CalendarIcon, Clock, Users, MapPin, Phone } from "lucide-react";
+import { CalendarIcon, Clock, Loader2, Users, MapPin, Phone } from "lucide-react";
 import { formSchema } from "../schemas";
 
 /**
@@ -130,7 +129,7 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
             disabled={cancelMutation.isPending}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
           >
-            {cancelMutation.isPending && <AiOutlineLoading3Quarters className="mr-2 h-4 w-4 animate-spin" />}
+            {cancelMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Yes, Cancel
           </AlertDialogAction>
         </AlertDialogFooter>
@@ -202,7 +201,7 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
                   Cancel Edit
                 </Button>
                 <Button type="submit" form="edit-reservation-form" disabled={updateMutation.isPending}>
-                  {updateMutation.isPending && <AiOutlineLoading3Quarters className="mr-2 h-4 w-4 animate-spin" />}
+                  {updateMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Save Changes
                 </Button>
               </>
@@ -217,7 +216,7 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
                   onClick={handleCancelReservation}
                   disabled={cancelMutation.isPending}
                 >
-                  {cancelMutation.isPending && <AiOutlineLoading3Quarters className="mr-2 h-4 w-4 animate-spin" />}
+                  {cancelMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Cancel Reservation
                 </Button>
               </>
