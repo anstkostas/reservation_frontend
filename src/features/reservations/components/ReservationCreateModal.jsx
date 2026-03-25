@@ -47,10 +47,16 @@ export function ReservationCreateModal({ restaurantId, restaurantName, open, onO
 
   const onSubmit = async (data) => {
     try {
-      const res = await createMutation.mutateAsync({ restaurantId, ...data });
+      // Combine separate date/time pickers into a single ISO datetime for the API
+      const scheduledAtDate = new Date(`${data.date}T${data.time}`);
+      const res = await createMutation.mutateAsync({
+        restaurantId,
+        scheduledAt: scheduledAtDate.toISOString(),
+        persons: data.persons,
+      });
       if (res.success) {
         toast.success(res.message || `Table booked at ${restaurantName}!`, {
-          description: `${format(new Date(data.date), "EEE, MMM d")} at ${data.time}`,
+          description: `${format(scheduledAtDate, "EEE, MMM d")} at ${format(scheduledAtDate, "HH:mm")}`,
         });
         onOpenChange(false);
         form.reset();

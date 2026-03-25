@@ -66,9 +66,12 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
     if (open && reservation) {
       setIsEditing(false);
       setIsCancelConfirmOpen(false);
+      // Split scheduledAt into local date/time strings for the form pickers.
+      // format() uses local time — do NOT use toISOString() which returns UTC.
+      const scheduled = new Date(reservation.scheduledAt);
       form.reset({
-        date: reservation.date,
-        time: reservation.time,
+        date: format(scheduled, "yyyy-MM-dd"),
+        time: format(scheduled, "HH:mm"),
         persons: reservation.persons,
       });
       cancelMutation.reset();
@@ -94,9 +97,12 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
 
   const onSubmit = async (values) => {
     try {
+      // Combine separate date/time pickers into a single ISO datetime for the API
+      const scheduledAt = new Date(`${values.date}T${values.time}`).toISOString();
       const res = await updateMutation.mutateAsync({
         id: reservation.id,
-        ...values,
+        scheduledAt,
+        persons: values.persons,
       });
       toast.success(res.message || "Reservation updated successfully");
       setIsEditing(false);
@@ -171,15 +177,17 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
                 <div className="flex items-center gap-3">
                   <CalendarIcon className="h-5 w-5 text-primary" />
                   <span className="text-lg font-medium">
-                    {reservation.date
-                      ? format(new Date(reservation.date), "EEEE, MMMM d, yyyy")
+                    {reservation.scheduledAt
+                      ? format(new Date(reservation.scheduledAt), "EEEE, MMMM d, yyyy")
                       : "Date not available"}
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Clock className="h-5 w-5 text-primary" />
                   <span className="text-lg">
-                    {reservation.time ? reservation.time.slice(0, 5) : "Time not available"}
+                    {reservation.scheduledAt
+                      ? format(new Date(reservation.scheduledAt), "HH:mm")
+                      : "Time not available"}
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
