@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Role } from "@/lib/constants";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/features/auth/useAuth";
 
@@ -7,7 +8,7 @@ export default function SplashPage() {
   const navigate = useNavigate();
   const handlePrimaryCTA = () => {
     if (currentUser) {
-      if (currentUser.role === "owner") {
+      if (currentUser.role === Role.OWNER) {
         navigate("/owner-dashboard");
       } else {
         navigate("/my-reservations");
@@ -46,7 +47,7 @@ export default function SplashPage() {
           className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-4 h-auto rounded-full font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 cursor-pointer"
         >
           {currentUser
-            ? (currentUser.role === "owner" ? "Dashboard" : "My Reservations")
+            ? (currentUser.role === Role.OWNER ? "Dashboard" : "My Reservations")
             : "Explore Restaurants"
           }
         </Button>

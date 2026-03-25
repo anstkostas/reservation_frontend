@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Role } from "@/lib/constants";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoginForm from "@/features/auth/components/LoginForm";
 import SignupForm from "@/features/auth/components/SignupForm";
@@ -18,7 +19,7 @@ export default function LoginPage() {
   useEffect(() => {
     if (!isLoadingUser && currentUser) {
       let target;
-      if (currentUser.role === "owner") {
+      if (currentUser.role === Role.OWNER) {
         target = "/owner-dashboard";
       } else {
         target = from === "/" || from === "/login" ? "/my-reservations" : from;

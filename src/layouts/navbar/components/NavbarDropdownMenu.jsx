@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Role } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { Loader2, LogOut, LayoutDashboard, CalendarDays } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -45,7 +46,7 @@ export default function NavbarDropdownMenu({ currentUser, handleLogout, isLoggin
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
 
-          {currentUser.role === "owner" ? (
+          {currentUser.role === Role.OWNER ? (
             <DropdownMenuItem asChild>
               <Link to="/owner-dashboard" className="cursor-pointer">
                 <LayoutDashboard className="mr-2 h-4 w-4" />

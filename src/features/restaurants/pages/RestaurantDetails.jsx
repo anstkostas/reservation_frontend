@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Role } from "@/lib/constants";
 import { useParams, useNavigate } from "react-router-dom";
 import { useRestaurant } from "../queries";
 import { useAuth } from "@/features/auth/useAuth";
@@ -29,7 +30,7 @@ export default function RestaurantDetails() {
       navigate("/login", { state: { from: `/restaurants/${id}` } });
       return;
     }
-    if (currentUser.role === "customer") {
+    if (currentUser.role === Role.CUSTOMER) {
       setIsBookingOpen(true);
     } else {
       toast.error("You cannot book a table as an owner");
@@ -85,7 +86,7 @@ export default function RestaurantDetails() {
             </CardContent>
           </Card>
         </div>
-        {currentUser?.role !== "owner" && (
+        {currentUser?.role !== Role.OWNER && (
           <div className="space-y-6">
             <Card className="border-primary/20 shadow-md">
               <CardContent className="p-6 space-y-6">

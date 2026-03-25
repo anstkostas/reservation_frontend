@@ -1,4 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom";
+import { Role } from "@/lib/constants";
 import { useAuth } from "@/features/auth/useAuth"
 
 /**
@@ -28,7 +29,7 @@ export default function ProtectedRoute({ children, role }) {
 
   if (role && currentUser.role !== role) {
     // Redirect to the user's own home rather than showing a broken page from a 403 API response
-    const roleHome = currentUser.role === "owner" ? "/owner-dashboard" : "/my-reservations";
+    const roleHome = currentUser.role === Role.OWNER ? "/owner-dashboard" : "/my-reservations";
     return <Navigate to={roleHome} replace />;
   }
 

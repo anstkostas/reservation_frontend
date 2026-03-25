@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import { EmailFormField, NameFormField, PasswordFormField, ConfirmPasswordFormField } from "@/components/FormFields";
 import SignupRestaurantDetails from "./signup/SignupRestaurantDetails";
+import { Role } from "@/lib/constants";
 
 /**
  * Complex Form Component for User Registration.
@@ -60,7 +61,7 @@ export default function SignupForm({ onSwitchToLogin }) {
         lastname: data.lastname,
         email: data.email,
         password: data.password,
-        role: data.isOwner ? "owner" : "customer",
+        role: data.isOwner ? Role.OWNER : Role.CUSTOMER,
         restaurantId: data.isOwner ? data.restaurantId : null,
       });
     } catch (err) {

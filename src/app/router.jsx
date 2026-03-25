@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { Role } from "@/lib/constants";
 import { ErrorBoundary } from "react-error-boundary";
 import Layout from "@/layouts/Layout";
 import SplashPage from "@/features/SplashPage";
@@ -23,7 +24,7 @@ export function Router() {
           <Route
             path="/my-reservations"
             element={
-              <ProtectedRoute role="customer">
+              <ProtectedRoute role={Role.CUSTOMER}>
                 <ReservationHistory />
               </ProtectedRoute>
             }
@@ -31,7 +32,7 @@ export function Router() {
           <Route
             path="/owner-dashboard"
             element={
-              <ProtectedRoute role="owner">
+              <ProtectedRoute role={Role.OWNER}>
                 <OwnerDashboard />
               </ProtectedRoute>
             }
