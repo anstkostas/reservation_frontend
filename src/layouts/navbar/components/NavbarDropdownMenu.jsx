@@ -1,7 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { LogOut, LayoutDashboard, CalendarDays } from "lucide-react";
+import { Loader2, LogOut, LayoutDashboard, CalendarDays } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
 
@@ -63,7 +62,7 @@ export default function NavbarDropdownMenu({ currentUser, handleLogout, isLoggin
           )}
           <DropdownMenuItem onClick={handleLogout} disabled={isLoggingOut} className="text-red-600 focus:text-red-600 cursor-pointer">
             {isLoggingOut ? (
-              <AiOutlineLoading3Quarters className="animate-spin mr-2 h-4 w-4" />
+              <Loader2 className="animate-spin mr-2 h-4 w-4" />
             ) : (
               <LogOut className="mr-2 h-4 w-4" />
             )}
