@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { format } from "date-fns";
 import { useMyReservationsQuery } from "../queries";
 import { ReservationCard } from "../components/ReservationCard";
 import { ReservationDetailModal } from "../components/ReservationDetailModal";
@@ -100,7 +99,7 @@ export default function ReservationHistory() {
       </Tabs>
 
       <ReservationDetailModal
-        reservation={selectedReservation}
+        reservation={selectedReservation ? (reservations?.find(r => r.id === selectedReservation.id) ?? selectedReservation) : null}
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
       />
