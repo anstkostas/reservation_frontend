@@ -1,7 +1,7 @@
-import { BrowserRouter } from 'react-router-dom'
-import { Providers } from './app/providers'
-import { Router } from './app/router'
-import { Toaster } from "@/components/ui/sonner"
+import { BrowserRouter } from "react-router-dom";
+import { Providers } from "./app/providers";
+import { Router } from "./app/router";
+import { Toaster } from "@/components/ui/sonner";
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
         <Toaster />
       </Providers>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

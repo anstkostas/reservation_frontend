@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { Role } from "@/lib/constants";
-import { useAuth } from "@/features/auth/useAuth"
+import { useAuth } from "@/features/auth/useAuth";
 
 /**
  * Higher-Order Component for route protection.

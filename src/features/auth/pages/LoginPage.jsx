@@ -12,9 +12,7 @@ export default function LoginPage() {
 
   // From is a string URL
   const from = location.state?.from || "/";
-  const [mode, setMode] = useState(
-    location.state?.mode === "signup" ? "signup" : "login"
-  );
+  const [mode, setMode] = useState(location.state?.mode === "signup" ? "signup" : "login");
 
   useEffect(() => {
     if (!isLoadingUser && currentUser) {

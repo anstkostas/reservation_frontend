@@ -75,8 +75,8 @@ export default function RestaurantDetails() {
             <CardContent className="p-6">
               <h2 className="text-2xl font-semibold mb-4">About</h2>
               <p className="text-muted-foreground leading-relaxed">
-                {restaurant.description} experience awaits you. Enjoy our carefully curated menu
-                in a comfortable atmosphere.
+                {restaurant.description} experience awaits you. Enjoy our carefully curated menu in
+                a comfortable atmosphere.
               </p>
               <div className="mt-6 flex items-center gap-4 text-sm text-muted-foreground">
                 <div className="bg-secondary px-3 py-1 rounded-full flex items-center gap-2">

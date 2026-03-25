@@ -7,12 +7,12 @@ import { ReservationStatusBadge } from "./ReservationStatusBadge";
 
 /**
  * Mobile-optimized view for the Owner Dashboard.
- * 
+ *
  * Logic:
  * - Renders a list of Cards instead of a table.
  * - Displays active reservations with "Complete" or "No-show" actions if the reservation time has arrived.
  * - Handles empty state rendering.
- * 
+ *
  * @param {object} props
  * @param {Array} props.activeReservations - The list of active bookings.
  * @param {function} props.canUpdate - Helper to check if the current time allows status updates.
@@ -20,8 +20,13 @@ import { ReservationStatusBadge } from "./ReservationStatusBadge";
  * @param {object} props.resolveMutation - Mutation state for loading indicators.
  * @param {boolean} props.showActions - Whether to show action buttons (true for Active tab).
  */
-export default function OwnerTableViewMobile({ activeReservations, canUpdate, handleResolve, resolveMutation, showActions }) {
-
+export default function OwnerTableViewMobile({
+  activeReservations,
+  canUpdate,
+  handleResolve,
+  resolveMutation,
+  showActions,
+}) {
   if (activeReservations.length === 0) {
     return (
       <>
@@ -29,7 +34,7 @@ export default function OwnerTableViewMobile({ activeReservations, canUpdate, ha
           No reservations found.
         </div>
       </>
-    )
+    );
   }
 
   return activeReservations.map((activeReservation) => (
@@ -48,7 +53,9 @@ export default function OwnerTableViewMobile({ activeReservations, canUpdate, ha
         <div className="grid grid-cols-2 gap-3 text-sm">
           <div className="flex items-center gap-2 p-2 rounded-md bg-muted/50">
             <Calendar className="h-4 w-4 text-primary" />
-            <span className="font-medium">{format(new Date(activeReservation.date), "MMM d, yyyy")}</span>
+            <span className="font-medium">
+              {format(new Date(activeReservation.date), "MMM d, yyyy")}
+            </span>
           </div>
           <div className="flex items-center gap-2 p-2 rounded-md bg-muted/50">
             <Clock className="h-4 w-4 text-primary" />
@@ -65,7 +72,7 @@ export default function OwnerTableViewMobile({ activeReservations, canUpdate, ha
             <Button
               variant="outline"
               className="w-[130px] text-green-600 hover:text-green-700 hover:bg-green-50 border-green-200"
-              onClick={() => handleResolve(activeReservation.id, 'completed')}
+              onClick={() => handleResolve(activeReservation.id, "completed")}
               disabled={resolveMutation.isPending}
             >
               <CheckCircle2 className="mr-2 h-4 w-4" />
@@ -74,7 +81,7 @@ export default function OwnerTableViewMobile({ activeReservations, canUpdate, ha
             <Button
               variant="outline"
               className="w-[130px] text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
-              onClick={() => handleResolve(activeReservation.id, 'no-show')}
+              onClick={() => handleResolve(activeReservation.id, "no-show")}
               disabled={resolveMutation.isPending}
             >
               <XCircle className="h-4 w-4" />
@@ -89,5 +96,5 @@ export default function OwnerTableViewMobile({ activeReservations, canUpdate, ha
         )}
       </CardContent>
     </Card>
-  ))
+  ));
 }

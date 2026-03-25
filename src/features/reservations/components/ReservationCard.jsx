@@ -1,12 +1,7 @@
 import { format } from "date-fns";
 import { CalendarIcon, Clock, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function ReservationCard({ reservation, onClick }) {
   const statusColors = {

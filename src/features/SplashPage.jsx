@@ -25,7 +25,8 @@ export default function SplashPage() {
       <div
         className="absolute inset-0 bg-cover bg-center z-0"
         style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1705211734796-7cdbcb527636?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHJlc2VydmF0aW9uJTIwYXBwJTIwaW4lMjBwaG9uZXxlbnwwfHwwfHx8MA%3D%3D')",
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1705211734796-7cdbcb527636?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHJlc2VydmF0aW9uJTIwYXBwJTIwaW4lMjBwaG9uZXxlbnwwfHwwfHx8MA%3D%3D')",
         }}
       >
         <div className="absolute inset-0 bg-black/60 bg-linear-to-t from-black/90 to-transparent" />
@@ -47,9 +48,10 @@ export default function SplashPage() {
           className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-4 h-auto rounded-full font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 cursor-pointer"
         >
           {currentUser
-            ? (currentUser.role === Role.OWNER ? "Dashboard" : "My Reservations")
-            : "Explore Restaurants"
-          }
+            ? currentUser.role === Role.OWNER
+              ? "Dashboard"
+              : "My Reservations"
+            : "Explore Restaurants"}
         </Button>
       </div>
     </div>

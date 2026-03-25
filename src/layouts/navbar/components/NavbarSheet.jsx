@@ -6,7 +6,7 @@ import {
   SheetTitle,
   SheetTrigger,
   SheetDescription,
-  SheetClose
+  SheetClose,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu, X, UtensilsCrossed } from "lucide-react";
@@ -36,9 +36,7 @@ export default function NavbarSheet() {
                 <span className="sr-only">Close</span>
               </Button>
             </SheetClose>
-            <SheetDescription className="sr-only">
-              Navigation menu
-            </SheetDescription>
+            <SheetDescription className="sr-only">Navigation menu</SheetDescription>
           </SheetHeader>
           <div className="grid gap-4 py-4">
             <SheetClose asChild>

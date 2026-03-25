@@ -1,16 +1,19 @@
 import { useState } from "react";
-import { Search, CheckCircle2, Users, Calendar, Clock, History, CalendarDays, XCircle } from "lucide-react";
+import {
+  Search,
+  CheckCircle2,
+  Users,
+  Calendar,
+  Clock,
+  History,
+  CalendarDays,
+  XCircle,
+} from "lucide-react";
 import { toast } from "sonner";
 import { useOwnerReservationsQuery, useResolveReservationMutation } from "../queries";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import OwnerTableViewMobile from "../components/OwnerTableViewMobile";
@@ -18,17 +21,17 @@ import OwnerTableViewTabletDesktop from "../components/OwnerTableViewTabletDeskt
 
 /**
  * Main Dashboard for Restaurant Owners.
- * 
+ *
  * Logic:
  * - Data Fetching: Fetches ALL reservations for the owners restaurant.
- * - Client-Side Filtering: 
+ * - Client-Side Filtering:
  *   - Search: Filters by customer name/email.
  *   - Tabs: Splits data into 'Active' (upcoming) and 'History' (completed/no-show).
  * - Sorting:
  *   - Active: Ascending by date (soonest first).
  *   - History: Descending by date (most recent first).
  * - Actions: Allows marking reservations as 'completed' or 'no-show'.
- * 
+ *
  * @component
  */
 export default function OwnerDashboard() {
@@ -37,7 +40,7 @@ export default function OwnerDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleResolve = (id, status) => {
-    const loadingMsg = 'Processing...';
+    const loadingMsg = "Processing...";
 
     toast.promise(resolveMutation.mutateAsync({ id, status }), {
       loading: loadingMsg,
@@ -46,16 +49,22 @@ export default function OwnerDashboard() {
     });
   };
 
-  const filteredReservations = reservations?.filter((res) => {
-    const searchLower = searchTerm.toLowerCase();
-    const customerName = `${res.customer?.firstname || ''} ${res.customer?.lastname || ''}`.toLowerCase();
-    const customerEmail = res.customer?.email?.toLowerCase() || "";
-    return customerName.includes(searchLower) || customerEmail.includes(searchLower);
-  }) || [];
+  const filteredReservations =
+    reservations?.filter((res) => {
+      const searchLower = searchTerm.toLowerCase();
+      const customerName =
+        `${res.customer?.firstname || ""} ${res.customer?.lastname || ""}`.toLowerCase();
+      const customerEmail = res.customer?.email?.toLowerCase() || "";
+      return customerName.includes(searchLower) || customerEmail.includes(searchLower);
+    }) || [];
 
   // Sort: Active by date ASC (soonest), History by date DESC (recent)
-  const activeReservations = filteredReservations.filter(r => r.status === 'active').toSorted((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
-  const historyReservations = filteredReservations.filter(r => r.status !== 'active').toSorted((a, b) => new Date(`${b.date}T${b.time}`) - new Date(`${a.date}T${a.time}`));
+  const activeReservations = filteredReservations
+    .filter((r) => r.status === "active")
+    .toSorted((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
+  const historyReservations = filteredReservations
+    .filter((r) => r.status !== "active")
+    .toSorted((a, b) => new Date(`${b.date}T${b.time}`) - new Date(`${a.date}T${a.time}`));
 
   if (isLoading) {
     return (
@@ -83,11 +92,23 @@ export default function OwnerDashboard() {
     return (
       <>
         <div className="hidden md:block rounded-md border">
-          <OwnerTableViewTabletDesktop activeReservations={activeReservations} canUpdate={canUpdate} handleResolve={handleResolve} resolveMutation={resolveMutation} showActions={showActions} />
+          <OwnerTableViewTabletDesktop
+            activeReservations={activeReservations}
+            canUpdate={canUpdate}
+            handleResolve={handleResolve}
+            resolveMutation={resolveMutation}
+            showActions={showActions}
+          />
         </div>
 
         <div className="md:hidden space-y-4">
-          <OwnerTableViewMobile activeReservations={activeReservations} canUpdate={canUpdate} handleResolve={handleResolve} resolveMutation={resolveMutation} showActions={showActions} />
+          <OwnerTableViewMobile
+            activeReservations={activeReservations}
+            canUpdate={canUpdate}
+            handleResolve={handleResolve}
+            resolveMutation={resolveMutation}
+            showActions={showActions}
+          />
         </div>
       </>
     );
@@ -129,13 +150,9 @@ export default function OwnerDashboard() {
           <Card>
             <CardHeader>
               <CardTitle>Active Arrivals</CardTitle>
-              <CardDescription>
-                Upcoming reservations.
-              </CardDescription>
+              <CardDescription>Upcoming reservations.</CardDescription>
             </CardHeader>
-            <CardContent>
-              {renderTable(activeReservations, true)}
-            </CardContent>
+            <CardContent>{renderTable(activeReservations, true)}</CardContent>
           </Card>
         </TabsContent>
 
@@ -143,13 +160,9 @@ export default function OwnerDashboard() {
           <Card>
             <CardHeader>
               <CardTitle>Reservation History</CardTitle>
-              <CardDescription>
-                Completed and canceled past reservations.
-              </CardDescription>
+              <CardDescription>Completed and canceled past reservations.</CardDescription>
             </CardHeader>
-            <CardContent>
-              {renderTable(historyReservations, false)}
-            </CardContent>
+            <CardContent>{renderTable(historyReservations, false)}</CardContent>
           </Card>
         </TabsContent>
       </Tabs>

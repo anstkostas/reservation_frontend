@@ -21,12 +21,12 @@ import { PersonsFormField } from "@/components/FormFields";
 
 /**
  * Modal for the customer to make a new reservation.
- * 
+ *
  * Logic:
  * - Uses `useCreateReservationMutation` to optimistically create the booking.
  * - Validates date/time/persons via Zod schema before submission.
  * - Handles toast notifications for success/failure feedback.
- * 
+ *
  * @param {object} props
  * @param {string} props.restaurantId - The target restaurant ID.
  * @param {string} props.restaurantName - Display name for the modal header.
@@ -39,7 +39,7 @@ export function ReservationCreateModal({ restaurantId, restaurantName, open, onO
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      date: format(new Date(), 'yyyy-MM-dd'),
+      date: format(new Date(), "yyyy-MM-dd"),
       time: "19:00",
       persons: 2,
     },
@@ -50,7 +50,7 @@ export function ReservationCreateModal({ restaurantId, restaurantName, open, onO
       const res = await createMutation.mutateAsync({ restaurantId, ...data });
       if (res.success) {
         toast.success(res.message || `Table booked at ${restaurantName}!`, {
-          description: `${format(new Date(data.date), 'EEE, MMM d')} at ${data.time}`
+          description: `${format(new Date(data.date), "EEE, MMM d")} at ${data.time}`,
         });
         onOpenChange(false);
         form.reset();

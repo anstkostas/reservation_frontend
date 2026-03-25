@@ -8,10 +8,7 @@ if (!BASE_URL) throw new Error("[fetch] VITE_API_URL is not set — add it to yo
  * Automatically sends cookies for auth requests
  * Normalizes errors
  */
-export async function apiFetch(
-  endpoint,
-  { method = "GET", body, headers = {}, auth = true } = {}
-) {
+export async function apiFetch(endpoint, { method = "GET", body, headers = {}, auth = true } = {}) {
   try {
     const res = await fetch(`${BASE_URL}${endpoint}`, {
       method,

@@ -4,9 +4,7 @@ import { useAuth } from "@/features/auth/useAuth";
 import { loginSchema } from "@/features/auth/schemas";
 import { Button } from "@/components/ui/button";
 import { EmailFormField, PasswordFormField } from "@/components/FormFields";
-import {
-  Form,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import {
   Card,
   CardContent,
@@ -18,12 +16,12 @@ import {
 
 /**
  * Login Form Component.
- * 
+ *
  * Logic:
  * - Uses `useAuth` hook to perform the login mutation.
  * - Handles server-side validation errors (e.g., 401 Unauthorized) and maps them to form fields.
  * - Auto-redirects/conditionally renders content if `currentUser` is already present.
- * 
+ *
  * @param {object} props
  * @param {function} props.onSwitchToSignup - Callback to toggle to the signup view.
  */

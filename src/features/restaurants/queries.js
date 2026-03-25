@@ -3,13 +3,13 @@ import { getUnownedRestaurants, getRestaurants, getRestaurant } from "./api";
 
 /**
  * Query to fetch unowned restaurants. Used in the SignupForm.
- * 
+ *
  * Logic:
  * - Query Key: `['unowned-restaurants']`
  * - Enabled Status: Managed by the SignupForm's checkbox.
  * - Stale Time: 5 minutes.
  * - Selection: Returns `res.data`.
- * 
+ *
  * @param {object} params
  * @param {boolean} params.enabled
  * @returns {UseQueryResult}
@@ -27,11 +27,11 @@ export function useUnownedRestaurantsQuery({ enabled }) {
 
 /**
  * Query to fetch all restaurants for the listing page.
- * 
+ *
  * Logic:
  * - Query Key: `['restaurants']`
  * - Standard fetch with default caching.
- * 
+ *
  * @returns {UseQueryResult<Array>} List of restaurants.
  */
 export function useRestaurants() {
@@ -44,11 +44,11 @@ export function useRestaurants() {
 
 /**
  * Query to fetch a single restaurant by ID.
- * 
+ *
  * Logic:
  * - Query Key: `['restaurants', id]`
  * - Enabled: Only runs if `id` is truthy.
- * 
+ *
  * @param {string} id - Restaurant UUID.
  * @returns {UseQueryResult<object>} Restaurant details.
  */

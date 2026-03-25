@@ -32,9 +32,7 @@ export function RestaurantCard({ restaurant }) {
         <CardDescription>{restaurant.description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="text-sm text-muted-foreground">
-          Capacity: {restaurant.capacity} Tables
-        </div>
+        <div className="text-sm text-muted-foreground">Capacity: {restaurant.capacity} Tables</div>
       </CardContent>
       <CardFooter>
         <Button asChild className="w-full">

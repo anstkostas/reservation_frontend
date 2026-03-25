@@ -9,13 +9,13 @@ import { CalendarDays, History, UtensilsCrossed } from "lucide-react";
 
 /**
  * Customer "My Reservations" Page.
- * 
+ *
  * Logic:
  * - Fetches logged-in user's entire reservation history.
  * - Tabbed Interface: Separates 'Upcoming' vs 'History' (past, canceled).
  * - Interaction: Clicking a card opens `ReservationDetailModal`.
  * - Empty States: Displays specific messaging/actions (e.g., "Book a Table") when lists are empty.
- * 
+ *
  * @component
  */
 export default function ReservationHistory() {
@@ -29,7 +29,9 @@ export default function ReservationHistory() {
   };
 
   if (isLoading) {
-    return <div className="p-8 text-center text-muted-foreground">Loading your reservations...</div>;
+    return (
+      <div className="p-8 text-center text-muted-foreground">Loading your reservations...</div>
+    );
   }
 
   if (error) {
@@ -41,8 +43,12 @@ export default function ReservationHistory() {
   }
 
   // Sort upcoming by date ASC (soonest first), history by date DESC (most recent first)
-  const upcoming = (reservations?.filter(r => r.status === 'active') ?? []).toSorted((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
-  const history = (reservations?.filter(r => r.status !== 'active') ?? []).toSorted((a, b) => new Date(`${b.date}T${b.time}`) - new Date(`${a.date}T${a.time}`));
+  const upcoming = (reservations?.filter((r) => r.status === "active") ?? []).toSorted(
+    (a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`)
+  );
+  const history = (reservations?.filter((r) => r.status !== "active") ?? []).toSorted(
+    (a, b) => new Date(`${b.date}T${b.time}`) - new Date(`${a.date}T${a.time}`)
+  );
 
   return (
     <div className="container mx-auto py-8 px-4 md:px-6 lg:px-8">
@@ -76,7 +82,7 @@ export default function ReservationHistory() {
             <EmptyState type="upcoming" />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {upcoming.map(r => (
+              {upcoming.map((r) => (
                 <ReservationCard key={r.id} reservation={r} onClick={handleCardClick} />
               ))}
             </div>
@@ -90,7 +96,7 @@ export default function ReservationHistory() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {history.map(r => (
+              {history.map((r) => (
                 <ReservationCard key={r.id} reservation={r} onClick={handleCardClick} />
               ))}
             </div>
@@ -99,7 +105,11 @@ export default function ReservationHistory() {
       </Tabs>
 
       <ReservationDetailModal
-        reservation={selectedReservation ? (reservations?.find(r => r.id === selectedReservation.id) ?? selectedReservation) : null}
+        reservation={
+          selectedReservation
+            ? (reservations?.find((r) => r.id === selectedReservation.id) ?? selectedReservation)
+            : null
+        }
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
       />
@@ -115,7 +125,8 @@ function EmptyState() {
       </div>
       <h3 className="text-lg font-semibold mb-2">No upcoming reservations</h3>
       <p className="text-muted-foreground max-w-sm mb-6">
-        You don't have any active bookings at the moment. Explore our restaurants and book your next meal!
+        You don't have any active bookings at the moment. Explore our restaurants and book your next
+        meal!
       </p>
     </div>
   );

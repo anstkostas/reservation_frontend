@@ -1,7 +1,13 @@
 import { FormField, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { format } from "date-fns";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function DateFormField({ control }) {
   return (
@@ -13,22 +19,22 @@ export function DateFormField({ control }) {
           <FormItem>
             <FormLabel>Date</FormLabel>
             <FormControl>
-              <Input type="date" {...field} min={format(new Date(), 'yyyy-MM-dd')} />
+              <Input type="date" {...field} min={format(new Date(), "yyyy-MM-dd")} />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
     </>
-  )
+  );
 }
 
 export function TimeFormField({ control }) {
   // Generate time slots (12:00 to 23:00, every 30 mins)
   const timeSlots = [];
   for (let h = 12; h <= 23; h++) {
-    timeSlots.push(`${h.toString().padStart(2, '0')}:00`);
-    timeSlots.push(`${h.toString().padStart(2, '0')}:30`);
+    timeSlots.push(`${h.toString().padStart(2, "0")}:00`);
+    timeSlots.push(`${h.toString().padStart(2, "0")}:30`);
   }
   return (
     <>
@@ -57,7 +63,7 @@ export function TimeFormField({ control }) {
         )}
       />
     </>
-  )
+  );
 }
 
 export function PersonsFormField({ control }) {
@@ -77,7 +83,7 @@ export function PersonsFormField({ control }) {
         )}
       />
     </>
-  )
+  );
 }
 
 export function NameFormField({ control, name }) {
@@ -99,7 +105,7 @@ export function NameFormField({ control, name }) {
         )}
       />
     </>
-  )
+  );
 }
 
 export function EmailFormField({ control }) {
@@ -119,7 +125,7 @@ export function EmailFormField({ control }) {
         )}
       />
     </>
-  )
+  );
 }
 
 export function PasswordFormField({ control }) {
@@ -139,7 +145,7 @@ export function PasswordFormField({ control }) {
         )}
       />
     </>
-  )
+  );
 }
 
 export function ConfirmPasswordFormField({ control }) {
@@ -159,5 +165,5 @@ export function ConfirmPasswordFormField({ control }) {
         )}
       />
     </>
-  )
+  );
 }

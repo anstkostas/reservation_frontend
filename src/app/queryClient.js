@@ -1,4 +1,4 @@
-import { QueryClient } from '@tanstack/react-query'
+import { QueryClient } from "@tanstack/react-query";
 
 // QueryClient instance with global default options
 export const queryClient = new QueryClient({
@@ -9,4 +9,4 @@ export const queryClient = new QueryClient({
       staleTime: 1000 * 60,
     },
   },
-})
+});

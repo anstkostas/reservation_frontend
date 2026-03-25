@@ -14,19 +14,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { EmailFormField, NameFormField, PasswordFormField, ConfirmPasswordFormField } from "@/components/FormFields";
+import {
+  EmailFormField,
+  NameFormField,
+  PasswordFormField,
+  ConfirmPasswordFormField,
+} from "@/components/FormFields";
 import SignupRestaurantDetails from "./signup/SignupRestaurantDetails";
 import { Role } from "@/lib/constants";
 
 /**
  * Complex Form Component for User Registration.
- * 
+ *
  * Logic:
  * - Dynamic Role Selection: Toggles between 'customer' and 'owner'.
  * - Conditional Validation: If 'owner' is selected, fetches and displays a list of unowned restaurants.
  * - Restaurant Claiming: Allows new owners to claim a restaurant during signup.
  * - Integration: Uses `useAuth` for the actual signup mutation and `useUnownedRestaurantsQuery` for the data.
- * 
+ *
  * @param {object} props
  * @param {function} props.onSwitchToLogin - Callback to toggle the view to login.
  */
@@ -79,9 +84,7 @@ export default function SignupForm({ onSwitchToLogin }) {
   return (
     <Card className="w-full max-w-lg mx-auto shadow-lg animate-in fade-in zoom-in duration-500">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center">
-          Create an account
-        </CardTitle>
+        <CardTitle className="text-2xl font-bold text-center">Create an account</CardTitle>
         <CardDescription className="text-center">
           Enter your details below to create your account
         </CardDescription>
@@ -135,4 +138,3 @@ export default function SignupForm({ onSwitchToLogin }) {
     </Card>
   );
 }
-

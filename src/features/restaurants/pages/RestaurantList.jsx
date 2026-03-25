@@ -15,9 +15,7 @@ export default function RestaurantList() {
 
   if (error) {
     return (
-      <div className="p-8 text-center text-red-500">
-        Error loading restaurants: {error.message}
-      </div>
+      <div className="p-8 text-center text-red-500">Error loading restaurants: {error.message}</div>
     );
   }
 
@@ -25,7 +23,9 @@ export default function RestaurantList() {
     return (
       <div className="container mx-auto py-8 px-4 md:px-6 lg:px-8">
         <h1 className="text-3xl font-bold mb-8">Available Restaurants</h1>
-        <p className="text-muted-foreground">No restaurants available at the moment. Check back soon.</p>
+        <p className="text-muted-foreground">
+          No restaurants available at the moment. Check back soon.
+        </p>
       </div>
     );
   }

@@ -47,16 +47,11 @@ export default function SignupRestaurantDetails({
         render={({ field }) => (
           <FormItem className="p-2 flex flex-row items-start space-x-3 space-y-0">
             <FormControl>
-              <Checkbox
-                checked={field.value}
-                onCheckedChange={field.onChange}
-              />
+              <Checkbox checked={field.value} onCheckedChange={field.onChange} />
             </FormControl>
             <div className="space-y-1 leading-none">
               <FormLabel>Are you a restaurant owner?</FormLabel>
-              <FormDescription>
-                Check this to claim an existing restaurant.
-              </FormDescription>
+              <FormDescription>Check this to claim an existing restaurant.</FormDescription>
             </div>
           </FormItem>
         )}
@@ -68,29 +63,31 @@ export default function SignupRestaurantDetails({
           name="restaurantId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className={hasNoRestaurants ? "opacity-50" : ""}>Select Restaurant</FormLabel>
+              <FormLabel className={hasNoRestaurants ? "opacity-50" : ""}>
+                Select Restaurant
+              </FormLabel>
 
               {isLoadingRestaurants ? (
-                <div className="p-2 text-sm text-muted-foreground text-center animate-pulse">Loading available restaurants...</div>
+                <div className="p-2 text-sm text-muted-foreground text-center animate-pulse">
+                  Loading available restaurants...
+                </div>
               ) : restaurantsError ? (
-                <div className="p-2 text-sm text-red-500 text-center">Error loading restaurants. Please try again.</div>
+                <div className="p-2 text-sm text-red-500 text-center">
+                  Error loading restaurants. Please try again.
+                </div>
               ) : hasNoRestaurants ? (
-                <p className="p-2 mx-2 text-center text-sm italic text-muted-foreground">All restaurants currently have an owner.</p>
+                <p className="p-2 mx-2 text-center text-sm italic text-muted-foreground">
+                  All restaurants currently have an owner.
+                </p>
               ) : (
                 <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select a restaurant to manage" />
                     </SelectTrigger>
                     <SelectContent>
                       {restaurantsData.map((restaurant) => (
-                        <SelectItem
-                          key={restaurant.id}
-                          value={restaurant.id.toString()}
-                        >
+                        <SelectItem key={restaurant.id} value={restaurant.id.toString()}>
                           {restaurant.name}
                         </SelectItem>
                       ))}
