@@ -1,5 +1,7 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, UseMutationOptions } from "@tanstack/react-query";
 import { login as apiLogin, me as apiMe, logout as apiLogout, signup as apiSignup } from "./api";
+import type { ApiError, ApiResponse, User } from "@/types/api";
+import type { LoginFormValues, SignupFormValues } from "./schemas";
 
 /**
  * React Query hook to manage the current user state.
@@ -10,10 +12,10 @@ import { login as apiLogin, me as apiMe, logout as apiLogout, signup as apiSignu
  * - Retry Policy: Disabled. If auth check fails (401), do not retry immediately.
  * - Selection: Extracts `res.data` to return the user object directly.
  *
- * @returns {UseQueryResult} Query result containing `data` (User) and status flags.
+ * @returns {UseQueryResult<User | null>} Query result containing `data` (User) and status flags.
  */
 export function useCurrentUserQuery() {
-  return useQuery({
+  return useQuery<ApiResponse<User>, ApiError, User | null>({
     queryKey: ["me"],
     queryFn: apiMe,
     staleTime: 1000 * 60 * 5, // 5 minutes cache overriding default 1min queryClient setting
@@ -30,11 +32,11 @@ export function useCurrentUserQuery() {
  * - Used by `AuthProvider` to expose login functionality.
  * - On success, the `AuthProvider` will invalidate `['me']` to refresh user state.
  *
- * @param {object} options - React Query mutation options (e.g., onSuccess, onError).
+ * @param {UseMutationOptions} options - React Query mutation options (e.g., onSuccess, onError).
  * @returns {UseMutationResult} Mutation result with `mutate` function.
  */
-export function useLoginMutation(options) {
-  return useMutation({
+export function useLoginMutation(options?: UseMutationOptions<ApiResponse<User>, ApiError, LoginFormValues>) {
+  return useMutation<ApiResponse<User>, ApiError, LoginFormValues>({
     mutationFn: apiLogin,
     ...options,
   });
@@ -47,11 +49,11 @@ export function useLoginMutation(options) {
  * - Wraps `apiLogout`.
  * - IMPORTANT: On success, the query cache (`['me']`) MUST be reset to null to reflect logged-out state.
  *
- * @param {object} options - React Query mutation options.
+ * @param {UseMutationOptions} options - React Query mutation options.
  * @returns {UseMutationResult} Mutation result.
  */
-export function useLogoutMutation(options) {
-  return useMutation({
+export function useLogoutMutation(options?: UseMutationOptions<ApiResponse<null>, ApiError, void>) {
+  return useMutation<ApiResponse<null>, ApiError, void>({
     mutationFn: apiLogout,
     ...options,
   });
@@ -64,11 +66,11 @@ export function useLogoutMutation(options) {
  * - Wraps `apiSignup`.
  * - Treated similarly to login since signup automatically authenticates the user.
  *
- * @param {object} options - React Query mutation options.
+ * @param {UseMutationOptions} options - React Query mutation options.
  * @returns {UseMutationResult} Mutation result.
  */
-export function useSignupMutation(options) {
-  return useMutation({
+export function useSignupMutation(options?: UseMutationOptions<ApiResponse<User>, ApiError, SignupFormValues>) {
+  return useMutation<ApiResponse<User>, ApiError, SignupFormValues>({
     mutationFn: apiSignup,
     ...options,
   });

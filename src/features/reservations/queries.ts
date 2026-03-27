@@ -7,6 +7,27 @@ import {
   getOwnerReservations,
   resolveReservation,
 } from "./api";
+import type { ApiError, ApiResponse, Reservation, ReservationStatus } from "@/types/api";
+
+/** Variables for updating a reservation — id plus the fields to change. */
+interface UpdateReservationVariables {
+  id: string;
+  scheduledAt?: string;
+  people?: number;
+}
+
+/** Variables for creating a new reservation. */
+interface CreateReservationVariables {
+  restaurantId: string;
+  scheduledAt: string;
+  people: number;
+}
+
+/** Variables for resolving a reservation (owner action). */
+interface ResolveReservationVariables {
+  id: string;
+  status: ReservationStatus;
+}
 
 /**
  * Hook to fetch the logged-in user's reservations.
@@ -15,7 +36,7 @@ import {
  * The query result containing the list of reservations.
  */
 export function useMyReservationsQuery() {
-  return useQuery({
+  return useQuery<ApiResponse<Reservation[]>, ApiError, Reservation[]>({
     queryKey: ["my-reservations"],
     queryFn: getMyReservations,
     select: (res) => res.data,
@@ -31,7 +52,7 @@ export function useMyReservationsQuery() {
 export function useCancelReservationMutation() {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<ApiResponse<null>, ApiError, string>({
     mutationFn: cancelReservation,
     onSuccess: () => {
       // Invalidate the list to refetch updated status
@@ -50,7 +71,7 @@ export function useCancelReservationMutation() {
 export function useUpdateReservationMutation() {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<ApiResponse<Reservation>, ApiError, UpdateReservationVariables>({
     mutationFn: ({ id, ...data }) => updateReservation(id, data), // Expects object { id, scheduledAt, people }
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["my-reservations"] });
@@ -70,7 +91,7 @@ export function useUpdateReservationMutation() {
 export function useCreateReservationMutation() {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<ApiResponse<Reservation>, ApiError, CreateReservationVariables>({
     mutationFn: ({ restaurantId, ...data }) => createReservation(restaurantId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["my-reservations"] });
@@ -85,10 +106,10 @@ export function useCreateReservationMutation() {
  * - Query Key: `['owner-reservations']`
  * - Used in Owner Dashboard.
  *
- * @returns {UseQueryResult<Array>}
+ * @returns {UseQueryResult<Reservation[]>}
  */
 export function useOwnerReservationsQuery() {
-  return useQuery({
+  return useQuery<ApiResponse<Reservation[]>, ApiError, Reservation[]>({
     queryKey: ["owner-reservations"],
     queryFn: getOwnerReservations,
     select: (res) => res.data,
@@ -106,7 +127,7 @@ export function useOwnerReservationsQuery() {
 export function useResolveReservationMutation() {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<ApiResponse<Reservation>, ApiError, ResolveReservationVariables>({
     mutationFn: ({ id, status }) => resolveReservation(id, status),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["owner-reservations"] });

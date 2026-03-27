@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getUnownedRestaurants, getRestaurants, getRestaurant } from "./api";
+import type { ApiError, ApiResponse, Restaurant } from "@/types/api";
 
 /**
  * Query to fetch unowned restaurants. Used in the SignupForm.
@@ -10,12 +11,11 @@ import { getUnownedRestaurants, getRestaurants, getRestaurant } from "./api";
  * - Stale Time: 5 minutes.
  * - Selection: Returns `res.data`.
  *
- * @param {object} params
- * @param {boolean} params.enabled
- * @returns {UseQueryResult}
+ * @param {{ enabled: boolean }} params
+ * @returns {UseQueryResult<Restaurant[]>}
  */
-export function useUnownedRestaurantsQuery({ enabled }) {
-  return useQuery({
+export function useUnownedRestaurantsQuery({ enabled }: { enabled: boolean }) {
+  return useQuery<ApiResponse<Restaurant[]>, ApiError, Restaurant[]>({
     queryKey: ["unowned-restaurants"],
     queryFn: getUnownedRestaurants,
     enabled,
@@ -32,10 +32,10 @@ export function useUnownedRestaurantsQuery({ enabled }) {
  * - Query Key: `['restaurants']`
  * - Standard fetch with default caching.
  *
- * @returns {UseQueryResult<Array>} List of restaurants.
+ * @returns {UseQueryResult<Restaurant[]>} List of restaurants.
  */
 export function useRestaurants() {
-  return useQuery({
+  return useQuery<ApiResponse<Restaurant[]>, ApiError, Restaurant[]>({
     queryKey: ["restaurants"],
     queryFn: getRestaurants,
     select: (res) => res.data,
@@ -50,12 +50,12 @@ export function useRestaurants() {
  * - Enabled: Only runs if `id` is truthy.
  *
  * @param {string} id - Restaurant UUID.
- * @returns {UseQueryResult<object>} Restaurant details.
+ * @returns {UseQueryResult<Restaurant>} Restaurant details.
  */
-export function useRestaurant(id) {
-  return useQuery({
+export function useRestaurant(id: string) {
+  return useQuery<ApiResponse<Restaurant>, ApiError, Restaurant>({
     queryKey: ["restaurants", id],
-    queryFn: (ctx) => getRestaurant(ctx.queryKey[1]),
+    queryFn: (ctx) => getRestaurant(ctx.queryKey[1] as string), // queryKey[1] is the id string
     enabled: !!id,
     select: (res) => res.data,
   });
