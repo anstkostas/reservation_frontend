@@ -17,7 +17,7 @@ export async function normalizeApiError(error: unknown): Promise<ApiError> {
     try {
       const data = await error.json();
       return {
-        message: data?.message || "An error occurred",
+        message: data?.message ?? "An error occurred",
         details: Array.isArray(data?.details) ? data.details : undefined,
       };
     } catch {

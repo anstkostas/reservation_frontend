@@ -1,11 +1,10 @@
-import type { ApiError } from "../types/api";
 import { normalizeApiError } from "./apiError";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 if (!BASE_URL) throw new Error("[fetch] VITE_API_URL is not set — add it to your .env file");
 
 /** Options accepted by `apiFetch`. */
-interface FetchOptions {
+export interface FetchOptions {
   method?: string;
   body?: unknown;
   headers?: Record<string, string>;
