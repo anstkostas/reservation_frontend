@@ -33,3 +33,5 @@ export const formSchema = z
       path: ["date"],
     }
   );
+
+export type ReservationFormValues = z.infer<typeof formSchema>;
