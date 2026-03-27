@@ -1,4 +1,5 @@
-import { useMutation, useQuery, UseMutationOptions } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import type { UseMutationOptions } from "@tanstack/react-query";
 import { login as apiLogin, me as apiMe, logout as apiLogout, signup as apiSignup } from "./api";
 import type { ApiError, ApiResponse, User } from "@/types/api";
 import type { LoginFormValues, SignupFormValues } from "./schemas";
@@ -15,12 +16,12 @@ import type { LoginFormValues, SignupFormValues } from "./schemas";
  * @returns {UseQueryResult<User | null>} Query result containing `data` (User) and status flags.
  */
 export function useCurrentUserQuery() {
-  return useQuery<ApiResponse<User>, ApiError, User | null>({
+  return useQuery<ApiResponse<User>, ApiError, User>({
     queryKey: ["me"],
     queryFn: apiMe,
     staleTime: 1000 * 60 * 5, // 5 minutes cache overriding default 1min queryClient setting
     retry: false,
-    select: (res) => res?.data || null,
+    select: (res) => res.data,
   });
 }
 
