@@ -1,5 +1,11 @@
 import { Role } from "../lib/constants";
 
+/** Normalized error shape thrown by `apiFetch` and produced by `normalizeApiError`. */
+export interface ApiError {
+  message: string;
+  details?: unknown[];
+}
+
 /** Possible statuses for a reservation — matches backend RESERVATION_STATUS constants and DB values. */
 export type ReservationStatus = "active" | "canceled" | "completed" | "no-show";
 
