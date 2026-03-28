@@ -52,7 +52,7 @@ export function useRestaurants() {
  * @param {string} id - Restaurant UUID.
  * @returns {UseQueryResult<Restaurant>} Restaurant details.
  */
-export function useRestaurant(id: string) {
+export function useRestaurant(id: string | undefined) {
   return useQuery<ApiResponse<Restaurant>, ApiError, Restaurant>({
     queryKey: ["restaurants", id],
     queryFn: (ctx) => getRestaurant(ctx.queryKey[1] as string), // queryKey[1] is the id string
