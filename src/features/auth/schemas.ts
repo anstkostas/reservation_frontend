@@ -19,7 +19,7 @@ export const signupSchema = z
         "Password must have 8+ chars, 1 uppercase, 1 lowercase, 1 number, and 1 special char"
       ),
     confirmPassword: z.string(),
-    isOwner: z.boolean().default(false),
+    isOwner: z.boolean(),
     restaurantId: z.string().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {

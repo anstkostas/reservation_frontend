@@ -1,7 +1,10 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { FieldPath } from "react-hook-form";
 import { signupSchema } from "@/features/auth/schemas";
+import type { SignupFormValues } from "@/features/auth/schemas";
 import { useAuth } from "@/features/auth/useAuth";
+import type { ApiError } from "@/types/api";
 // Cross-feature import: unowned restaurants are only used in the signup flow, so the query lives in restaurants but is consumed here
 import { useUnownedRestaurantsQuery } from "@/features/restaurants/queries";
 import { Button } from "@/components/ui/button";
@@ -23,6 +26,10 @@ import {
 import SignupRestaurantDetails from "./signup/SignupRestaurantDetails";
 import { Role } from "@/lib/constants";
 
+interface SignupFormProps {
+  onSwitchToLogin: () => void;
+}
+
 /**
  * Complex Form Component for User Registration.
  *
@@ -32,13 +39,12 @@ import { Role } from "@/lib/constants";
  * - Restaurant Claiming: Allows new owners to claim a restaurant during signup.
  * - Integration: Uses `useAuth` for the actual signup mutation and `useUnownedRestaurantsQuery` for the data.
  *
- * @param {object} props
  * @param {function} props.onSwitchToLogin - Callback to toggle the view to login.
  */
-export default function SignupForm({ onSwitchToLogin }) {
+export default function SignupForm({ onSwitchToLogin }: SignupFormProps) {
   const { signupAsync } = useAuth();
 
-  const form = useForm({
+  const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
       firstname: "",
@@ -59,7 +65,7 @@ export default function SignupForm({ onSwitchToLogin }) {
     error: restaurantsError,
   } = useUnownedRestaurantsQuery({ enabled: isOwner });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: SignupFormValues) => {
     try {
       await signupAsync({
         firstname: data.firstname,
@@ -70,13 +76,14 @@ export default function SignupForm({ onSwitchToLogin }) {
         restaurantId: data.isOwner ? data.restaurantId : null,
       });
     } catch (err) {
-      console.error("[LOG] SignupForm.onSubmit:", err.message);
-      if (err.details?.length) {
-        err.details.forEach(({ field, message }) => {
-          form.setError(field, { message });
+      const error = err as ApiError;
+      console.error("[LOG] SignupForm.onSubmit:", error.message);
+      if (error.details?.length) {
+        (error.details as { field: string; message: string }[]).forEach(({ field, message }) => {
+          form.setError(field as FieldPath<SignupFormValues>, { message });
         });
       } else {
-        form.setError("root", { message: err.message });
+        form.setError("root", { message: error.message });
       }
     }
   };

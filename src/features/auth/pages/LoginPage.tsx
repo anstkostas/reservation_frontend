@@ -11,12 +11,14 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   // From is a string URL
-  const from = location.state?.from || "/";
-  const [mode, setMode] = useState(location.state?.mode === "signup" ? "signup" : "login");
+  const from = (location.state as { from?: string } | null)?.from || "/";
+  const [mode, setMode] = useState<"login" | "signup">(
+    location.state?.mode === "signup" ? "signup" : "login"
+  );
 
   useEffect(() => {
     if (!isLoadingUser && currentUser) {
-      let target;
+      let target: string;
       if (currentUser.role === Role.OWNER) {
         target = "/owner-dashboard";
       } else {

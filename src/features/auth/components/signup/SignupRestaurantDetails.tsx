@@ -1,3 +1,6 @@
+import type { UseFormReturn } from "react-hook-form";
+import type { SignupFormValues } from "@/features/auth/schemas";
+import type { Restaurant, ApiError } from "@/types/api";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   FormControl,
@@ -15,6 +18,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+interface SignupRestaurantDetailsProps {
+  form: UseFormReturn<SignupFormValues>;
+  unownedRestaurants: Restaurant[];
+  isLoadingRestaurants: boolean;
+  restaurantsError: ApiError | null;
+}
+
 /**
  * Conditional restaurant-claim section for the owner signup flow.
  *
@@ -23,18 +33,17 @@ import {
  * - When checked, reveals a restaurant selector populated with unowned restaurants.
  * - Handles three secondary states: loading, API error, and no available restaurants.
  *
- * @param {object} props
- * @param {object} props.form - React Hook Form instance from the parent `SignupForm`.
- * @param {Array} props.unownedRestaurants - List of restaurants without an owner.
+ * @param {UseFormReturn<SignupFormValues>} props.form - React Hook Form instance from the parent `SignupForm`.
+ * @param {Restaurant[]} props.unownedRestaurants - List of restaurants without an owner.
  * @param {boolean} props.isLoadingRestaurants - Whether the restaurant list is still loading.
- * @param {Error|null} props.restaurantsError - Error from the unowned restaurants query, if any.
+ * @param {ApiError|null} props.restaurantsError - Error from the unowned restaurants query, if any.
  */
 export default function SignupRestaurantDetails({
   form,
   unownedRestaurants,
   isLoadingRestaurants,
   restaurantsError,
-}) {
+}: SignupRestaurantDetailsProps) {
   const isOwner = form.watch("isOwner");
   const restaurantsData = unownedRestaurants || [];
   const hasNoRestaurants = !isLoadingRestaurants && !restaurantsError && restaurantsData.length < 1;
@@ -87,7 +96,7 @@ export default function SignupRestaurantDetails({
                     </SelectTrigger>
                     <SelectContent>
                       {restaurantsData.map((restaurant) => (
-                        <SelectItem key={restaurant.id} value={restaurant.id.toString()}>
+                        <SelectItem key={restaurant.id} value={restaurant.id}>
                           {restaurant.name}
                         </SelectItem>
                       ))}

@@ -1,6 +1,12 @@
+import type { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { Role } from "@/lib/constants";
 import { useAuth } from "@/features/auth/useAuth";
+
+interface ProtectedRouteProps {
+  children: ReactNode;
+  role?: Role;
+}
 
 /**
  * Higher-Order Component for route protection.
@@ -11,11 +17,10 @@ import { useAuth } from "@/features/auth/useAuth";
  * - **Redirection**: If unauthenticated, navigates to `/login` but preserves the attempted path in `state.from`. This allows `LoginForm` to redirect the user back to their intended destination after successful login.
  * - **Role Guard**: If a `role` is specified and the user's role doesn't match, redirects them to their own home route — guards against manual URL navigation to the wrong role's page.
  *
- * @param {object} props
- * @param {React.ReactNode} props.children - The protected content/route.
- * @param {string} [props.role] - Required role ('customer' | 'owner'). If provided, redirects mismatched roles.
+ * @param {ReactNode} props.children - The protected content/route.
+ * @param {Role} [props.role] - Required role. If provided, redirects mismatched roles.
  */
-export default function ProtectedRoute({ children, role }) {
+export default function ProtectedRoute({ children, role }: ProtectedRouteProps) {
   const { currentUser, isLoadingUser } = useAuth();
   const location = useLocation();
 
@@ -33,5 +38,5 @@ export default function ProtectedRoute({ children, role }) {
     return <Navigate to={roleHome} replace />;
   }
 
-  return children;
+  return <>{children}</>;
 }

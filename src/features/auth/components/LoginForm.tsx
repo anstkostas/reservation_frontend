@@ -1,7 +1,10 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { FieldPath } from "react-hook-form";
 import { useAuth } from "@/features/auth/useAuth";
 import { loginSchema } from "@/features/auth/schemas";
+import type { LoginFormValues } from "@/features/auth/schemas";
+import type { ApiError } from "@/types/api";
 import { Button } from "@/components/ui/button";
 import { EmailFormField, PasswordFormField } from "@/components/FormFields";
 import { Form } from "@/components/ui/form";
@@ -14,6 +17,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+interface LoginFormProps {
+  onSwitchToSignup: () => void;
+}
+
 /**
  * Login Form Component.
  *
@@ -22,13 +29,12 @@ import {
  * - Handles server-side validation errors (e.g., 401 Unauthorized) and maps them to form fields.
  * - Auto-redirects/conditionally renders content if `currentUser` is already present.
  *
- * @param {object} props
  * @param {function} props.onSwitchToSignup - Callback to toggle to the signup view.
  */
-export default function LoginForm({ onSwitchToSignup }) {
+export default function LoginForm({ onSwitchToSignup }: LoginFormProps) {
   const { loginAsync, isLoggingIn, currentUser } = useAuth();
 
-  const form = useForm({
+  const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
@@ -38,18 +44,19 @@ export default function LoginForm({ onSwitchToSignup }) {
 
   const { setError, reset } = form;
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: LoginFormValues) => {
     try {
       await loginAsync(data);
       reset({ password: "" });
     } catch (err) {
-      console.error("[LOG] LoginForm.onSubmit:", err.message);
-      if (err.details?.length) {
-        err.details.forEach(({ field, message }) => {
-          setError(field, { message });
+      const error = err as ApiError;
+      console.error("[LOG] LoginForm.onSubmit:", error.message);
+      if (error.details?.length) {
+        (error.details as { field: string; message: string }[]).forEach(({ field, message }) => {
+          setError(field as FieldPath<LoginFormValues>, { message });
         });
       } else {
-        setError("root", { type: "server", message: err.message });
+        setError("root", { type: "server", message: error.message });
       }
     }
   };
