@@ -1,3 +1,8 @@
+// TODO: Consider refactoring to accept `name` as a prop (name: Path<T>) instead of hardcoding it
+// inside each component. That approach lets TypeScript verify the field name at the call site
+// (no `as Path<T>` cast needed) and makes components more reusable across different form schemas.
+// Requires updating all call sites: LoginForm, SignupForm, ReservationCreateModal.
+import { type Control, type FieldValues, type Path } from "react-hook-form";
 import { FormField, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { format } from "date-fns";
@@ -9,12 +14,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export function DateFormField({ control }) {
+export function DateFormField<T extends FieldValues>({ control }: { control: Control<T> }) {
   return (
     <>
       <FormField
         control={control}
-        name="date"
+        name={"date" as Path<T>}
         render={({ field }) => (
           <FormItem>
             <FormLabel>Date</FormLabel>
@@ -29,9 +34,9 @@ export function DateFormField({ control }) {
   );
 }
 
-export function TimeFormField({ control }) {
+export function TimeFormField<T extends FieldValues>({ control }: { control: Control<T> }) {
   // Generate time slots (12:00 to 23:00, every 30 mins)
-  const timeSlots = [];
+  const timeSlots: string[] = [];
   for (let h = 12; h <= 23; h++) {
     timeSlots.push(`${h.toString().padStart(2, "0")}:00`);
     timeSlots.push(`${h.toString().padStart(2, "0")}:30`);
@@ -40,7 +45,7 @@ export function TimeFormField({ control }) {
     <>
       <FormField
         control={control}
-        name="time"
+        name={"time" as Path<T>}
         render={({ field }) => (
           <FormItem>
             <FormLabel>Time</FormLabel>
@@ -66,12 +71,12 @@ export function TimeFormField({ control }) {
   );
 }
 
-export function PersonsFormField({ control }) {
+export function PersonsFormField<T extends FieldValues>({ control }: { control: Control<T> }) {
   return (
     <>
       <FormField
         control={control}
-        name="people"
+        name={"people" as Path<T>}
         render={({ field }) => (
           <FormItem>
             <FormLabel>Persons</FormLabel>
@@ -86,14 +91,19 @@ export function PersonsFormField({ control }) {
   );
 }
 
-export function NameFormField({ control, name }) {
+interface NameFormFieldProps<T extends FieldValues> {
+  control: Control<T>;
+  name: "firstname" | "lastname";
+}
+
+export function NameFormField<T extends FieldValues>({ control, name }: NameFormFieldProps<T>) {
   const label = name === "firstname" ? "First Name" : "Last Name";
   const placeholder = name === "firstname" ? "John" : "Doe";
   return (
     <>
       <FormField
         control={control}
-        name={name}
+        name={name as Path<T>}
         render={({ field }) => (
           <FormItem>
             <FormLabel>{label}</FormLabel>
@@ -108,12 +118,12 @@ export function NameFormField({ control, name }) {
   );
 }
 
-export function EmailFormField({ control }) {
+export function EmailFormField<T extends FieldValues>({ control }: { control: Control<T> }) {
   return (
     <>
       <FormField
         control={control}
-        name="email"
+        name={"email" as Path<T>}
         render={({ field }) => (
           <FormItem>
             <FormLabel>Email</FormLabel>
@@ -128,12 +138,12 @@ export function EmailFormField({ control }) {
   );
 }
 
-export function PasswordFormField({ control }) {
+export function PasswordFormField<T extends FieldValues>({ control }: { control: Control<T> }) {
   return (
     <>
       <FormField
         control={control}
-        name="password"
+        name={"password" as Path<T>}
         render={({ field }) => (
           <FormItem>
             <FormLabel>Password</FormLabel>
@@ -148,12 +158,16 @@ export function PasswordFormField({ control }) {
   );
 }
 
-export function ConfirmPasswordFormField({ control }) {
+export function ConfirmPasswordFormField<T extends FieldValues>({
+  control,
+}: {
+  control: Control<T>;
+}) {
   return (
     <>
       <FormField
         control={control}
-        name="confirmPassword"
+        name={"confirmPassword" as Path<T>}
         render={({ field }) => (
           <FormItem>
             <FormLabel>Confirm Password</FormLabel>

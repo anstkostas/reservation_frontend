@@ -1,7 +1,8 @@
+import type { FallbackProps } from "react-error-boundary";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, RefreshCw } from "lucide-react";
 
-export default function ErrorFallback({ error: _error, resetErrorBoundary }) {
+export default function ErrorFallback({ error: _error, resetErrorBoundary }: FallbackProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] text-center px-4 space-y-8 animate-in fade-in duration-500">
       <div className="space-y-4">
