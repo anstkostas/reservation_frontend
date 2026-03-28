@@ -1,8 +1,9 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import type { UseMutationOptions } from "@tanstack/react-query";
 import { login as apiLogin, me as apiMe, logout as apiLogout, signup as apiSignup } from "./api";
+import type { SignupApiPayload } from "./api";
 import type { ApiError, ApiResponse, User } from "@/types/api";
-import type { LoginFormValues, SignupFormValues } from "./schemas";
+import type { LoginFormValues } from "./schemas";
 
 /**
  * React Query hook to manage the current user state.
@@ -70,8 +71,8 @@ export function useLogoutMutation(options?: UseMutationOptions<ApiResponse<null>
  * @param {UseMutationOptions} options - React Query mutation options.
  * @returns {UseMutationResult} Mutation result.
  */
-export function useSignupMutation(options?: UseMutationOptions<ApiResponse<User>, ApiError, SignupFormValues>) {
-  return useMutation<ApiResponse<User>, ApiError, SignupFormValues>({
+export function useSignupMutation(options?: UseMutationOptions<ApiResponse<User>, ApiError, SignupApiPayload>) {
+  return useMutation<ApiResponse<User>, ApiError, SignupApiPayload>({
     mutationFn: apiSignup,
     ...options,
   });

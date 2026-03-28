@@ -1,5 +1,15 @@
 import { apiFetch } from "@/lib/fetch";
 import type { ApiResponse, User } from "@/types/api";
+import { Role } from "@/lib/constants";
+
+export interface SignupApiPayload {
+  firstname: string;
+  lastname: string;
+  email: string;
+  password: string;
+  role: Role;
+  restaurantId?: string | null;
+}
 
 /**
  * Authenticates a user with email and password.
@@ -52,18 +62,10 @@ export function logout(): Promise<ApiResponse<null>> {
  * - Sends POST request to /auth/signup with user details.
  * - Automatically logs the user in (setting cookie) upon successful creation.
  *
- * @param {{ firstname: string; lastname: string; email: string; password: string; confirmPassword: string; isOwner: boolean; restaurantId?: string }} data - Signup payload
+ * @param {SignupApiPayload} data - Signup payload (form-only fields like confirmPassword and isOwner are stripped before reaching here)
  * @returns {Promise<ApiResponse<User>>} Response containing the new user data.
  */
-export function signup(data: {
-  firstname: string;
-  lastname: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  isOwner: boolean;
-  restaurantId?: string;
-}): Promise<ApiResponse<User>> {
+export function signup(data: SignupApiPayload): Promise<ApiResponse<User>> {
   return apiFetch<ApiResponse<User>>("/auth/signup", {
     method: "POST",
     body: data,

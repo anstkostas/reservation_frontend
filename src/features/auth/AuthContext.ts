@@ -1,12 +1,13 @@
 import { createContext } from "react";
 import type { UseMutationResult } from "@tanstack/react-query";
 import type { ApiError, ApiResponse, User } from "@/types/api";
-import type { LoginFormValues, SignupFormValues } from "./schemas";
+import type { LoginFormValues } from "./schemas";
+import type { SignupApiPayload } from "./api";
 
 // Derive async mutate types from TanStack Query generics — if the mutation
 // signature changes, these update automatically.
 type LoginMutation = UseMutationResult<ApiResponse<User>, ApiError, LoginFormValues>;
-type SignupMutation = UseMutationResult<ApiResponse<User>, ApiError, SignupFormValues>;
+type SignupMutation = UseMutationResult<ApiResponse<User>, ApiError, SignupApiPayload>;
 type LogoutMutation = UseMutationResult<ApiResponse<null>, ApiError, void>;
 
 export interface AuthContextValue {

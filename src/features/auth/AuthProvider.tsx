@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { AuthContext } from "./AuthContext";
+import type { AuthContextValue } from "./AuthContext";
 import {
   useCurrentUserQuery,
   useLoginMutation,
@@ -46,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
   });
 
-  const value = {
+  const value: AuthContextValue = {
     currentUser,
     isLoadingUser,
 
