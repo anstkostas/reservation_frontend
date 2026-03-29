@@ -27,7 +27,22 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CalendarIcon, Clock, Loader2, Users, MapPin, Phone } from "lucide-react";
-import { formSchema } from "../schemas";
+import { formSchema, type ReservationFormValues } from "../schemas";
+import type { Reservation, ReservationStatus } from "@/types/api";
+
+/** Maps every reservation status to a Shadcn Badge variant. */
+const STATUS_BADGE_VARIANT = {
+  active: "default",
+  completed: "secondary",
+  canceled: "destructive",
+  "no-show": "outline",
+} as const satisfies Record<ReservationStatus, string>;
+
+interface Props {
+  reservation: Reservation | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
 
 /**
  * Modal for the customer to view and manage an existing reservation.
@@ -39,27 +54,15 @@ import { formSchema } from "../schemas";
  *   - Cancel: Deletes the reservation (with confirmation).
  *   - Update: Mutates the existing reservation (optimistic update via React Query).
  * - Conditional UI: Displays different buttons based on `status` (e.g., active vs completed).
- *
- * @param {object} props
- * @param {object} props.reservation - The full reservation object to display.
- * @param {boolean} props.open - Modal visibility.
- * @param {function} props.onOpenChange - State setter.
  */
-/** Maps reservation status values to Shadcn Badge variant names. */
-const STATUS_BADGE_VARIANT = {
-  active: "default",
-  completed: "secondary",
-  canceled: "destructive",
-};
-
-export function ReservationDetailModal({ reservation, open, onOpenChange }) {
+export function ReservationDetailModal({ reservation, open, onOpenChange }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [isCancelConfirmOpen, setIsCancelConfirmOpen] = useState(false);
 
   const cancelMutation = useCancelReservationMutation();
   const updateMutation = useUpdateReservationMutation();
 
-  const form = useForm({
+  const form = useForm<ReservationFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       date: "",
@@ -68,9 +71,12 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
     },
   });
 
-  // Destructure form.reset — useForm may recreate its return object, but individual
-  // method refs are stable, so we use formReset in deps instead of the full form object
+  // Destructure stable method refs — useForm and useMutation may recreate their return
+  // objects on state changes, but individual method refs are stable, so we use these
+  // in deps instead of the full objects to avoid spurious effect re-runs
   const { reset: formReset } = form;
+  const { reset: cancelMutationReset } = cancelMutation;
+  const { reset: updateMutationReset } = updateMutation;
 
   // Reset form values when modal opens or reservation changes.
   // State resets (isEditing, isCancelConfirmOpen) are handled in handleOpenChange on close.
@@ -84,13 +90,13 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
         time: format(scheduled, "HH:mm"),
         people: reservation.people,
       });
-      cancelMutation.reset();
-      updateMutation.reset();
+      cancelMutationReset();
+      updateMutationReset();
     }
-  }, [open, reservation, formReset, cancelMutation, updateMutation]);
+  }, [open, reservation, formReset, cancelMutationReset, updateMutationReset]);
 
   // Reset UI state on close so the modal opens fresh next time
-  const handleOpenChange = (newOpen) => {
+  const handleOpenChange = (newOpen: boolean) => {
     if (!newOpen) {
       setIsEditing(false);
       setIsCancelConfirmOpen(false);
@@ -110,11 +116,11 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
       toast.success(res.message || "Reservation canceled successfully");
       onOpenChange(false);
     } catch (err) {
-      toast.error(err.message || "Failed to cancel reservation");
+      toast.error(err instanceof Error ? err.message : "Failed to cancel reservation");
     }
   };
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values: ReservationFormValues) => {
     try {
       // Combine separate date/time pickers into a single ISO datetime for the API
       const scheduledAt = new Date(`${values.date}T${values.time}`).toISOString();
@@ -126,8 +132,8 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }) {
       toast.success(res.message || "Reservation updated successfully");
       setIsEditing(false);
     } catch (err) {
-      toast.error(err.message || "Failed to update reservation");
-      console.error("[LOG] ReservationDetailModal.onSubmit:", err.stack);
+      toast.error(err instanceof Error ? err.message : "Failed to update reservation");
+      console.error("[LOG] ReservationDetailModal.onSubmit:", err instanceof Error ? err.stack : String(err));
     }
   };
 

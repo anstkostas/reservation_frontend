@@ -8,7 +8,11 @@ export const formSchema = z
   .object({
     date: z.string().min(1, "Date is required"),
     time: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Time must be HH:MM"),
-    people: z.coerce.number().min(1, "At least 1 person").max(20, "Max 20 people"),
+    people: z
+      .number({ error: "Please enter a valid number" })
+      .int("Must be a whole number")
+      .min(1, "At least 1 person")
+      .max(20, "Max 20 people"),
   })
   .refine(
     (data) => {

@@ -1,23 +1,13 @@
 import { useState } from "react";
-import {
-  Search,
-  CheckCircle2,
-  Users,
-  Calendar,
-  Clock,
-  History,
-  CalendarDays,
-  XCircle,
-} from "lucide-react";
+import { Search, CalendarDays, History } from "lucide-react";
 import { toast } from "sonner";
 import { useOwnerReservationsQuery, useResolveReservationMutation } from "../queries";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import OwnerTableViewMobile from "../components/OwnerTableViewMobile";
-import OwnerTableViewTabletDesktop from "../components/OwnerTableViewTabletDesktop";
+import { OwnerTableViewMobile } from "../components/OwnerTableViewMobile";
+import { OwnerTableViewTabletDesktop } from "../components/OwnerTableViewTabletDesktop";
+import type { ApiError, Reservation, ReservationStatus } from "@/types/api";
 
 /**
  * Main Dashboard for Restaurant Owners.
@@ -31,40 +21,66 @@ import OwnerTableViewTabletDesktop from "../components/OwnerTableViewTabletDeskt
  *   - Active: Ascending by date (soonest first).
  *   - History: Descending by date (most recent first).
  * - Actions: Allows marking reservations as 'completed' or 'no-show'.
- *
- * @component
  */
 export default function OwnerDashboard() {
   const { data: reservations, isLoading, error } = useOwnerReservationsQuery();
   const resolveMutation = useResolveReservationMutation();
   const [searchTerm, setSearchTerm] = useState("");
 
-  const handleResolve = (id, status) => {
-    const loadingMsg = "Processing...";
-
+  const handleResolve = (id: string, status: ReservationStatus) => {
     toast.promise(resolveMutation.mutateAsync({ id, status }), {
-      loading: loadingMsg,
-      success: (data) => data.message || `Guest reservation status updated successfully!`,
-      error: (err) => err.message || `Failed to update guest reservation status`,
+      loading: "Processing...",
+      success: (data) => data.message || "Guest reservation status updated successfully!",
+      error: (err) => (err as ApiError)?.message || "Failed to update guest reservation status",
     });
   };
 
-  const filteredReservations =
-    reservations?.filter((res) => {
+  const filteredReservations: Reservation[] =
+    reservations?.filter((reservation) => {
       const searchLower = searchTerm.toLowerCase();
       const customerName =
-        `${res.customer?.firstname || ""} ${res.customer?.lastname || ""}`.toLowerCase();
-      const customerEmail = res.customer?.email?.toLowerCase() || "";
+        `${reservation.customer?.firstname ?? ""} ${reservation.customer?.lastname ?? ""}`.toLowerCase();
+      const customerEmail = reservation.customer?.email?.toLowerCase() ?? "";
       return customerName.includes(searchLower) || customerEmail.includes(searchLower);
-    }) || [];
+    }) ?? [];
 
   // Sort: Active by date ASC (soonest), History by date DESC (recent)
   const activeReservations = filteredReservations
     .filter((r) => r.status === "active")
-    .toSorted((a, b) => new Date(a.scheduledAt) - new Date(b.scheduledAt));
+    .toSorted((a, b) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime());
   const historyReservations = filteredReservations
     .filter((r) => r.status !== "active")
-    .toSorted((a, b) => new Date(b.scheduledAt) - new Date(a.scheduledAt));
+    .toSorted((a, b) => new Date(b.scheduledAt).getTime() - new Date(a.scheduledAt).getTime());
+
+  function canUpdate(scheduledAt: string): boolean {
+    return new Date(scheduledAt) <= new Date();
+  }
+
+  function renderTable(tableReservations: Reservation[], showActions: boolean) {
+    return (
+      <>
+        <div className="hidden md:block rounded-md border">
+          <OwnerTableViewTabletDesktop
+            activeReservations={tableReservations}
+            canUpdate={canUpdate}
+            handleResolve={handleResolve}
+            resolveMutation={resolveMutation}
+            showActions={showActions}
+          />
+        </div>
+
+        <div className="md:hidden space-y-4">
+          <OwnerTableViewMobile
+            activeReservations={tableReservations}
+            canUpdate={canUpdate}
+            handleResolve={handleResolve}
+            resolveMutation={resolveMutation}
+            showActions={showActions}
+          />
+        </div>
+      </>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -79,36 +95,6 @@ export default function OwnerDashboard() {
       <div className="container mx-auto p-6 flex justify-center items-center h-[50vh]">
         <div className="text-destructive">Error loading reservations: {error.message}</div>
       </div>
-    );
-  }
-
-  function canUpdate(scheduledAt) {
-    return new Date(scheduledAt) <= new Date();
-  }
-
-  function renderTable(activeReservations, showActions) {
-    return (
-      <>
-        <div className="hidden md:block rounded-md border">
-          <OwnerTableViewTabletDesktop
-            activeReservations={activeReservations}
-            canUpdate={canUpdate}
-            handleResolve={handleResolve}
-            resolveMutation={resolveMutation}
-            showActions={showActions}
-          />
-        </div>
-
-        <div className="md:hidden space-y-4">
-          <OwnerTableViewMobile
-            activeReservations={activeReservations}
-            canUpdate={canUpdate}
-            handleResolve={handleResolve}
-            resolveMutation={resolveMutation}
-            showActions={showActions}
-          />
-        </div>
-      </>
     );
   }
 

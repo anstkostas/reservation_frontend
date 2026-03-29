@@ -7,10 +7,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Calendar, Clock, Users } from "lucide-react";
+import { Calendar, Clock, Users, CheckCircle2, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, XCircle } from "lucide-react";
 import { ReservationStatusBadge } from "./ReservationStatusBadge";
+import type { Reservation, ReservationStatus } from "@/types/api";
+
+interface Props {
+  activeReservations: Reservation[];
+  canUpdate: (scheduledAt: string) => boolean;
+  handleResolve: (id: string, status: ReservationStatus) => void;
+  resolveMutation: { isPending: boolean };
+  showActions: boolean;
+}
 
 /**
  * Tablet/desktop table view for the Owner Dashboard.
@@ -19,21 +27,14 @@ import { ReservationStatusBadge } from "./ReservationStatusBadge";
  * - Renders a full data table with customer, date/time, party size, and status columns.
  * - Displays "Complete" and "No-show" action buttons when the reservation time has arrived.
  * - Handles empty state rendering via a full-width table row.
- *
- * @param {object} props
- * @param {Array} props.activeReservations - The list of reservations to display.
- * @param {function} props.canUpdate - Helper to check if the current time allows status updates.
- * @param {function} props.handleResolve - Callback to resolve a reservation.
- * @param {object} props.resolveMutation - Mutation state for loading indicators.
- * @param {boolean} props.showActions - Whether to show action buttons (true for Active tab).
  */
-export default function OwnerTableViewTabletDesktop({
+export function OwnerTableViewTabletDesktop({
   activeReservations,
   canUpdate,
   handleResolve,
   resolveMutation,
   showActions,
-}) {
+}: Props) {
   return (
     <>
       <Table>

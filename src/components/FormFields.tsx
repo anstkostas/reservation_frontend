@@ -81,7 +81,13 @@ export function PersonsFormField<T extends FieldValues>({ control }: { control: 
           <FormItem>
             <FormLabel>Persons</FormLabel>
             <FormControl>
-              <Input type="number" min={1} max={20} {...field} />
+              <Input
+                type="number"
+                min={1}
+                max={20}
+                {...field}
+                onChange={(e) => field.onChange(e.target.valueAsNumber)}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>

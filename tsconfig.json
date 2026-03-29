@@ -1,17 +1,24 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "ES2023",
     "module": "ESNext",
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "paths": {
       "@/*": ["./src/*"]
     },
-    "allowJs": true,
-    "checkJs": false,
     "noEmit": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false
   },
   "include": ["src"],
   "exclude": ["node_modules"]

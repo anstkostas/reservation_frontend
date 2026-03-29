@@ -6,6 +6,7 @@ import { ReservationDetailModal } from "../components/ReservationDetailModal";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { CalendarDays, History, UtensilsCrossed } from "lucide-react";
+import type { Reservation } from "@/types/api";
 
 /**
  * Customer "My Reservations" Page.
@@ -15,15 +16,13 @@ import { CalendarDays, History, UtensilsCrossed } from "lucide-react";
  * - Tabbed Interface: Separates 'Upcoming' vs 'History' (past, canceled).
  * - Interaction: Clicking a card opens `ReservationDetailModal`.
  * - Empty States: Displays specific messaging/actions (e.g., "Book a Table") when lists are empty.
- *
- * @component
  */
 export default function ReservationHistory() {
   const { data: reservations, isLoading, error } = useMyReservationsQuery();
-  const [selectedReservation, setSelectedReservation] = useState(null);
+  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleCardClick = (reservation) => {
+  const handleCardClick = (reservation: Reservation) => {
     setSelectedReservation(reservation);
     setIsModalOpen(true);
   };
@@ -44,10 +43,10 @@ export default function ReservationHistory() {
 
   // Sort upcoming by date ASC (soonest first), history by date DESC (most recent first)
   const upcoming = (reservations?.filter((r) => r.status === "active") ?? []).toSorted(
-    (a, b) => new Date(a.scheduledAt) - new Date(b.scheduledAt)
+    (a, b) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime()
   );
   const history = (reservations?.filter((r) => r.status !== "active") ?? []).toSorted(
-    (a, b) => new Date(b.scheduledAt) - new Date(a.scheduledAt)
+    (a, b) => new Date(b.scheduledAt).getTime() - new Date(a.scheduledAt).getTime()
   );
 
   return (
@@ -79,7 +78,7 @@ export default function ReservationHistory() {
 
         <TabsContent value="upcoming">
           {upcoming.length === 0 ? (
-            <EmptyState type="upcoming" />
+            <EmptyState />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {upcoming.map((r) => (

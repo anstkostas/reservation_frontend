@@ -1,17 +1,23 @@
 import { format } from "date-fns";
-import { CalendarIcon, Clock, Users } from "lucide-react";
+import { CalendarIcon, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { Reservation, ReservationStatus } from "@/types/api";
 
 /** Maps reservation status values to Shadcn Badge variant names. */
 const STATUS_BADGE_VARIANT = {
-  active: "default",      // primary
-  completed: "secondary", // gray
+  active: "default",       // primary
+  completed: "secondary",  // gray
   canceled: "destructive", // red
-};
+  "no-show": "outline",    // neutral
+} as const satisfies Record<ReservationStatus, string>;
 
-export function ReservationCard({ reservation, onClick }) {
+interface Props {
+  reservation: Reservation;
+  onClick: (reservation: Reservation) => void;
+}
 
+export function ReservationCard({ reservation, onClick }: Props) {
   return (
     <Card
       className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer border-l-4 border-l-primary"
@@ -24,7 +30,7 @@ export function ReservationCard({ reservation, onClick }) {
               {reservation.restaurantName || `Restaurant #${reservation.restaurantId}`}
             </CardTitle>
           </div>
-          <Badge variant={STATUS_BADGE_VARIANT[reservation.status] || "outline"} className="capitalize">
+          <Badge variant={STATUS_BADGE_VARIANT[reservation.status]} className="capitalize">
             {reservation.status}
           </Badge>
         </div>

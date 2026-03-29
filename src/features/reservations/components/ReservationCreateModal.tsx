@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useCreateReservationMutation } from "../queries";
-import { formSchema } from "../schemas";
+import { formSchema, type ReservationFormValues } from "../schemas";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,6 +19,13 @@ import { DateFormField } from "@/components/FormFields";
 import { TimeFormField } from "@/components/FormFields";
 import { PersonsFormField } from "@/components/FormFields";
 
+interface Props {
+  restaurantId: string;
+  restaurantName: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
 /**
  * Modal for the customer to make a new reservation.
  *
@@ -26,17 +33,11 @@ import { PersonsFormField } from "@/components/FormFields";
  * - Uses `useCreateReservationMutation` to optimistically create the booking.
  * - Validates date/time/people via Zod schema before submission.
  * - Handles toast notifications for success/failure feedback.
- *
- * @param {object} props
- * @param {string} props.restaurantId - The target restaurant ID.
- * @param {string} props.restaurantName - Display name for the modal header.
- * @param {boolean} props.open - Modal visibility state.
- * @param {function} props.onOpenChange - State setter for visibility.
  */
-export function ReservationCreateModal({ restaurantId, restaurantName, open, onOpenChange }) {
+export function ReservationCreateModal({ restaurantId, restaurantName, open, onOpenChange }: Props) {
   const createMutation = useCreateReservationMutation();
 
-  const form = useForm({
+  const form = useForm<ReservationFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       date: format(new Date(), "yyyy-MM-dd"),
@@ -45,7 +46,7 @@ export function ReservationCreateModal({ restaurantId, restaurantName, open, onO
     },
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: ReservationFormValues) => {
     try {
       // Combine separate date/time pickers into a single ISO datetime for the API
       const scheduledAtDate = new Date(`${data.date}T${data.time}`);
@@ -64,7 +65,7 @@ export function ReservationCreateModal({ restaurantId, restaurantName, open, onO
         toast.error(res.message || "Failed to book table");
       }
     } catch (err) {
-      toast.error(err.message || "Something went wrong. Please try again.");
+      toast.error(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     }
   };
 

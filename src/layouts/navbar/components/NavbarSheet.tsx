@@ -13,8 +13,7 @@ import { Menu, X, UtensilsCrossed } from "lucide-react";
 
 export default function NavbarSheet() {
   return (
-    <>
-      <Sheet>
+    <Sheet>
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon" className="md:hidden cursor-pointer">
             <Menu className="h-5 w-5" />
@@ -51,6 +50,5 @@ export default function NavbarSheet() {
           </div>
         </SheetContent>
       </Sheet>
-    </>
   );
 }

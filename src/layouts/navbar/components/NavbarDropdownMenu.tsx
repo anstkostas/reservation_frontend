@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Role } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { Loader2, LogOut, LayoutDashboard, CalendarDays } from "lucide-react";
@@ -11,33 +11,30 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
+import type { User } from "@/types/api";
+
+interface Props {
+  currentUser: User;
+  handleLogout: () => void;
+  isLoggingOut: boolean;
+}
 
 /**
  * User Profile Dropdown Menu.
  *
  * Logic:
  * - Displays user info (Avatar, Name, Email, Role).
- * - **Role-Based Navigation**:
- *   - Renders "Dashboard" link if `activeUser` is an 'owner'.
- *   - Renders "My Reservations" link if `activeUser` is a 'customer'.
+ * - Role-Based Navigation:
+ *   - Renders "Dashboard" link if `currentUser` is an 'owner'.
+ *   - Renders "My Reservations" link if `currentUser` is a 'customer'.
  * - Handles Logout via `handleLogout` callback.
- *
- * @param {object} props
- * @param {object} props.currentUser - The authenticated user object.
- * @param {function} props.handleLogout - Callback to trigger logout mutation.
- * @param {boolean} props.isLoggingOut - Loading state for the logout action.
  */
-export default function NavbarDropdownMenu({ currentUser, handleLogout, isLoggingOut }) {
+export default function NavbarDropdownMenu({ currentUser, handleLogout, isLoggingOut }: Props) {
   return (
-    <>
-      <DropdownMenu>
+    <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-9 w-9 rounded-full">
             <Avatar className="h-9 w-9 hover:scale-105 transition-transform cursor-pointer border border-primary/20">
-              <AvatarImage
-                src={`https://api.dicebear.com/7.x/initials/svg?seed=${currentUser.firstname}`}
-                alt={currentUser.firstname}
-              />
               <AvatarFallback>{currentUser.firstname?.[0]?.toUpperCase()}</AvatarFallback>
             </Avatar>
           </Button>
@@ -85,6 +82,5 @@ export default function NavbarDropdownMenu({ currentUser, handleLogout, isLoggin
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </>
   );
 }
