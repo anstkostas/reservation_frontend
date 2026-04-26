@@ -33,7 +33,7 @@ export default function NavbarDropdownMenu({ currentUser, handleLogout, isLoggin
   return (
     <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+          <Button variant="ghost" aria-label="User menu" className="relative h-9 w-9 rounded-full">
             <Avatar className="h-9 w-9 hover:scale-105 transition-transform cursor-pointer border border-primary/20">
               <AvatarFallback>{currentUser.firstname?.[0]?.toUpperCase()}</AvatarFallback>
             </Avatar>
