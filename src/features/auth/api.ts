@@ -1,6 +1,6 @@
 import { apiFetch } from "@/lib/fetch";
 import type { ApiResponse, User } from "@/types/api";
-import { Role } from "@/lib/constants";
+import { Role } from "@/constants";
 
 export interface SignupApiPayload {
   firstname: string;

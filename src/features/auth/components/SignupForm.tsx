@@ -24,7 +24,7 @@ import {
   ConfirmPasswordFormField,
 } from "@/components/FormFields";
 import SignupRestaurantDetails from "./signup/SignupRestaurantDetails";
-import { Role } from "@/lib/constants";
+import { Role } from "@/constants";
 
 interface SignupFormProps {
   onSwitchToLogin: () => void;

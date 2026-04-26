@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Role } from "@/lib/constants";
+import { Role } from "@/constants";
 import { useParams, useNavigate } from "react-router-dom";
 import { useRestaurant } from "../queries";
 import { useAuth } from "@/features/auth/useAuth";

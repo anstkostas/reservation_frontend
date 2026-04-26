@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Role } from "@/lib/constants";
+import { Role } from "@/constants";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/features/auth/useAuth";
 

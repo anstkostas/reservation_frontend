@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { Role } from "@/lib/constants";
+import { Role } from "@/constants";
 import { useAuth } from "@/features/auth/useAuth";
 
 interface ProtectedRouteProps {

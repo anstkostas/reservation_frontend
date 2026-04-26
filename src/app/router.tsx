@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { Role } from "@/lib/constants";
+import { Role } from "@/constants";
 import { ErrorBoundary } from "react-error-boundary";
 import Layout from "@/layouts/Layout";
 import SplashPage from "@/features/SplashPage";

@@ -1,4 +1,4 @@
-import { Role } from "../lib/constants";
+import { Role } from "@/constants";
 
 /** Normalized error shape thrown by `apiFetch` and produced by `normalizeApiError`. */
 export interface ApiError {

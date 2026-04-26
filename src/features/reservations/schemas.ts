@@ -2,7 +2,7 @@ import * as z from "zod";
 import {
   RESERVATION_MIN_BUFFER_MINUTES,
   RESERVATION_BOOKING_WINDOW_MONTHS,
-} from "@/lib/constants";
+} from "@/constants";
 
 export const formSchema = z
   .object({

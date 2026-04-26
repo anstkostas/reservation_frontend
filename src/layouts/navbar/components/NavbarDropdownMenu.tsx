@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Role } from "@/lib/constants";
+import { Role } from "@/constants";
 import { Button } from "@/components/ui/button";
 import { Loader2, LogOut, LayoutDashboard, CalendarDays } from "lucide-react";
 import {
