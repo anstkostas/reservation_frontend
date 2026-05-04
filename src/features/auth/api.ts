@@ -56,6 +56,18 @@ export function logout(): Promise<ApiResponse<null>> {
 }
 
 /**
+ * Requests a new access token using the refresh token cookie.
+ *
+ * Called automatically by `apiFetch` on 401 — not called directly by consumers.
+ * Exposed here for completeness and for use in any future explicit refresh trigger.
+ *
+ * @returns {Promise<ApiResponse<null>>}
+ */
+export function refresh(): Promise<ApiResponse<null>> {
+  return apiFetch<ApiResponse<null>>("/auth/refresh", { method: "POST" });
+}
+
+/**
  * Registers a new user account.
  *
  * Logic:
