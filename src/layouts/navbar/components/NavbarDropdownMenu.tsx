@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Role } from "@/constants";
 import { Button } from "@/components/ui/button";
 import { Loader2, LogOut, LayoutDashboard, CalendarDays } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,6 +31,7 @@ interface Props {
  * - Handles Logout via `handleLogout` callback.
  */
 export default function NavbarDropdownMenu({ currentUser, handleLogout, isLoggingOut }: Props) {
+  const { t } = useTranslation();
   return (
     <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -57,14 +59,14 @@ export default function NavbarDropdownMenu({ currentUser, handleLogout, isLoggin
             <DropdownMenuItem asChild>
               <Link to="/owner-dashboard" className="cursor-pointer">
                 <LayoutDashboard className="mr-2 h-4 w-4" />
-                Dashboard
+                {t("navDashboard")}
               </Link>
             </DropdownMenuItem>
           ) : (
             <DropdownMenuItem asChild>
               <Link to="/my-reservations" className="cursor-pointer">
                 <CalendarDays className="mr-2 h-4 w-4" />
-                My Reservations
+                {t("navReservations")}
               </Link>
             </DropdownMenuItem>
           )}
@@ -78,7 +80,7 @@ export default function NavbarDropdownMenu({ currentUser, handleLogout, isLoggin
             ) : (
               <LogOut className="mr-2 h-4 w-4" />
             )}
-            Log out
+            {t("navLogout")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

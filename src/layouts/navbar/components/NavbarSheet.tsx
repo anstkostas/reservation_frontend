@@ -10,8 +10,10 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu, X, UtensilsCrossed } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function NavbarSheet() {
+  const { t } = useTranslation();
   return (
     <Sheet>
         <SheetTrigger asChild>
@@ -44,7 +46,7 @@ export default function NavbarSheet() {
                 className="flex items-center gap-2 text-lg font-medium hover:text-primary transition-colors"
               >
                 <UtensilsCrossed className="h-5 w-5" />
-                Restaurants
+                {t("navRestaurants")}
               </Link>
             </SheetClose>
           </div>

@@ -1,9 +1,17 @@
 import { Role } from "@/constants";
 
+/** A single field-level validation error — mirrors `ValidationDetail` from the backend. */
+export interface ApiErrorDetail {
+  field: string;
+  message: string;
+  code?: string;
+}
+
 /** Normalized error shape thrown by `apiFetch` and produced by `normalizeApiError`. */
 export interface ApiError {
   message: string;
-  details?: unknown[];
+  code?: string;
+  details?: ApiErrorDetail[];
 }
 
 /** Possible statuses for a reservation — matches backend RESERVATION_STATUS constants and DB values. */

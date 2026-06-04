@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useMyReservationsQuery } from "../queries";
 import { ReservationCard } from "../components/ReservationCard";
@@ -7,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { CalendarDays, History, UtensilsCrossed } from "lucide-react";
 import type { Reservation } from "@/types/api";
+import { resolveErrorMessage } from "@/lib/apiError";
 
 /**
  * Customer "My Reservations" Page.
@@ -18,6 +20,7 @@ import type { Reservation } from "@/types/api";
  * - Empty States: Displays specific messaging/actions (e.g., "Book a Table") when lists are empty.
  */
 export default function ReservationHistory() {
+  const { t } = useTranslation();
   const { data: reservations, isLoading, error } = useMyReservationsQuery();
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,14 +32,14 @@ export default function ReservationHistory() {
 
   if (isLoading) {
     return (
-      <div className="p-8 text-center text-muted-foreground">Loading your reservations...</div>
+      <div className="p-8 text-center text-muted-foreground">{t("reservationHistoryLoading")}</div>
     );
   }
 
   if (error) {
     return (
       <div className="p-8 text-center text-red-500">
-        Error loading reservations: {error.message}
+        {t("reservationsLoadError", { message: resolveErrorMessage(t, error) })}
       </div>
     );
   }
@@ -53,13 +56,13 @@ export default function ReservationHistory() {
     <div className="container mx-auto py-8 px-4 md:px-6 lg:px-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold">My Reservations</h1>
-          <p className="text-muted-foreground">View and manage your dining bookings.</p>
+          <h1 className="text-3xl font-bold">{t("reservationHistoryTitle")}</h1>
+          <p className="text-muted-foreground">{t("reservationHistorySubtitle")}</p>
         </div>
         <Button asChild>
           <Link to="/restaurants">
             <UtensilsCrossed className="mr-2 h-4 w-4" />
-            Book a Table
+            {t("reservationHistoryBookButton")}
           </Link>
         </Button>
       </div>
@@ -68,11 +71,11 @@ export default function ReservationHistory() {
         <TabsList className="grid w-full max-w-100 grid-cols-2 mb-8">
           <TabsTrigger value="upcoming" className="cursor-pointer">
             <CalendarDays className="mr-2 h-4 w-4" />
-            Upcoming ({upcoming.length})
+            {t("reservationHistoryTabUpcoming", { count: upcoming.length })}
           </TabsTrigger>
           <TabsTrigger value="history" className="cursor-pointer">
             <History className="mr-2 h-4 w-4" />
-            History ({history.length})
+            {t("reservationHistoryTabHistory", { count: history.length })}
           </TabsTrigger>
         </TabsList>
 
@@ -91,7 +94,7 @@ export default function ReservationHistory() {
         <TabsContent value="history">
           {history.length === 0 ? (
             <div className="text-center py-12 border-2 border-dashed rounded-lg bg-muted/50">
-              <p className="text-muted-foreground">No past reservation history.</p>
+              <p className="text-muted-foreground">{t("reservationHistoryEmptyPastDetail")}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -117,15 +120,15 @@ export default function ReservationHistory() {
 }
 
 function EmptyState() {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center border-2 border-dashed rounded-lg bg-muted/50">
       <div className="bg-background p-4 rounded-full mb-4 shadow-sm">
         <UtensilsCrossed className="h-8 w-8 text-muted-foreground" />
       </div>
-      <h3 className="text-lg font-semibold mb-2">No upcoming reservations</h3>
+      <h3 className="text-lg font-semibold mb-2">{t("reservationHistoryEmptyUpcomingTitle")}</h3>
       <p className="text-muted-foreground max-w-sm mb-6">
-        You don't have any active bookings at the moment. Explore our restaurants and book your next
-        meal!
+        {t("reservationHistoryEmptyUpcomingDetail")}
       </p>
     </div>
   );

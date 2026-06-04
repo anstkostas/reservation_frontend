@@ -5,6 +5,8 @@ import { UtensilsCrossed } from "lucide-react";
 import { toast } from "sonner";
 import NavbarSheet from "./components/NavbarSheet";
 import NavbarDropdownMenu from "./components/NavbarDropdownMenu";
+import LanguageToggle from "./components/LanguageToggle";
+import { useTranslation } from "react-i18next";
 
 /**
  * Global navigation bar.
@@ -18,6 +20,7 @@ export default function Navbar() {
   const { currentUser, logoutAsync, isLoggingOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
   const isLoginPage = location.pathname === "/login";
 
   const handleLogout = async () => {
@@ -50,27 +53,26 @@ export default function Navbar() {
             className="flex items-center gap-2 hover:text-primary transition-colors"
           >
             <UtensilsCrossed className="h-4 w-4" />
-            Restaurants
+            {t("navRestaurants")}
           </Link>
         </div>
 
-        {currentUser ? (
-          <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
+          <LanguageToggle />
+          {currentUser ? (
             <NavbarDropdownMenu
               currentUser={currentUser}
               handleLogout={handleLogout}
               isLoggingOut={isLoggingOut}
             />
-          </div>
-        ) : (
-          !isLoginPage && (
-            <div className="flex items-center gap-4">
+          ) : (
+            !isLoginPage && (
               <Button asChild>
-                <Link to="/login">Log in</Link>
+                <Link to="/login">{t("navLogIn")}</Link>
               </Button>
-            </div>
-          )
-        )}
+            )
+          )}
+        </div>
       </div>
     </nav>
   );

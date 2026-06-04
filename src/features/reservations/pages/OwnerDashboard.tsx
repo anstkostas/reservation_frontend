@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Search, CalendarDays, History } from "lucide-react";
 import { toast } from "sonner";
 import { useOwnerReservationsQuery, useResolveReservationMutation } from "../queries";
@@ -8,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { OwnerTableViewMobile } from "../components/OwnerTableViewMobile";
 import { OwnerTableViewTabletDesktop } from "../components/OwnerTableViewTabletDesktop";
 import type { ApiError, Reservation, ReservationStatus } from "@/types/api";
+import { resolveErrorMessage } from "@/lib/apiError";
 
 /**
  * Main Dashboard for Restaurant Owners.
@@ -23,15 +25,16 @@ import type { ApiError, Reservation, ReservationStatus } from "@/types/api";
  * - Actions: Allows marking reservations as 'completed' or 'no-show'.
  */
 export default function OwnerDashboard() {
+  const { t } = useTranslation();
   const { data: reservations, isLoading, error } = useOwnerReservationsQuery();
   const resolveMutation = useResolveReservationMutation();
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleResolve = (id: string, status: ReservationStatus) => {
     toast.promise(resolveMutation.mutateAsync({ id, status }), {
-      loading: "Processing...",
-      success: (data) => data.message || "Guest reservation status updated successfully!",
-      error: (err) => (err as ApiError)?.message || "Failed to update guest reservation status",
+      loading: t("ownerResolveLoading"),
+      success: (data) => data.message || t("ownerResolvedSnackbar"),
+      error: (err) => (err as ApiError)?.message || t("ownerResolveError"),
     });
   };
 
@@ -85,7 +88,7 @@ export default function OwnerDashboard() {
   if (isLoading) {
     return (
       <div className="container mx-auto p-6 flex justify-center items-center h-[50vh]">
-        <div className="animate-pulse text-muted-foreground">Loading dashboard...</div>
+        <div className="animate-pulse text-muted-foreground">{t("ownerDashboardLoading")}</div>
       </div>
     );
   }
@@ -93,7 +96,7 @@ export default function OwnerDashboard() {
   if (error) {
     return (
       <div className="container mx-auto p-6 flex justify-center items-center h-[50vh]">
-        <div className="text-destructive">Error loading reservations: {error.message}</div>
+        <div className="text-destructive">{t("reservationsLoadError", { message: resolveErrorMessage(t, error) })}</div>
       </div>
     );
   }
@@ -102,15 +105,13 @@ export default function OwnerDashboard() {
     <div className="container mx-auto p-6 space-y-8 animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground mt-1">
-            Manage your restaurant's active reservations.
-          </p>
+          <h1 className="text-3xl font-bold tracking-tight">{t("ownerDashboardTitle")}</h1>
+          <p className="text-muted-foreground mt-1">{t("ownerDashboardSubtitle")}</p>
         </div>
         <div className="relative w-full md:w-72">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search by name or email..."
+            placeholder={t("ownerDashboardSearchHint")}
             className="pl-8"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -122,19 +123,19 @@ export default function OwnerDashboard() {
         <TabsList className="grid w-full max-w-100 grid-cols-2 mb-8">
           <TabsTrigger value="active" className="cursor-pointer">
             <CalendarDays className="mr-2 h-4 w-4" />
-            Active ({activeReservations.length})
+            {t("ownerDashboardTabActive", { count: activeReservations.length })}
           </TabsTrigger>
           <TabsTrigger value="history" className="cursor-pointer">
             <History className="mr-2 h-4 w-4" />
-            History ({historyReservations.length})
+            {t("ownerDashboardTabHistory", { count: historyReservations.length })}
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="active">
           <Card>
             <CardHeader>
-              <CardTitle>Active Arrivals</CardTitle>
-              <CardDescription>Upcoming reservations.</CardDescription>
+              <CardTitle>{t("ownerDashboardCardActiveTitle")}</CardTitle>
+              <CardDescription>{t("ownerDashboardCardActiveSubtitle")}</CardDescription>
             </CardHeader>
             <CardContent>{renderTable(activeReservations, true)}</CardContent>
           </Card>
@@ -143,8 +144,8 @@ export default function OwnerDashboard() {
         <TabsContent value="history">
           <Card>
             <CardHeader>
-              <CardTitle>Reservation History</CardTitle>
-              <CardDescription>Completed and canceled past reservations.</CardDescription>
+              <CardTitle>{t("ownerDashboardCardHistoryTitle")}</CardTitle>
+              <CardDescription>{t("ownerDashboardCardHistorySubtitle")}</CardDescription>
             </CardHeader>
             <CardContent>{renderTable(historyReservations, false)}</CardContent>
           </Card>

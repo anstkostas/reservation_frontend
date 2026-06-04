@@ -2,6 +2,7 @@
 // inside each component. That approach lets TypeScript verify the field name at the call site
 // (no `as Path<T>` cast needed) and makes components more reusable across different form schemas.
 // Requires updating all call sites: LoginForm, SignupForm, ReservationCreateModal.
+import { useTranslation } from "react-i18next";
 import { type Control, type FieldValues, type Path } from "react-hook-form";
 import { FormField, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -15,6 +16,7 @@ import {
 } from "@/components/ui/select";
 
 export function DateFormField<T extends FieldValues>({ control }: { control: Control<T> }) {
+  const { t } = useTranslation();
   return (
     <>
       <FormField
@@ -22,7 +24,7 @@ export function DateFormField<T extends FieldValues>({ control }: { control: Con
         name={"date" as Path<T>}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Date</FormLabel>
+            <FormLabel>{t("reservationCreateDateLabel")}</FormLabel>
             <FormControl>
               <Input type="date" {...field} min={format(new Date(), "yyyy-MM-dd")} />
             </FormControl>
@@ -35,6 +37,7 @@ export function DateFormField<T extends FieldValues>({ control }: { control: Con
 }
 
 export function TimeFormField<T extends FieldValues>({ control }: { control: Control<T> }) {
+  const { t } = useTranslation();
   // Generate time slots (12:00 to 23:00, every 30 mins)
   const timeSlots: string[] = [];
   for (let h = 12; h <= 23; h++) {
@@ -48,11 +51,11 @@ export function TimeFormField<T extends FieldValues>({ control }: { control: Con
         name={"time" as Path<T>}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Time</FormLabel>
+            <FormLabel>{t("reservationCreateTimeLabel")}</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select time" />
+                  <SelectValue placeholder={t("reservationCreateSelectTime")} />
                 </SelectTrigger>
               </FormControl>
               <SelectContent className="max-h-50">
@@ -72,6 +75,7 @@ export function TimeFormField<T extends FieldValues>({ control }: { control: Con
 }
 
 export function PersonsFormField<T extends FieldValues>({ control }: { control: Control<T> }) {
+  const { t } = useTranslation();
   return (
     <>
       <FormField
@@ -79,7 +83,7 @@ export function PersonsFormField<T extends FieldValues>({ control }: { control: 
         name={"people" as Path<T>}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Persons</FormLabel>
+            <FormLabel>{t("reservationCreateGuestsLabel")}</FormLabel>
             <FormControl>
               <Input
                 type="number"
@@ -103,7 +107,8 @@ interface NameFormFieldProps<T extends FieldValues> {
 }
 
 export function NameFormField<T extends FieldValues>({ control, name }: NameFormFieldProps<T>) {
-  const label = name === "firstname" ? "First Name" : "Last Name";
+  const { t } = useTranslation();
+  const label = name === "firstname" ? t("signupFirstNameLabel") : t("signupLastNameLabel");
   const placeholder = name === "firstname" ? "John" : "Doe";
   return (
     <>
@@ -125,6 +130,7 @@ export function NameFormField<T extends FieldValues>({ control, name }: NameForm
 }
 
 export function EmailFormField<T extends FieldValues>({ control }: { control: Control<T> }) {
+  const { t } = useTranslation();
   return (
     <>
       <FormField
@@ -132,9 +138,9 @@ export function EmailFormField<T extends FieldValues>({ control }: { control: Co
         name={"email" as Path<T>}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Email</FormLabel>
+            <FormLabel>{t("loginEmailLabel")}</FormLabel>
             <FormControl>
-              <Input placeholder="m@example.com" {...field} />
+              <Input placeholder={t("loginEmailHint")} {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -145,6 +151,7 @@ export function EmailFormField<T extends FieldValues>({ control }: { control: Co
 }
 
 export function PasswordFormField<T extends FieldValues>({ control }: { control: Control<T> }) {
+  const { t } = useTranslation();
   return (
     <>
       <FormField
@@ -152,7 +159,7 @@ export function PasswordFormField<T extends FieldValues>({ control }: { control:
         name={"password" as Path<T>}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Password</FormLabel>
+            <FormLabel>{t("loginPasswordLabel")}</FormLabel>
             <FormControl>
               <Input type="password" {...field} />
             </FormControl>
@@ -169,6 +176,7 @@ export function ConfirmPasswordFormField<T extends FieldValues>({
 }: {
   control: Control<T>;
 }) {
+  const { t } = useTranslation();
   return (
     <>
       <FormField
@@ -176,7 +184,7 @@ export function ConfirmPasswordFormField<T extends FieldValues>({
         name={"confirmPassword" as Path<T>}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Confirm Password</FormLabel>
+            <FormLabel>{t("confirmPasswordLabel")}</FormLabel>
             <FormControl>
               <Input type="password" {...field} />
             </FormControl>

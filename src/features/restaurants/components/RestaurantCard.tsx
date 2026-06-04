@@ -9,12 +9,14 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import type { Restaurant } from "../../../types/api";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   restaurant: Restaurant;
 }
 
 export function RestaurantCard({ restaurant }: Props) {
+  const { t } = useTranslation();
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
       {restaurant.logoUrl && (
@@ -31,11 +33,11 @@ export function RestaurantCard({ restaurant }: Props) {
         <CardDescription>{restaurant.description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="text-sm text-muted-foreground">Capacity: {restaurant.capacity} Tables</div>
+        <div className="text-sm text-muted-foreground">{t("restaurantCardCapacity", { capacity: restaurant.capacity })}</div>
       </CardContent>
       <CardFooter>
         <Button asChild className="w-full">
-          <Link to={`/restaurants/${restaurant.id}`}>View Details & Book</Link>
+          <Link to={`/restaurants/${restaurant.id}`}>{t("restaurantCardViewButton")}</Link>
         </Button>
       </CardFooter>
     </Card>

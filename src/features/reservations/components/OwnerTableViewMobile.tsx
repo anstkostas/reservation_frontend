@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Clock, Users, CheckCircle2, XCircle } from "lucide-react";
@@ -28,11 +29,12 @@ export function OwnerTableViewMobile({
   resolveMutation,
   showActions,
 }: Props) {
+  const { t } = useTranslation();
   if (activeReservations.length === 0) {
     return (
       <>
         <div className="text-center p-8 border rounded-md text-muted-foreground bg-muted/10">
-          No reservations found.
+          {t("ownerDashboardNoReservations")}
         </div>
       </>
     );
@@ -66,7 +68,7 @@ export function OwnerTableViewMobile({
           </div>
           <div className="flex items-center gap-2 p-2 rounded-md bg-muted/50 col-span-2">
             <Users className="h-4 w-4 text-primary" />
-            <span className="font-medium">{activeReservation.people} People</span>
+            <span className="font-medium">{t("ownerMobilePeopleLabel", { count: activeReservation.people })}</span>
           </div>
         </div>
 
@@ -79,7 +81,7 @@ export function OwnerTableViewMobile({
               disabled={resolveMutation.isPending}
             >
               <CheckCircle2 className="mr-2 h-4 w-4" />
-              Complete
+              {t("ownerMobileComplete")}
             </Button>
             <Button
               variant="outline"
@@ -88,13 +90,13 @@ export function OwnerTableViewMobile({
               disabled={resolveMutation.isPending}
             >
               <XCircle className="h-4 w-4" />
-              No-show
+              {t("ownerMobileNoShow")}
             </Button>
           </div>
         )}
         {!canUpdate(activeReservation.scheduledAt) && (
           <div className="text-center text-xs text-muted-foreground italic pt-2 border-t">
-            Arriving soon
+            {t("ownerTableArrivingSoon")}
           </div>
         )}
       </CardContent>

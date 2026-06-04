@@ -1,5 +1,4 @@
 import { normalizeApiError } from "./apiError";
-import { queryClient } from "@/app/queryClient";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 if (!BASE_URL) throw new Error("[fetch] VITE_API_URL is not set — add it to your .env file");
@@ -88,10 +87,10 @@ export async function apiFetch<T>(endpoint: string, { method = "GET", body, head
         if (refreshed) {
           return apiFetch<T>(endpoint, { method, body, headers, auth, timeout, _isRetry: true });
         }
-        // Refresh failed — clear auth state so ProtectedRoute redirects to login.
-        // Mirrors Flutter's AuthLogoutRequested dispatch on refresh failure.
-        queryClient.resetQueries({ queryKey: ["me"] });
-        queryClient.invalidateQueries();
+        // Refresh failed — throw so useCurrentUserQuery enters error state (retry:false).
+        // data becomes undefined → currentUser undefined → ProtectedRoute redirects to login.
+        // resetQueries/invalidateQueries must NOT be called here: both trigger a refetch of
+        // the active ["me"] observer, restarting this same 401 cycle indefinitely.
       }
       throw res;
     }

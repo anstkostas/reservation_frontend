@@ -2,10 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Role } from "@/constants";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/features/auth/useAuth";
+import { useTranslation } from "react-i18next";
 
 export default function SplashPage() {
   const { currentUser, isLoadingUser } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const handlePrimaryCTA = () => {
     if (currentUser) {
       if (currentUser.role === Role.OWNER) {
@@ -35,10 +37,10 @@ export default function SplashPage() {
       <div className="relative z-10 text-center space-y-8 p-6 max-w-2xl animate-in fade-in zoom-in duration-700">
         <div className="space-y-4">
           <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight drop-shadow-xl">
-            <span className="text-secondary">Reservation App</span>
+            <span className="text-secondary">{t("splashHeadline")}</span>
           </h1>
           <p className="text-xl md:text-2xl text-gray-200 font-light">
-            Book, manage, and explore your favorite restaurants seamlessly.
+            {t("splashSubtitle")}
           </p>
         </div>
 
@@ -49,9 +51,9 @@ export default function SplashPage() {
         >
           {currentUser
             ? currentUser.role === Role.OWNER
-              ? "Dashboard"
-              : "My Reservations"
-            : "Explore Restaurants"}
+              ? t("splashCtaDashboard")
+              : t("splashCtaMyReservations")
+            : t("splashCtaExplore")}
         </Button>
       </div>
     </div>

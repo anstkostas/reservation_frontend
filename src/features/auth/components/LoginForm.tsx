@@ -2,9 +2,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { FieldPath } from "react-hook-form";
 import { useAuth } from "@/features/auth/useAuth";
+import { useTranslation } from "react-i18next";
 import { loginSchema } from "@/features/auth/schemas";
 import type { LoginFormValues } from "@/features/auth/schemas";
 import type { ApiError } from "@/types/api";
+import { resolveErrorMessage, resolveDetailMessage } from "@/lib/apiError";
 import { Button } from "@/components/ui/button";
 import { EmailFormField, PasswordFormField } from "@/components/FormFields";
 import { Form } from "@/components/ui/form";
@@ -33,6 +35,7 @@ interface LoginFormProps {
  */
 export default function LoginForm({ onSwitchToSignup }: LoginFormProps) {
   const { loginAsync, isLoggingIn, currentUser } = useAuth();
+  const { t } = useTranslation();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -52,11 +55,11 @@ export default function LoginForm({ onSwitchToSignup }: LoginFormProps) {
       const error = err as ApiError;
       console.error("[LOG] LoginForm.onSubmit:", error.message);
       if (error.details?.length) {
-        (error.details as { field: string; message: string }[]).forEach(({ field, message }) => {
-          setError(field as FieldPath<LoginFormValues>, { message });
+        error.details.forEach((detail) => {
+          setError(detail.field as FieldPath<LoginFormValues>, { message: resolveDetailMessage(t, detail) });
         });
       } else {
-        setError("root", { type: "server", message: error.message });
+        setError("root", { type: "server", message: resolveErrorMessage(t, error) });
       }
     }
   };
@@ -74,9 +77,9 @@ export default function LoginForm({ onSwitchToSignup }: LoginFormProps) {
   return (
     <Card className="w-full max-w-md mx-auto shadow-lg animate-in fade-in zoom-in duration-500">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center">Welcome back</CardTitle>
+        <CardTitle className="text-2xl font-bold text-center">{t("loginTitle")}</CardTitle>
         <CardDescription className="text-center">
-          Enter your credentials to log in to your account
+          {t("loginSubtitle")}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -92,21 +95,21 @@ export default function LoginForm({ onSwitchToSignup }: LoginFormProps) {
             <PasswordFormField control={form.control} />
 
             <Button type="submit" className="w-full cursor-pointer" disabled={isLoggingIn}>
-              {isLoggingIn ? "Logging in..." : "Login"}
+              {t("loginSubmitButton")}
             </Button>
           </form>
         </Form>
       </CardContent>
       <CardFooter className="flex justify-center">
         <div className="text-sm text-muted-foreground">
-          Don&apos;t have an account?{" "}
+          {t("loginNoAccount")}{" "}
           <Button
             variant="link"
             className="p-0 h-auto font-normal underline cursor-pointer"
             onClick={onSwitchToSignup}
             disabled={isLoggingIn}
           >
-            Sign up
+            {t("loginSignUpLink")}
           </Button>
         </div>
       </CardFooter>

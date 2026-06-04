@@ -1,9 +1,12 @@
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useCreateReservationMutation } from "../queries";
+import { resolveErrorMessage } from "@/lib/apiError";
+import type { ApiError } from "@/types/api";
 import { formSchema, type ReservationFormValues } from "../schemas";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,6 +38,7 @@ interface Props {
  * - Handles toast notifications for success/failure feedback.
  */
 export function ReservationCreateModal({ restaurantId, restaurantName, open, onOpenChange }: Props) {
+  const { t } = useTranslation();
   const createMutation = useCreateReservationMutation();
 
   const form = useForm<ReservationFormValues>({
@@ -56,16 +60,16 @@ export function ReservationCreateModal({ restaurantId, restaurantName, open, onO
         people: data.people,
       });
       if (res.success) {
-        toast.success(res.message || `Table booked at ${restaurantName}!`, {
+        toast.success(res.message || t("reservationCreateSuccess"), {
           description: `${format(scheduledAtDate, "EEE, MMM d")} at ${format(scheduledAtDate, "HH:mm")}`,
         });
         onOpenChange(false);
         form.reset();
       } else {
-        toast.error(res.message || "Failed to book table");
+        toast.error(res.message || t("reservationCreateError"));
       }
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      toast.error(resolveErrorMessage(t, err as ApiError));
     }
   };
 
@@ -73,7 +77,7 @@ export function ReservationCreateModal({ restaurantId, restaurantName, open, onO
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-106.25">
         <DialogHeader>
-          <DialogTitle>Book a Table</DialogTitle>
+          <DialogTitle>{t("reservationCreateTitle")}</DialogTitle>
           <DialogDescription>
             at <span className="font-semibold text-foreground">{restaurantName}</span>
           </DialogDescription>
@@ -85,11 +89,11 @@ export function ReservationCreateModal({ restaurantId, restaurantName, open, onO
             <PersonsFormField control={form.control} />
             <DialogFooter className="pt-4">
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-                Cancel
+                {t("cancelButton")}
               </Button>
               <Button type="submit" disabled={createMutation.isPending}>
                 {createMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Confirm Booking
+                {t("reservationCreateConfirmButton")}
               </Button>
             </DialogFooter>
           </form>

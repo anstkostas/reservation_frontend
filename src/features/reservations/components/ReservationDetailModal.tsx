@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
@@ -28,7 +29,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CalendarIcon, Clock, Loader2, Users, MapPin, Phone } from "lucide-react";
 import { formSchema, type ReservationFormValues } from "../schemas";
-import type { Reservation, ReservationStatus } from "@/types/api";
+import type { ApiError, Reservation, ReservationStatus } from "@/types/api";
+import { resolveErrorMessage } from "@/lib/apiError";
 
 /** Maps every reservation status to a Shadcn Badge variant. */
 const STATUS_BADGE_VARIANT = {
@@ -36,6 +38,13 @@ const STATUS_BADGE_VARIANT = {
   completed: "secondary",
   canceled: "destructive",
   "no-show": "outline",
+} as const satisfies Record<ReservationStatus, string>;
+
+const STATUS_KEY_MAP = {
+  active: "statusActive",
+  completed: "statusCompleted",
+  canceled: "statusCanceled",
+  "no-show": "statusNoShow",
 } as const satisfies Record<ReservationStatus, string>;
 
 interface Props {
@@ -56,6 +65,7 @@ interface Props {
  * - Conditional UI: Displays different buttons based on `status` (e.g., active vs completed).
  */
 export function ReservationDetailModal({ reservation, open, onOpenChange }: Props) {
+  const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
   const [isCancelConfirmOpen, setIsCancelConfirmOpen] = useState(false);
 
@@ -113,10 +123,10 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }: Prop
   const handleConfirmCancel = async () => {
     try {
       const res = await cancelMutation.mutateAsync(reservation.id);
-      toast.success(res.message || "Reservation canceled successfully");
+      toast.success(res.message || t("reservationCanceledSnackbar"));
       onOpenChange(false);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to cancel reservation");
+      toast.error(resolveErrorMessage(t, err as ApiError));
     }
   };
 
@@ -129,10 +139,10 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }: Prop
         scheduledAt,
         people: values.people,
       });
-      toast.success(res.message || "Reservation updated successfully");
+      toast.success(res.message || t("reservationUpdatedSnackbar"));
       setIsEditing(false);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to update reservation");
+      toast.error(resolveErrorMessage(t, err as ApiError));
       console.error("[LOG] ReservationDetailModal.onSubmit:", err instanceof Error ? err.stack : String(err));
     }
   };
@@ -142,20 +152,20 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }: Prop
       <AlertDialog open={isCancelConfirmOpen} onOpenChange={setIsCancelConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Cancel Reservation</AlertDialogTitle>
+            <AlertDialogTitle>{t("reservationCancelDialogTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to cancel this reservation? This cannot be undone.
+              {t("reservationCancelDialogContent")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Keep Reservation</AlertDialogCancel>
+            <AlertDialogCancel>{t("reservationCancelDialogKeep")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleConfirmCancel}
               disabled={cancelMutation.isPending}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               {cancelMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Yes, Cancel
+              {t("reservationCancelDialogConfirm")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -164,15 +174,15 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }: Prop
         <DialogContent className="sm:max-w-106.25">
           <DialogHeader>
             <div className="flex justify-between items-center pr-4">
-              <DialogTitle>Reservation Details</DialogTitle>
-              <Badge variant={STATUS_BADGE_VARIANT[reservation.status]} className="capitalize">
-                {reservation.status}
+              <DialogTitle>{t("reservationDetailModalTitle")}</DialogTitle>
+              <Badge variant={STATUS_BADGE_VARIANT[reservation.status]}>
+                {t(STATUS_KEY_MAP[reservation.status])}
               </Badge>
             </div>
             <DialogDescription>
               at{" "}
               <span className="font-semibold text-foreground">
-                {reservation.restaurantName || `Restaurant #${reservation.restaurantId}`}
+                {reservation.restaurantName || `${t("reservationDetailRestaurantFallback")} #${reservation.restaurantId}`}
               </span>
               <span className="block mt-1 text-xs">ID: {reservation.id}</span>
             </DialogDescription>
@@ -211,7 +221,7 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }: Prop
                 </div>
                 <div className="flex items-center gap-3">
                   <Users className="h-5 w-5 text-primary" />
-                  <span className="text-lg">{reservation.people} people</span>
+                  <span className="text-lg">{t(reservation.people === 1 ? "reservationDetailGuestSingular" : "reservationDetailGuestPlural", { count: reservation.people })}</span>
                 </div>
                 {reservation.restaurantAddress && (
                   <div className="flex items-center gap-3">
@@ -239,7 +249,7 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }: Prop
                     onClick={() => setIsEditing(false)}
                     disabled={updateMutation.isPending}
                   >
-                    Cancel Edit
+                    {t("reservationEditDiscardButton")}
                   </Button>
                   <Button
                     type="submit"
@@ -247,7 +257,7 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }: Prop
                     disabled={updateMutation.isPending}
                   >
                     {updateMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Save Changes
+                    {t("reservationEditSaveButton")}
                   </Button>
                 </>
               ) : (
@@ -257,7 +267,7 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }: Prop
                     className="w-full sm:w-auto"
                     onClick={() => setIsEditing(true)}
                   >
-                    Edit Reservation
+                    {t("reservationDetailEditButton")}
                   </Button>
                   <Button
                     variant="destructive"
@@ -266,13 +276,13 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }: Prop
                     disabled={cancelMutation.isPending}
                   >
                     {cancelMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Cancel Reservation
+                    {t("reservationDetailCancelButton")}
                   </Button>
                 </>
               ))}
             {reservation.status !== "active" && (
               <Button variant="outline" onClick={() => onOpenChange(false)}>
-                Close
+                {t("closeButton")}
               </Button>
             )}
           </DialogFooter>

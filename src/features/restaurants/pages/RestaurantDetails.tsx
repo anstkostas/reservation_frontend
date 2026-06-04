@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ReservationCreateModal } from "@/features/reservations/components/ReservationCreateModal";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 /**
  * Restaurant detail page with a booking call-to-action.
@@ -17,6 +18,7 @@ import { toast } from "sonner";
  * - Unauthenticated users are redirected to `/login` with the current path preserved for post-login redirect.
  */
 export default function RestaurantDetails() {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const { currentUser } = useAuth();
@@ -71,14 +73,14 @@ export default function RestaurantDetails() {
         <div className="md:col-span-2 space-y-6">
           <Card>
             <CardContent className="p-6">
-              <h2 className="text-2xl font-semibold mb-4">About</h2>
+              <h2 className="text-2xl font-semibold mb-4">{t("restaurantDetailAbout")}</h2>
               <p className="text-muted-foreground leading-relaxed">
                 {restaurant.description} experience awaits you. Enjoy our carefully curated menu in
                 a comfortable atmosphere.
               </p>
               <div className="mt-6 flex items-center gap-4 text-sm text-muted-foreground">
                 <div className="bg-secondary px-3 py-1 rounded-full flex items-center gap-2">
-                  <span className="font-medium">Capacity:</span> {restaurant.capacity} Tables
+                  {t("restaurantDetailCapacityChip", { capacity: restaurant.capacity })}
                 </div>
               </div>
             </CardContent>
@@ -89,9 +91,9 @@ export default function RestaurantDetails() {
             <Card className="border-primary/20 shadow-md">
               <CardContent className="p-6 space-y-6">
                 <div>
-                  <h3 className="text-xl font-semibold">Make a Reservation</h3>
+                  <h3 className="text-xl font-semibold">{t("restaurantDetailMakeReservationTitle")}</h3>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Secure your table for an unforgettable dining experience.
+                    {t("restaurantDetailMakeReservationSubtitle")}
                   </p>
                 </div>
                 <Button
@@ -99,7 +101,7 @@ export default function RestaurantDetails() {
                   size="lg"
                   onClick={handleBookClick}
                 >
-                  Book a Table
+                  {t("restaurantDetailBookButton")}
                 </Button>
               </CardContent>
             </Card>

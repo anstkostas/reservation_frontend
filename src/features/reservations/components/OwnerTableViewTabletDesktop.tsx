@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import {
   Table,
@@ -35,23 +36,24 @@ export function OwnerTableViewTabletDesktop({
   resolveMutation,
   showActions,
 }: Props) {
+  const { t } = useTranslation();
   return (
     <>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Customer</TableHead>
-            <TableHead>Date & Time</TableHead>
-            <TableHead>People</TableHead>
-            <TableHead>Status</TableHead>
-            {showActions && <TableHead className="text-right">Actions</TableHead>}
+            <TableHead>{t("ownerTableColumnCustomer")}</TableHead>
+            <TableHead>{t("ownerTableColumnDate")} & {t("ownerTableColumnTime")}</TableHead>
+            <TableHead>{t("ownerTableColumnPeople")}</TableHead>
+            <TableHead>{t("ownerTableColumnStatus")}</TableHead>
+            {showActions && <TableHead className="text-right">{t("ownerTableColumnActions")}</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
           {activeReservations.length === 0 ? (
             <TableRow>
               <TableCell colSpan={showActions ? 5 : 4} className="h-24 text-center">
-                No reservations found.
+                {t("ownerDashboardNoReservations")}
               </TableCell>
             </TableRow>
           ) : (
@@ -97,7 +99,7 @@ export function OwnerTableViewTabletDesktop({
                           disabled={resolveMutation.isPending}
                         >
                           <CheckCircle2 className="mr-2 h-4 w-4" />
-                          Complete
+                          {t("ownerMobileComplete")}
                         </Button>
                         <Button
                           variant="outline"
@@ -106,11 +108,11 @@ export function OwnerTableViewTabletDesktop({
                           disabled={resolveMutation.isPending}
                         >
                           <XCircle className="h-4 w-4" />
-                          No-show
+                          {t("ownerMobileNoShow")}
                         </Button>
                       </div>
                     ) : (
-                      <span className="text-xs text-muted-foreground italic">Arriving soon</span>
+                      <span className="text-xs text-muted-foreground italic">{t("ownerTableArrivingSoon")}</span>
                     ))}
                 </TableCell>
               </TableRow>

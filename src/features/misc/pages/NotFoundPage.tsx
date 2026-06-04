@@ -1,8 +1,10 @@
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Ghost, Home, ArrowLeft } from "lucide-react";
 
 export default function NotFoundPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
@@ -14,21 +16,20 @@ export default function NotFoundPage() {
           </div>
         </div>
         <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">404</h1>
-        <h2 className="text-2xl font-semibold tracking-tight">Page not found</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">{t("notFoundTitle")}</h2>
         <p className="text-muted-foreground max-w-125 mx-auto">
-          Whoops! It seems you've stumbled upon a page that doesn't exist. It might have been moved
-          or deleted.
+          {t("notFoundMessage")}
         </p>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">
         <Button variant="outline" size="lg" onClick={() => navigate(-1)}>
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Go Back
+          {t("notFoundGoBackButton")}
         </Button>
         <Button size="lg" onClick={() => navigate("/")}>
           <Home className="mr-2 h-4 w-4" />
-          Return Home
+          {t("notFoundReturnHomeButton")}
         </Button>
       </div>
     </div>

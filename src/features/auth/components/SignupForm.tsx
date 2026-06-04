@@ -4,7 +4,9 @@ import type { FieldPath } from "react-hook-form";
 import { signupSchema } from "@/features/auth/schemas";
 import type { SignupFormValues } from "@/features/auth/schemas";
 import { useAuth } from "@/features/auth/useAuth";
+import { useTranslation } from "react-i18next";
 import type { ApiError } from "@/types/api";
+import { resolveErrorMessage, resolveDetailMessage } from "@/lib/apiError";
 // Cross-feature import: unowned restaurants are only used in the signup flow, so the query lives in restaurants but is consumed here
 import { useUnownedRestaurantsQuery } from "@/features/restaurants/queries";
 import { Button } from "@/components/ui/button";
@@ -43,6 +45,7 @@ interface SignupFormProps {
  */
 export default function SignupForm({ onSwitchToLogin }: SignupFormProps) {
   const { signupAsync } = useAuth();
+  const { t } = useTranslation();
 
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
@@ -79,11 +82,11 @@ export default function SignupForm({ onSwitchToLogin }: SignupFormProps) {
       const error = err as ApiError;
       console.error("[LOG] SignupForm.onSubmit:", error.message);
       if (error.details?.length) {
-        (error.details as { field: string; message: string }[]).forEach(({ field, message }) => {
-          form.setError(field as FieldPath<SignupFormValues>, { message });
+        error.details.forEach((detail) => {
+          form.setError(detail.field as FieldPath<SignupFormValues>, { message: resolveDetailMessage(t, detail) });
         });
       } else {
-        form.setError("root", { message: error.message });
+        form.setError("root", { message: resolveErrorMessage(t, error) });
       }
     }
   };
@@ -91,9 +94,9 @@ export default function SignupForm({ onSwitchToLogin }: SignupFormProps) {
   return (
     <Card className="w-full max-w-lg mx-auto shadow-lg animate-in fade-in zoom-in duration-500">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center">Create an account</CardTitle>
+        <CardTitle className="text-2xl font-bold text-center">{t("signupTitle")}</CardTitle>
         <CardDescription className="text-center">
-          Enter your details below to create your account
+          {t("signupSubtitle")}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -124,21 +127,21 @@ export default function SignupForm({ onSwitchToLogin }: SignupFormProps) {
               className="w-full cursor-pointer"
               disabled={form.formState.isSubmitting}
             >
-              {form.formState.isSubmitting ? "Creating account..." : "Sign up"}
+              {t("signupSubmitButton")}
             </Button>
           </form>
         </Form>
       </CardContent>
       <CardFooter className="flex justify-center">
         <div className="text-sm text-muted-foreground">
-          Already have an account?{" "}
+          {t("signupHaveAccount")}{" "}
           <Button
             variant="link"
             className="p-0 h-auto font-normal underline cursor-pointer"
             onClick={onSwitchToLogin}
             disabled={form.formState.isSubmitting}
           >
-            Log in
+            {t("signupSignInLink")}
           </Button>
         </div>
       </CardFooter>
