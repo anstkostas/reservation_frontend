@@ -4,8 +4,9 @@ import type { ApiError, ApiErrorDetail } from "../types/api";
 /**
  * Normalizes any thrown error into a consistent `ApiError` shape.
  *
- * Handles three error forms:
+ * Handles four error forms:
  * - A raw `Response` object (thrown by `apiFetch` when `res.ok` is false) — parsed as JSON.
+ * - A `TypeError` (thrown by fetch on network failure) — sets NO_INTERNET or SERVER_UNREACHABLE code.
  * - An object with a `message` property (already-normalized or custom errors).
  * - Anything else — returns a generic fallback message.
  *
@@ -27,6 +28,13 @@ export async function normalizeApiError(error: unknown): Promise<ApiError> {
     } catch {
       return { message: "An error occurred" };
     }
+  }
+
+  // TypeError = genuine network failure (offline or server unreachable); AbortError is caught by
+  // apiFetch before reaching here, so TypeError is safe to treat as a connection error
+  if (error instanceof TypeError) {
+    const code = navigator.onLine ? "SERVER_UNREACHABLE" : "NO_INTERNET";
+    return { message: error.message, code };
   }
 
   // If the error is already an object with a message property (already-normalized or custom errors)

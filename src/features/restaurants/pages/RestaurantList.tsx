@@ -9,12 +9,12 @@ export default function RestaurantList() {
   const { data: restaurants, isLoading, error } = useRestaurants();
 
   if (isLoading) {
-    return <div className="p-8 text-center text-muted-foreground">Loading restaurants...</div>;
+    return <div className="p-8 text-center text-muted-foreground">{t("restaurantListLoading")}</div>;
   }
 
   if (error) {
     return (
-      <div className="p-8 text-center text-red-500">Error loading restaurants: {resolveErrorMessage(t, error as ApiError)}</div>
+      <div className="p-8 text-center text-red-500">{t("restaurantListError", { message: resolveErrorMessage(t, error as ApiError) })}</div>
     );
   }
 

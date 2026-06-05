@@ -48,6 +48,8 @@
 
   "restaurantListTitle": "Available Restaurants",
   "restaurantListEmpty": "No restaurants available.",
+  "restaurantListLoading": "Loading restaurants...",
+  "restaurantListError": "Error loading restaurants: {{message}}",
   "restaurantCardCapacity": "Capacity: {{capacity}} Tables",
   "restaurantCardViewButton": "View Details & Book",
 
@@ -56,6 +58,9 @@
   "restaurantDetailMakeReservationTitle": "Make a Reservation",
   "restaurantDetailMakeReservationSubtitle": "Secure your table for an unforgettable dining experience.",
   "restaurantDetailBookButton": "Book a Table",
+  "restaurantDetailLoading": "Loading restaurant details...",
+  "restaurantDetailError": "Error loading restaurant: {{message}}",
+  "restaurantDetailOwnerBookingError": "You cannot book a table as an owner",
 
   "reservationHistoryTitle": "My Reservations",
   "reservationHistorySubtitle": "View and manage your dining bookings.",
@@ -197,6 +202,8 @@
     "USER_OWNER_RESTAURANT_REQUIRED": "Please select a restaurant to manage.",
     "RESTAURANT_ALREADY_OWNED": "This restaurant already has an owner.",
     "RESOURCE_CONFLICT": "This resource already exists.",
-    "VALIDATION_ERROR": "Please check the form for errors."
+    "VALIDATION_ERROR": "Please check the form for errors.",
+    "NO_INTERNET": "No internet connection. Please check your network.",
+    "SERVER_UNREACHABLE": "Could not reach the server. Please try again later."
   }
 }

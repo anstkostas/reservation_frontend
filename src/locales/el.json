@@ -48,6 +48,8 @@
 
   "restaurantListTitle": "Διαθέσιμα Εστιατόρια",
   "restaurantListEmpty": "Δεν υπάρχουν διαθέσιμα εστιατόρια.",
+  "restaurantListLoading": "Φόρτωση εστιατορίων...",
+  "restaurantListError": "Σφάλμα φόρτωσης εστιατορίων: {{message}}",
   "restaurantCardCapacity": "Χωρητικότητα: {{capacity}} Τραπέζια",
   "restaurantCardViewButton": "Λεπτομέρειες & Κράτηση",
 
@@ -56,6 +58,9 @@
   "restaurantDetailMakeReservationTitle": "Κάντε Κράτηση",
   "restaurantDetailMakeReservationSubtitle": "Εξασφαλίστε το τραπέζι σας για μια αξέχαστη γαστρονομική εμπειρία.",
   "restaurantDetailBookButton": "Κράτηση Τραπεζιού",
+  "restaurantDetailLoading": "Φόρτωση λεπτομερειών εστιατορίου...",
+  "restaurantDetailError": "Σφάλμα φόρτωσης εστιατορίου: {{message}}",
+  "restaurantDetailOwnerBookingError": "Δεν μπορείτε να κάνετε κράτηση ως ιδιοκτήτης",
 
   "reservationHistoryTitle": "Οι Κρατήσεις μου",
   "reservationHistorySubtitle": "Δείτε και διαχειριστείτε τις κρατήσεις σας.",
@@ -197,6 +202,8 @@
     "USER_OWNER_RESTAURANT_REQUIRED": "Παρακαλώ επιλέξτε εστιατόριο για διαχείριση.",
     "RESTAURANT_ALREADY_OWNED": "Αυτό το εστιατόριο έχει ήδη ιδιοκτήτη.",
     "RESOURCE_CONFLICT": "Αυτός ο πόρος υπάρχει ήδη.",
-    "VALIDATION_ERROR": "Παρακαλώ ελέγξτε τη φόρμα για σφάλματα."
+    "VALIDATION_ERROR": "Παρακαλώ ελέγξτε τη φόρμα για σφάλματα.",
+    "NO_INTERNET": "Δεν υπάρχει σύνδεση στο διαδίκτυο. Ελέγξτε τη σύνδεσή σας.",
+    "SERVER_UNREACHABLE": "Δεν ήταν δυνατή η επικοινωνία με τον διακομιστή. Παρακαλώ δοκιμάστε ξανά αργότερα."
   }
 }

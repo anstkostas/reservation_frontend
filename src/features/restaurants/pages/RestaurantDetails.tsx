@@ -8,6 +8,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ReservationCreateModal } from "@/features/reservations/components/ReservationCreateModal";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { resolveErrorMessage } from "@/lib/apiError";
+import type { ApiError } from "@/types/api";
 
 /**
  * Restaurant detail page with a booking call-to-action.
@@ -33,21 +35,25 @@ export default function RestaurantDetails() {
     if (currentUser.role === Role.CUSTOMER) {
       setIsBookingOpen(true);
     } else {
-      toast.error("You cannot book a table as an owner");
+      toast.error(t("restaurantDetailOwnerBookingError"));
     }
   };
 
   if (isLoading)
     return (
       <div className="container mx-auto p-4 flex justify-center items-center h-[50vh]">
-        <div className="animate-pulse text-muted-foreground">Loading restaurant details...</div>
+        <div className="animate-pulse text-muted-foreground">{t("restaurantDetailLoading")}</div>
       </div>
     );
 
   if (error || !restaurant)
     return (
       <div className="container mx-auto p-4 flex justify-center items-center h-[50vh]">
-        <div className="text-destructive">Error loading restaurant. Please try again later.</div>
+        <div className="text-destructive">
+          {t("restaurantDetailError", {
+            message: error ? resolveErrorMessage(t, error as ApiError) : t("genericError"),
+          })}
+        </div>
       </div>
     );
 
