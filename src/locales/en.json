@@ -127,6 +127,8 @@
   "reservationDetailGuestSingular": "1 guest",
   "reservationDetailGuestPlural": "{{count}} guests",
   "reservationDetailRestaurantFallback": "Restaurant",
+  "reservationDetailDateFallback": "Date not available",
+  "reservationDetailTimeFallback": "Time not available",
   "reservationCardRestaurantFallback": "Restaurant",
   "reservationDetailModalTitle": "Reservation Details",
 
@@ -142,12 +144,19 @@
   "validatorEmailRequired": "Email is required",
   "validatorEmailInvalid": "Enter a valid email address",
   "validatorPasswordRequired": "Password is required",
-  "validatorPasswordTooShort": "Password must be at least 6 characters",
+
   "validatorFieldRequired": "{{fieldName}} is required",
   "validatorGuestsRequired": "Number of guests is required",
   "validatorGuestsInvalidNumber": "Enter a valid number",
   "validatorGuestsTooFew": "Must be at least 1 guest",
   "validatorGuestsTooMany": "Cannot exceed 20 guests",
+  "validatorGuestsMustBeInteger": "Must be a whole number",
+  "validatorNameTooShort": "Must be at least 2 characters",
+  "validatorPasswordComplexity": "Password must be at least 8 characters with uppercase, lowercase, number, and special character",
+  "validatorPasswordsMustMatch": "Passwords do not match",
+  "validatorTimeInvalid": "Invalid time format",
+  "validatorReservationTooSoon": "Reservation must be at least {{minutes}} minutes from now",
+  "validatorReservationTooFar": "Reservation must be within {{months}} months from today",
 
   "confirmPasswordLabel": "Confirm Password",
 

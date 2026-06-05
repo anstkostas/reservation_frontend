@@ -1,30 +1,48 @@
 import * as z from "zod";
+import type { TFunction } from "i18next";
 
-export const loginSchema = z.object({
-  email: z.string().min(1, "Email is required").email(),
-  password: z.string().min(1, "Password is required"),
-});
-
-export type LoginFormValues = z.infer<typeof loginSchema>;
-
-export const signupSchema = z
-  .object({
-    firstname: z.string().min(2, "First name must be at least 2 characters"),
-    lastname: z.string().min(2, "Last name must be at least 2 characters"),
-    email: z.string().min(1, "Email is required").email(),
-    password: z
-      .string()
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/,
-        "Password must have 8+ chars, 1 uppercase, 1 lowercase, 1 number, and 1 special char"
-      ),
-    confirmPassword: z.string(),
-    isOwner: z.boolean(),
-    restaurantId: z.string().optional(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
+/**
+ * Returns the Zod schema for the login form with localized validation messages.
+ *
+ * @param {TFunction} t - i18next translate function from `useTranslation()`
+ * @returns {ZodObject} Login form schema
+ */
+export function createLoginSchema(t: TFunction) {
+  return z.object({
+    email: z.string().min(1, t("validatorEmailRequired")).email({ error: t("validatorEmailInvalid") }),
+    password: z.string().min(1, t("validatorPasswordRequired")),
   });
+}
 
-export type SignupFormValues = z.infer<typeof signupSchema>;
+export type LoginFormValues = z.infer<ReturnType<typeof createLoginSchema>>;
+
+/**
+ * Returns the Zod schema for the signup form with localized validation messages.
+ * Includes cross-field password confirmation check via `.refine()`.
+ *
+ * @param {TFunction} t - i18next translate function from `useTranslation()`
+ * @returns {ZodEffects} Signup form schema
+ */
+export function createSignupSchema(t: TFunction) {
+  return z
+    .object({
+      firstname: z.string().min(2, t("validatorNameTooShort")),
+      lastname: z.string().min(2, t("validatorNameTooShort")),
+      email: z.string().min(1, t("validatorEmailRequired")).email({ error: t("validatorEmailInvalid") }),
+      password: z
+        .string()
+        .regex(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/,
+          t("validatorPasswordComplexity")
+        ),
+      confirmPassword: z.string(),
+      isOwner: z.boolean(),
+      restaurantId: z.string().optional(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t("validatorPasswordsMustMatch"),
+      path: ["confirmPassword"],
+    });
+}
+
+export type SignupFormValues = z.infer<ReturnType<typeof createSignupSchema>>;

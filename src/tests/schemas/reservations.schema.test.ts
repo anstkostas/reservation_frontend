@@ -1,10 +1,29 @@
 import { addMinutes, addMonths, format } from "date-fns";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { formSchema } from "@/features/reservations/schemas";
+import type { TFunction } from "i18next";
+import { createReservationSchema } from "@/features/reservations/schemas";
 import {
   RESERVATION_BOOKING_WINDOW_MONTHS,
   RESERVATION_MIN_BUFFER_MINUTES,
 } from "@/constants";
+
+// Minimal mock — returns English strings for the keys used in the schema
+const t = ((key: string, opts?: Record<string, unknown>): string => {
+  const translations: Record<string, string> = {
+    "validatorFieldRequired": `${opts?.fieldName} is required`,
+    "reservationCreateDateLabel": "Date",
+    "validatorTimeInvalid": "Invalid time format",
+    "validatorGuestsInvalidNumber": "Enter a valid number",
+    "validatorGuestsMustBeInteger": "Must be a whole number",
+    "validatorGuestsTooFew": "Must be at least 1 guest",
+    "validatorGuestsTooMany": "Cannot exceed 20 guests",
+    "validatorReservationTooSoon": `Reservation must be at least ${opts?.minutes} minutes from now`,
+    "validatorReservationTooFar": `Reservation must be within ${opts?.months} months from today`,
+  };
+  return translations[key] ?? key;
+}) as unknown as TFunction;
+
+const formSchema = createReservationSchema(t);
 
 describe("reservation form schema", () => {
   const fixedNow = new Date("2026-04-26T12:00:00.000Z");
@@ -37,7 +56,7 @@ describe("reservation form schema", () => {
     });
 
     expect(result.success).toBe(false);
-    expect(result.error?.flatten().fieldErrors.time).toContain("Time must be HH:MM");
+    expect(result.error?.flatten().fieldErrors.time).toContain("Invalid time format");
   });
 
   it("fails when people count is below 1", () => {
@@ -48,7 +67,7 @@ describe("reservation form schema", () => {
     });
 
     expect(result.success).toBe(false);
-    expect(result.error?.flatten().fieldErrors.people).toContain("At least 1 person");
+    expect(result.error?.flatten().fieldErrors.people).toContain("Must be at least 1 guest");
   });
 
   it("fails when reservation is earlier than the minimum buffer", () => {

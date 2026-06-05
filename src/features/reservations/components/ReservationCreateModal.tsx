@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { useCreateReservationMutation } from "../queries";
 import { resolveErrorMessage } from "@/lib/apiError";
 import type { ApiError } from "@/types/api";
-import { formSchema, type ReservationFormValues } from "../schemas";
+import { createReservationSchema, type ReservationFormValues } from "../schemas";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -42,7 +42,7 @@ export function ReservationCreateModal({ restaurantId, restaurantName, open, onO
   const createMutation = useCreateReservationMutation();
 
   const form = useForm<ReservationFormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createReservationSchema(t)),
     defaultValues: {
       date: format(new Date(), "yyyy-MM-dd"),
       time: "19:00",

@@ -28,7 +28,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CalendarIcon, Clock, Loader2, Users, MapPin, Phone } from "lucide-react";
-import { formSchema, type ReservationFormValues } from "../schemas";
+import { createReservationSchema, type ReservationFormValues } from "../schemas";
 import type { ApiError, Reservation, ReservationStatus } from "@/types/api";
 import { resolveErrorMessage } from "@/lib/apiError";
 
@@ -73,7 +73,7 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }: Prop
   const updateMutation = useUpdateReservationMutation();
 
   const form = useForm<ReservationFormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createReservationSchema(t)),
     defaultValues: {
       date: "",
       time: "",
@@ -208,7 +208,7 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }: Prop
                   <span className="text-lg font-medium">
                     {reservation.scheduledAt
                       ? format(new Date(reservation.scheduledAt), "EEEE, MMMM d, yyyy")
-                      : "Date not available"}
+                      : t("reservationDetailDateFallback")}
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
@@ -216,7 +216,7 @@ export function ReservationDetailModal({ reservation, open, onOpenChange }: Prop
                   <span className="text-lg">
                     {reservation.scheduledAt
                       ? format(new Date(reservation.scheduledAt), "HH:mm")
-                      : "Time not available"}
+                      : t("reservationDetailTimeFallback")}
                   </span>
                 </div>
                 <div className="flex items-center gap-3">

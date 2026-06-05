@@ -127,6 +127,8 @@
   "reservationDetailGuestSingular": "1 άτομο",
   "reservationDetailGuestPlural": "{{count}} άτομα",
   "reservationDetailRestaurantFallback": "Εστιατόριο",
+  "reservationDetailDateFallback": "Η ημερομηνία δεν είναι διαθέσιμη",
+  "reservationDetailTimeFallback": "Η ώρα δεν είναι διαθέσιμη",
   "reservationCardRestaurantFallback": "Εστιατόριο",
   "reservationDetailModalTitle": "Λεπτομέρειες Κράτησης",
 
@@ -142,12 +144,19 @@
   "validatorEmailRequired": "Απαιτείται email",
   "validatorEmailInvalid": "Εισάγετε έγκυρη διεύθυνση email",
   "validatorPasswordRequired": "Απαιτείται κωδικός",
-  "validatorPasswordTooShort": "Ο κωδικός πρέπει να έχει τουλάχιστον 6 χαρακτήρες",
+
   "validatorFieldRequired": "Το πεδίο {{fieldName}} είναι υποχρεωτικό",
   "validatorGuestsRequired": "Απαιτείται αριθμός καλεσμένων",
   "validatorGuestsInvalidNumber": "Εισάγετε έγκυρο αριθμό",
   "validatorGuestsTooFew": "Πρέπει να είναι τουλάχιστον 1 άτομο",
   "validatorGuestsTooMany": "Δεν μπορεί να υπερβαίνει τα 20 άτομα",
+  "validatorGuestsMustBeInteger": "Πρέπει να είναι ακέραιος αριθμός",
+  "validatorNameTooShort": "Πρέπει να έχει τουλάχιστον 2 χαρακτήρες",
+  "validatorPasswordComplexity": "Ο κωδικός πρέπει να έχει τουλάχιστον 8 χαρακτήρες με κεφαλαίο, πεζό, αριθμό και ειδικό χαρακτήρα",
+  "validatorPasswordsMustMatch": "Οι κωδικοί δεν ταιριάζουν",
+  "validatorTimeInvalid": "Μη έγκυρη μορφή ώρας",
+  "validatorReservationTooSoon": "Η κράτηση πρέπει να γίνει τουλάχιστον {{minutes}} λεπτά από τώρα",
+  "validatorReservationTooFar": "Η κράτηση πρέπει να γίνει εντός {{months}} μηνών από σήμερα",
 
   "confirmPasswordLabel": "Επιβεβαίωση Κωδικού",
 

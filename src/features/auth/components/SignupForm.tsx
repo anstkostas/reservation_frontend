@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { FieldPath } from "react-hook-form";
-import { signupSchema } from "@/features/auth/schemas";
+import { createSignupSchema } from "@/features/auth/schemas";
 import type { SignupFormValues } from "@/features/auth/schemas";
 import { useAuth } from "@/features/auth/useAuth";
 import { useTranslation } from "react-i18next";
@@ -48,7 +48,7 @@ export default function SignupForm({ onSwitchToLogin }: SignupFormProps) {
   const { t } = useTranslation();
 
   const form = useForm<SignupFormValues>({
-    resolver: zodResolver(signupSchema),
+    resolver: zodResolver(createSignupSchema(t)),
     defaultValues: {
       firstname: "",
       lastname: "",

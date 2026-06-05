@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { FieldPath } from "react-hook-form";
 import { useAuth } from "@/features/auth/useAuth";
 import { useTranslation } from "react-i18next";
-import { loginSchema } from "@/features/auth/schemas";
+import { createLoginSchema } from "@/features/auth/schemas";
 import type { LoginFormValues } from "@/features/auth/schemas";
 import type { ApiError } from "@/types/api";
 import { resolveErrorMessage, resolveDetailMessage } from "@/lib/apiError";
@@ -38,7 +38,7 @@ export default function LoginForm({ onSwitchToSignup }: LoginFormProps) {
   const { t } = useTranslation();
 
   const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(createLoginSchema(t)),
     defaultValues: {
       email: "",
       password: "",
