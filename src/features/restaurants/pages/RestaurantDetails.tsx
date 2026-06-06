@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Role } from "@/constants";
 import { useParams, useNavigate } from "react-router-dom";
-import { useRestaurant } from "../queries";
+import { useRestaurant } from "@/features/restaurants/queries";
 import { useAuth } from "@/features/auth/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";

@@ -2,12 +2,12 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Search, CalendarDays, History } from "lucide-react";
 import { toast } from "sonner";
-import { useOwnerReservationsQuery, useResolveReservationMutation } from "../queries";
+import { useOwnerReservationsQuery, useResolveReservationMutation } from "@/features/reservations/queries";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { OwnerTableViewMobile } from "../components/OwnerTableViewMobile";
-import { OwnerTableViewTabletDesktop } from "../components/OwnerTableViewTabletDesktop";
+import { OwnerTableViewMobile } from "@/features/reservations/components/OwnerTableViewMobile";
+import { OwnerTableViewTabletDesktop } from "@/features/reservations/components/OwnerTableViewTabletDesktop";
 import type { ApiError, Reservation, ReservationStatus } from "@/types/api";
 import { resolveErrorMessage } from "@/lib/apiError";
 

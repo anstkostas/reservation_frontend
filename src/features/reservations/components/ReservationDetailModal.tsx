@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { DateFormField, PersonsFormField, TimeFormField } from "@/components/FormFields";
-import { useCancelReservationMutation, useUpdateReservationMutation } from "../queries";
+import { useCancelReservationMutation, useUpdateReservationMutation } from "@/features/reservations/queries";
 import {
   Dialog,
   DialogContent,
@@ -28,7 +28,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CalendarIcon, Clock, Loader2, Users, MapPin, Phone } from "lucide-react";
-import { createReservationSchema, type ReservationFormValues } from "../schemas";
+import { createReservationSchema, type ReservationFormValues } from "@/features/reservations/schemas";
 import type { ApiError, Reservation, ReservationStatus } from "@/types/api";
 import { resolveErrorMessage } from "@/lib/apiError";
 

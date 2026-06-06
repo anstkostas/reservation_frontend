@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import type { Restaurant } from "../../../types/api";
+import type { Restaurant } from "@/types/api";
 import { useTranslation } from "react-i18next";
 
 interface Props {

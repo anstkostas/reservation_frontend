@@ -1,5 +1,5 @@
-import { useRestaurants } from "../queries";
-import { RestaurantCard } from "../components/RestaurantCard";
+import { useRestaurants } from "@/features/restaurants/queries";
+import { RestaurantCard } from "@/features/restaurants/components/RestaurantCard";
 import { useTranslation } from "react-i18next";
 import { resolveErrorMessage } from "@/lib/apiError";
 import type { ApiError } from "@/types/api";

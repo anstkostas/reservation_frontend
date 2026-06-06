@@ -4,10 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { useCreateReservationMutation } from "../queries";
+import { useCreateReservationMutation } from "@/features/reservations/queries";
 import { resolveErrorMessage } from "@/lib/apiError";
 import type { ApiError } from "@/types/api";
-import { createReservationSchema, type ReservationFormValues } from "../schemas";
+import { createReservationSchema, type ReservationFormValues } from "@/features/reservations/schemas";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

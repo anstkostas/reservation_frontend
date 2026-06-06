@@ -1,5 +1,5 @@
 import type { TFunction } from "i18next";
-import type { ApiError, ApiErrorDetail } from "../types/api";
+import type { ApiError, ApiErrorDetail } from "@/types/api";
 
 /**
  * Normalizes any thrown error into a consistent `ApiError` shape.

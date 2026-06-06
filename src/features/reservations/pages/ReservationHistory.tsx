@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { useMyReservationsQuery } from "../queries";
-import { ReservationCard } from "../components/ReservationCard";
-import { ReservationDetailModal } from "../components/ReservationDetailModal";
+import { useMyReservationsQuery } from "@/features/reservations/queries";
+import { ReservationCard } from "@/features/reservations/components/ReservationCard";
+import { ReservationDetailModal } from "@/features/reservations/components/ReservationDetailModal";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { CalendarDays, History, UtensilsCrossed } from "lucide-react";
