@@ -1,4 +1,5 @@
 import { normalizeApiError } from "./apiError";
+import i18n from "./i18n";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 if (!BASE_URL) throw new Error("[fetch] VITE_API_URL is not set — add it to your .env file");
@@ -68,6 +69,7 @@ export async function apiFetch<T>(endpoint: string, { method = "GET", body, head
       method,
       headers: {
         "Content-Type": "application/json",
+        "Accept-Language": i18n.language,
         ...headers,
       },
       credentials: auth ? "include" : "same-origin", // send cookies for protected routes
