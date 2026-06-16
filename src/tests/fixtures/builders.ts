@@ -1,6 +1,6 @@
 import type { UseQueryResult } from "@tanstack/react-query";
 import { Role, RESERVATION_STATUSES } from "@/constants";
-import type { ApiError, Reservation, Restaurant, User } from "@/types/api";
+import type { ApiError, Reservation, Restaurant, RestaurantPrivate, User } from "@/types/api";
 
 export function createTestUser(overrides: Partial<User> = {}): User {
   return {
@@ -43,6 +43,23 @@ export function createTestReservation(overrides: Partial<Reservation> = {}): Res
       lastname: "Customer",
       email: "customer@example.com",
     },
+    ...overrides,
+  };
+}
+
+export function createTestRestaurantPrivate(
+  overrides: Partial<RestaurantPrivate> = {}
+): RestaurantPrivate {
+  return {
+    id: "restaurant-1",
+    name: "Test Restaurant",
+    description: { en: "A test restaurant", el: "Ένα δοκιμαστικό εστιατόριο" },
+    address: "1 Test Street",
+    phone: "0000000000",
+    capacity: 5,
+    logoUrl: "/logo.png",
+    coverImageUrl: "/cover.png",
+    ownerId: "owner-1",
     ...overrides,
   };
 }

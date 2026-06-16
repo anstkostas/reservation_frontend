@@ -9,7 +9,7 @@ export async function loginAsCustomer(page: Page): Promise<void> {
   await page.goto("/login");
   await page.getByLabel("Email").fill(CUSTOMER_EMAIL);
   await page.getByLabel("Password").fill(CUSTOMER_PASSWORD);
-  await page.getByRole("button", { name: "Login" }).click();
+  await page.getByRole("button", { name: "Sign in" }).click();
   await page.waitForURL("**/my-reservations");
 }
 
@@ -17,6 +17,6 @@ export async function loginAsOwner(page: Page): Promise<void> {
   await page.goto("/login");
   await page.getByLabel("Email").fill(OWNER_EMAIL);
   await page.getByLabel("Password").fill(OWNER_PASSWORD);
-  await page.getByRole("button", { name: "Login" }).click();
+  await page.getByRole("button", { name: "Sign in" }).click();
   await page.waitForURL("**/owner-dashboard");
 }

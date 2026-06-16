@@ -1,3 +1,15 @@
+/**
+ * Component tests for NavbarDropdownMenu — role-based link rendering and logout action.
+ * Type: component (RTL render + userEvent, MemoryRouter wrapper for Link elements).
+ *
+ * Covers: customer sees "Reservations" link and no "Dashboard"; owner sees "Dashboard" link
+ *   and no "Reservations"; logout action is present for both roles.
+ * Not yet covered: handleLogout is called when logout is clicked; isLoggingOut=true disables
+ *   the logout item or shows a loading indicator.
+ * Oracle: navReservations = "Reservations", navDashboard = "Dashboard", navLogout = "Logout"
+ *   from src/locales/en.json; Role enum from @/constants.
+ */
+
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
@@ -32,13 +44,13 @@ function renderDropdown(currentUser: User) {
 }
 
 describe("NavbarDropdownMenu role-based rendering", () => {
-  it("shows My Reservations for customer and hides owner-only links", async () => {
+  it("shows Reservations for customer and hides owner-only links", async () => {
     const user = userEvent.setup();
 
     renderDropdown(customerUser);
     await user.click(screen.getByRole("button"));
 
-    expect(await screen.findByRole("menuitem", { name: /my reservations/i })).toBeInTheDocument();
+    expect(await screen.findByRole("menuitem", { name: /^reservations$/i })).toBeInTheDocument();
     expect(screen.queryByRole("menuitem", { name: /dashboard/i })).not.toBeInTheDocument();
   });
 
@@ -58,6 +70,6 @@ describe("NavbarDropdownMenu role-based rendering", () => {
     renderDropdown(customerUser);
     await user.click(screen.getByRole("button"));
 
-    expect(await screen.findByText(/log out/i)).toBeInTheDocument();
+    expect(await screen.findByText(/logout/i)).toBeInTheDocument();
   });
 });

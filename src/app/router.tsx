@@ -9,6 +9,7 @@ import RestaurantList from "@/features/restaurants/pages/RestaurantList";
 import RestaurantDetails from "@/features/restaurants/pages/RestaurantDetails";
 import ReservationHistory from "@/features/reservations/pages/ReservationHistory";
 import OwnerDashboard from "@/features/reservations/pages/OwnerDashboard";
+import RestaurantEdit from "@/features/restaurants/pages/RestaurantEdit";
 import NotFoundPage from "@/features/misc/pages/NotFoundPage";
 import ErrorFallback from "@/features/misc/components/ErrorFallback";
 
@@ -34,6 +35,14 @@ export function Router() {
             element={
               <ProtectedRoute role={Role.OWNER}>
                 <OwnerDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-restaurant"
+            element={
+              <ProtectedRoute role={Role.OWNER}>
+                <RestaurantEdit />
               </ProtectedRoute>
             }
           />

@@ -55,6 +55,24 @@ export interface Reservation {
   customer: Pick<User, "id" | "firstname" | "lastname" | "email"> | null;
 }
 
+/**
+ * Owner-facing ("private") restaurant shape — matches backend RestaurantPrivateOutput DTO.
+ * Unlike the public `Restaurant`, this exposes `address` + `phone` and returns `description`
+ * as both locales ({ en, el }) so the owner edit form can pre-fill each language input.
+ * `el` is null when no Greek translation exists.
+ */
+export interface RestaurantPrivate {
+  id: string;
+  name: string;
+  description: { en: string; el: string | null };
+  address: string;
+  phone: string;
+  capacity: number;
+  logoUrl: string;
+  coverImageUrl: string;
+  ownerId: string | null;
+}
+
 /** Standard API envelope — wraps all successful responses from the backend. */
 export interface ApiResponse<T> {
   success: boolean;

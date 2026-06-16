@@ -1,3 +1,17 @@
+/**
+ * Component tests for SignupForm — validation errors and submission behaviour.
+ * Type: component (RTL render + userEvent interactions, useAuth and useUnownedRestaurantsQuery mocked).
+ *
+ * Covers: validation — empty fields (name, email, password), password mismatch, password below
+ *   complexity rules, no signupAsync call when invalid; submission — customer payload called
+ *   correctly, root server error (no field details), field-level server error on email field.
+ * Not yet covered: owner signup with restaurantId; isSigningUp=true disables the submit button;
+ *   already-logged-in state; restaurant picker shows/hides based on isOwner checkbox.
+ * Oracle: validation messages from validatorNameTooShort / validatorEmailRequired /
+ *   validatorPasswordComplexity / validatorPasswordsMustMatch keys in src/locales/en.json;
+ *   Role enum from @/constants.
+ */
+
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
@@ -5,7 +19,7 @@ import SignupForm from "@/features/auth/components/SignupForm";
 import { useAuth } from "@/features/auth/useAuth";
 import { useUnownedRestaurantsQuery } from "@/features/restaurants/queries";
 import { createQuerySuccessResult } from "@/tests/fixtures/builders";
-import { Role } from "@/constants/auth";
+import { Role } from "@/constants";
 
 vi.mock("@/features/auth/useAuth", () => ({
   useAuth: vi.fn(),
@@ -39,14 +53,15 @@ describe("SignupForm validation", () => {
 
     render(<SignupForm onSwitchToLogin={vi.fn()} />);
 
-    await user.click(screen.getByRole("button", { name: /sign up/i }));
+    await user.click(screen.getByRole("button", { name: /create account/i }));
 
-    expect(await screen.findByText("First name must be at least 2 characters")).toBeInTheDocument();
-    expect(screen.getByText("Last name must be at least 2 characters")).toBeInTheDocument();
+    // Both firstname and lastname use the same validatorNameTooShort key → same text
+    const nameErrors = await screen.findAllByText("Must be at least 2 characters");
+    expect(nameErrors).toHaveLength(2);
     expect(screen.getByText("Email is required")).toBeInTheDocument();
     expect(
       screen.getByText(
-        "Password must have 8+ chars, 1 uppercase, 1 lowercase, 1 number, and 1 special char"
+        "Password must be at least 8 characters with uppercase, lowercase, number, and special character"
       )
     ).toBeInTheDocument();
   });
@@ -61,7 +76,7 @@ describe("SignupForm validation", () => {
     await user.type(screen.getByLabelText(/email/i), "jane@example.com");
     await user.type(screen.getByLabelText(/^password$/i), "StrongPass1!");
     await user.type(screen.getByLabelText(/confirm password/i), "DifferentPass1!");
-    await user.click(screen.getByRole("button", { name: /sign up/i }));
+    await user.click(screen.getByRole("button", { name: /create account/i }));
 
     expect(await screen.findByText("Passwords do not match")).toBeInTheDocument();
   });
@@ -76,11 +91,11 @@ describe("SignupForm validation", () => {
     await user.type(screen.getByLabelText(/email/i), "jane@example.com");
     await user.type(screen.getByLabelText(/^password$/i), "weak");
     await user.type(screen.getByLabelText(/confirm password/i), "weak");
-    await user.click(screen.getByRole("button", { name: /sign up/i }));
+    await user.click(screen.getByRole("button", { name: /create account/i }));
 
     expect(
       await screen.findByText(
-        "Password must have 8+ chars, 1 uppercase, 1 lowercase, 1 number, and 1 special char"
+        "Password must be at least 8 characters with uppercase, lowercase, number, and special character"
       )
     ).toBeInTheDocument();
   });
@@ -90,7 +105,7 @@ describe("SignupForm validation", () => {
 
     render(<SignupForm onSwitchToLogin={vi.fn()} />);
 
-    await user.click(screen.getByRole("button", { name: /sign up/i }));
+    await user.click(screen.getByRole("button", { name: /create account/i }));
 
     await waitFor(() => {
       expect(signupAsync).not.toHaveBeenCalled();
@@ -132,7 +147,7 @@ describe("SignupForm submission", () => {
     render(<SignupForm onSwitchToLogin={vi.fn()} />);
 
     await fillValidCustomerForm(user);
-    await user.click(screen.getByRole("button", { name: /sign up/i }));
+    await user.click(screen.getByRole("button", { name: /create account/i }));
 
     await waitFor(() => {
       expect(signupAsync).toHaveBeenCalledWith({
@@ -153,7 +168,7 @@ describe("SignupForm submission", () => {
     render(<SignupForm onSwitchToLogin={vi.fn()} />);
 
     await fillValidCustomerForm(user);
-    await user.click(screen.getByRole("button", { name: /sign up/i }));
+    await user.click(screen.getByRole("button", { name: /create account/i }));
 
     expect(await screen.findByText("Email already in use")).toBeInTheDocument();
   });
@@ -168,7 +183,7 @@ describe("SignupForm submission", () => {
     render(<SignupForm onSwitchToLogin={vi.fn()} />);
 
     await fillValidCustomerForm(user);
-    await user.click(screen.getByRole("button", { name: /sign up/i }));
+    await user.click(screen.getByRole("button", { name: /create account/i }));
 
     expect(await screen.findByText("Email already taken")).toBeInTheDocument();
   });

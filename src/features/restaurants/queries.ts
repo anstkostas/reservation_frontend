@@ -1,7 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { getUnownedRestaurants, getRestaurants, getRestaurant } from "./api";
-import type { ApiError, ApiResponse, Restaurant } from "@/types/api";
+import { getUnownedRestaurants, getRestaurants, getRestaurant, getOwnRestaurant, updateOwnRestaurant, type UpdateRestaurantPayload } from "./api";
+import type { ApiError, ApiResponse, Restaurant, RestaurantPrivate } from "@/types/api";
 
 /**
  * Query to fetch unowned restaurants. Used in the SignupForm.
@@ -62,5 +62,44 @@ export function useRestaurant(id: string | undefined) {
     queryFn: (ctx) => getRestaurant(ctx.queryKey[1] as string), // queryKey[1] is the id string
     enabled: !!id,
     select: (res) => res.data,
+  });
+}
+
+/**
+ * Query to fetch the authenticated owner's own restaurant (private shape) for the edit form.
+ *
+ * Logic:
+ * - Query Key: `["restaurants", "me"]` — NOT locale-keyed: the private DTO always returns BOTH
+ *   locales, so it does not vary with the UI language.
+ * - Selection: returns `res.data`.
+ *
+ * @returns {UseQueryResult<RestaurantPrivate>}
+ */
+export function useOwnRestaurantQuery() {
+  return useQuery<ApiResponse<RestaurantPrivate>, ApiError, RestaurantPrivate>({
+    queryKey: ["restaurants", "me"],
+    queryFn: getOwnRestaurant,
+    select: (res) => res.data,
+  });
+}
+
+/**
+ * Mutation to update the owner's restaurant.
+ *
+ * Logic:
+ * - On Success: invalidates the `["restaurants"]` key prefix — this covers the owner's own record
+ *   (`["restaurants","me"]`), the public list (`["restaurants", locale]`) and detail
+ *   (`["restaurants", id, locale]`) so every cached view refetches with the new data.
+ *
+ * @returns {UseMutationResult}
+ */
+export function useUpdateRestaurantMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation<ApiResponse<RestaurantPrivate>, ApiError, UpdateRestaurantPayload>({
+    mutationFn: updateOwnRestaurant,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["restaurants"] });
+    },
   });
 }

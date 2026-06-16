@@ -1,3 +1,17 @@
+/**
+ * e2e tests for the authentication flow.
+ * Type: e2e (Playwright, seeded test DB, backend must be running on the test env).
+ *
+ * Covers: customer login redirects to /my-reservations; owner login redirects to /owner-dashboard;
+ *   logout clears session and redirects to home, then blocks access to protected routes;
+ *   unauthenticated direct navigation to /my-reservations redirects to /login;
+ *   failed login (wrong password) keeps user on /login.
+ * Not yet covered: signup flow; token refresh behaviour across tabs; session persistence
+ *   across page reload; signup as owner with restaurant selection.
+ * Prerequisites: backend running on dev:test env with seeded test credentials
+ *   (customer1@test.com / cust123, owner1@restaurant.com / rest123).
+ */
+
 import { expect, test } from "@playwright/test";
 import {
   CUSTOMER_EMAIL,
@@ -15,7 +29,7 @@ test.describe("Auth Flow", () => {
     await page.goto("/login");
     await page.getByLabel("Email").fill(CUSTOMER_EMAIL);
     await page.getByLabel("Password").fill(CUSTOMER_PASSWORD);
-    await page.getByRole("button", { name: "Login" }).click();
+    await page.getByRole("button", { name: "Sign in" }).click();
 
     await expect(page).toHaveURL(/\/my-reservations$/);
   });
@@ -24,7 +38,7 @@ test.describe("Auth Flow", () => {
     await loginAsCustomer(page);
 
     await page.getByRole("button", { name: "User menu" }).click();
-    await page.getByRole("menuitem", { name: "Log out" }).click();
+    await page.getByRole("menuitem", { name: "Logout" }).click();
 
     await expect(page).toHaveURL(/\/$/);
     await page.goto("/my-reservations");
@@ -40,7 +54,7 @@ test.describe("Auth Flow", () => {
     await page.goto("/login");
     await page.getByLabel("Email").fill(CUSTOMER_EMAIL);
     await page.getByLabel("Password").fill("wrongpassword");
-    await page.getByRole("button", { name: "Login" }).click();
+    await page.getByRole("button", { name: "Sign in" }).click();
 
     await expect(page).toHaveURL(/\/login$/);
   });

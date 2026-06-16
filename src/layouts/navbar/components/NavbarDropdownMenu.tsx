@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Role } from "@/constants";
 import { Button } from "@/components/ui/button";
-import { Loader2, LogOut, LayoutDashboard, CalendarDays } from "lucide-react";
+import { Loader2, LogOut, LayoutDashboard, CalendarDays, Store } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
   DropdownMenu,
@@ -56,12 +56,20 @@ export default function NavbarDropdownMenu({ currentUser, handleLogout, isLoggin
           <DropdownMenuSeparator />
 
           {currentUser.role === Role.OWNER ? (
-            <DropdownMenuItem asChild>
-              <Link to="/owner-dashboard" className="cursor-pointer">
-                <LayoutDashboard className="mr-2 h-4 w-4" />
-                {t("navDashboard")}
-              </Link>
-            </DropdownMenuItem>
+            <>
+              <DropdownMenuItem asChild>
+                <Link to="/owner-dashboard" className="cursor-pointer">
+                  <LayoutDashboard className="mr-2 h-4 w-4" />
+                  {t("navDashboard")}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/my-restaurant" className="cursor-pointer">
+                  <Store className="mr-2 h-4 w-4" />
+                  {t("navMyRestaurant")}
+                </Link>
+              </DropdownMenuItem>
+            </>
           ) : (
             <DropdownMenuItem asChild>
               <Link to="/my-reservations" className="cursor-pointer">

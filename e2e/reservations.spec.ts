@@ -1,3 +1,17 @@
+/**
+ * e2e tests for the reservation flows (customer and owner).
+ * Type: e2e (Playwright, seeded test DB, backend must be running on the test env).
+ *
+ * Covers: customer can book a table at a restaurant; customer can cancel an upcoming reservation
+ *   (soft cancel — card moves to History tab); owner dashboard renders with tabs and search;
+ *   owner search filters reservations (empty result on no-match term).
+ * Not yet covered: "Complete" and "No-show" actions — only appear when scheduledAt <= now,
+ *   which is not achievable with current seed data (see NOTE comment in Owner tests);
+ *   booking validation errors shown in the dialog; owner pagination if list is long.
+ * Prerequisites: backend running on dev:test env with seeded test credentials
+ *   (customer1@test.com / cust123, owner1@restaurant.com / rest123).
+ */
+
 import { expect, test, type Page } from "@playwright/test";
 import { loginAsCustomer, loginAsOwner } from "./helpers";
 
@@ -10,15 +24,16 @@ function futureDateString(daysAhead: number): string {
 }
 
 // Books a table at the first restaurant in the list.
-// daysAhead controls which future date is used — pass different values across tests
-// to avoid the 4-hour per-customer active reservation conflict buffer.
-async function bookFirstRestaurant(page: Page, daysAhead = 1): Promise<void> {
+// daysAhead must stay >15 to clear the seed's ±15-day range and avoid
+// conflicts with seeded reservations. Different values across tests avoid
+// the 4-hour per-customer active reservation conflict buffer (DOMAIN.md).
+async function bookFirstRestaurant(page: Page, daysAhead = 30): Promise<void> {
   await page.goto("/restaurants");
   await page.getByRole("link", { name: "View Details & Book" }).first().click();
   await page.getByRole("button", { name: "Book a Table" }).click();
   await page.getByLabel("Date").fill(futureDateString(daysAhead));
-  await page.getByRole("button", { name: "Confirm Booking" }).click();
-  await expect(page.getByRole("dialog", { name: "Book a Table" })).not.toBeVisible();
+  await page.getByRole("button", { name: "Confirm" }).click();
+  await expect(page.getByRole("dialog", { name: "Make a Reservation" })).not.toBeVisible();
 }
 
 test.describe("Customer Reservation Flow", () => {
@@ -40,8 +55,8 @@ test.describe("Customer Reservation Flow", () => {
   test("customer can cancel an upcoming reservation", async ({ page }) => {
     await loginAsCustomer(page);
 
-    // Book at +2 days to avoid the 4-hour conflict buffer with the booking test (+1 day)
-    await bookFirstRestaurant(page, 2);
+    // Book at +31 days to avoid the 4-hour conflict buffer with the booking test (+30 days)
+    await bookFirstRestaurant(page, 31);
 
     await page.goto("/my-reservations");
 
@@ -49,8 +64,8 @@ test.describe("Customer Reservation Flow", () => {
     await page.getByRole("tabpanel").locator('[class*="cursor-pointer"]').first().click();
 
     // Two-step cancel: open confirm dialog, then confirm
-    await page.getByRole("button", { name: "Cancel Reservation" }).click();
-    await page.getByRole("button", { name: "Yes, Cancel" }).click();
+    await page.getByRole("button", { name: "Cancel" }).click();
+    await page.getByRole("button", { name: "Cancel reservation" }).click();
 
     await expect(page.getByRole("dialog", { name: "Reservation Details" })).not.toBeVisible();
 
