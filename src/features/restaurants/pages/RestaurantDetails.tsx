@@ -9,6 +9,7 @@ import { ReservationCreateModal } from "@/features/reservations/components/Reser
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { resolveErrorMessage } from "@/lib/apiError";
+import { MapPin, Phone } from "lucide-react";
 import type { ApiError } from "@/types/api";
 
 /**
@@ -84,9 +85,21 @@ export default function RestaurantDetails() {
                 {restaurant.description} experience awaits you. Enjoy our carefully curated menu in
                 a comfortable atmosphere.
               </p>
-              <div className="mt-6 flex items-center gap-4 text-sm text-muted-foreground">
-                <div className="bg-secondary px-3 py-1 rounded-full flex items-center gap-2">
-                  {t("restaurantDetailCapacityChip", { capacity: restaurant.capacity })}
+              <div className="mt-6 space-y-3">
+                <div className="flex items-center gap-6 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 shrink-0" aria-label={t("restaurantDetailAddress")} />
+                    <span>{restaurant.address}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-4 h-4 shrink-0" aria-label={t("restaurantDetailPhone")} />
+                    <span>{restaurant.phone}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                  <div className="bg-secondary px-3 py-1 rounded-full flex items-center gap-2">
+                    {t("restaurantDetailCapacityChip", { capacity: restaurant.capacity })}
+                  </div>
                 </div>
               </div>
             </CardContent>

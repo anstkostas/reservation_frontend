@@ -31,6 +31,8 @@ export interface Restaurant {
   id: string;
   name: string;
   description: string;
+  address: string;
+  phone: string;
   capacity: number;
   logoUrl: string;
   coverImageUrl: string;

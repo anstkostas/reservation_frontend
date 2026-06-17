@@ -55,6 +55,8 @@
   "restaurantCardViewButton": "View Details & Book",
 
   "restaurantDetailAbout": "About",
+  "restaurantDetailAddress": "Address",
+  "restaurantDetailPhone": "Phone",
   "restaurantDetailCapacityChip": "Capacity: {{capacity}} Tables",
   "restaurantDetailMakeReservationTitle": "Make a Reservation",
   "restaurantDetailMakeReservationSubtitle": "Secure your table for an unforgettable dining experience.",

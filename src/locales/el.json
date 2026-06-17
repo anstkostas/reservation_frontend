@@ -55,6 +55,8 @@
   "restaurantCardViewButton": "Λεπτομέρειες & Κράτηση",
 
   "restaurantDetailAbout": "Σχετικά",
+  "restaurantDetailAddress": "Διεύθυνση",
+  "restaurantDetailPhone": "Τηλέφωνο",
   "restaurantDetailCapacityChip": "Χωρητικότητα: {{capacity}} Τραπέζια",
   "restaurantDetailMakeReservationTitle": "Κάντε Κράτηση",
   "restaurantDetailMakeReservationSubtitle": "Εξασφαλίστε το τραπέζι σας για μια αξέχαστη γαστρονομική εμπειρία.",

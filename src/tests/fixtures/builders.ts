@@ -18,6 +18,8 @@ export function createTestRestaurant(overrides: Partial<Restaurant> = {}): Resta
     id: "restaurant-1",
     name: "Test Restaurant",
     description: "Fixture restaurant",
+    address: "1 Test Street",
+    phone: "0000000000",
     capacity: 20,
     logoUrl: "/logo.png",
     coverImageUrl: "/cover.png",
