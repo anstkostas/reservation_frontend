@@ -16,26 +16,42 @@ export function createRestaurantEditSchema(t: TranslateFunction) {
       .string()
       .trim()
       .min(4, t("validatorRestaurantNameTooShort"))
-      .max(100, t("validatorRestaurantNameTooLong")),
+      .max(100, t("validatorRestaurantNameTooLong"))
+      .refine((val) => /\p{L}/u.test(val), t("validatorRestaurantNameNoLetter"))
+      .refine(
+        (val) => !/[^\p{L}\p{N}\s]{2,}/u.test(val),
+        t("validatorRestaurantNameConsecutiveSpecial"),
+      ),
     descriptionEn: z
       .string()
       .trim()
       .min(1, t("validatorRestaurantDescriptionEnRequired"))
-      .max(500, t("validatorRestaurantDescriptionTooLong")),
+      .max(500, t("validatorRestaurantDescriptionTooLong"))
+      .refine(
+        (val) => !/[Ͱ-Ͽἀ-῿]/.test(val),
+        t("validatorRestaurantDescriptionEnLatinOnly"),
+      ),
     descriptionEl: z
       .string()
       .trim()
-      .max(500, t("validatorRestaurantDescriptionTooLong")), // optional: "" is valid
+      .max(500, t("validatorRestaurantDescriptionTooLong"))
+      .refine(
+        (val) => val === "" || !/[a-zA-Z]/.test(val),
+        t("validatorRestaurantDescriptionElGreekOnly"),
+      ),
     address: z
       .string()
       .trim()
       .min(1, t("validatorRestaurantAddressRequired"))
-      .max(255, t("validatorRestaurantAddressTooLong")),
+      .max(255, t("validatorRestaurantAddressTooLong"))
+      .refine((val) => /\p{L}/u.test(val), t("validatorRestaurantAddressNoLetter")),
     phone: z
       .string()
       .trim()
       .min(1, t("validatorRestaurantPhoneRequired"))
-      .max(30, t("validatorRestaurantPhoneTooLong")),
+      .refine((val) => /^\d+$/.test(val), t("validatorRestaurantPhoneDigitsOnly"))
+      .refine((val) => val.length >= 7, t("validatorRestaurantPhoneTooShort"))
+      .refine((val) => val.length <= 15, t("validatorRestaurantPhoneTooLong")),
     capacity: z
       .number({ error: t("validatorRestaurantCapacityInvalid") })
       .int(t("validatorRestaurantCapacityInteger"))
