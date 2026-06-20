@@ -30,6 +30,10 @@ export function createRestaurantEditSchema(t: TranslateFunction) {
       .refine(
         (val) => !/[Ͱ-Ͽἀ-῿]/.test(val),
         t("validatorRestaurantDescriptionEnLatinOnly"),
+      )
+      .refine(
+        (val) => /\p{Script=Latin}/u.test(val),
+        t("validatorRestaurantDescriptionEnNoLetter"),
       ),
     descriptionEl: z
       .string()
@@ -38,6 +42,10 @@ export function createRestaurantEditSchema(t: TranslateFunction) {
       .refine(
         (val) => val === "" || !/[a-zA-Z]/.test(val),
         t("validatorRestaurantDescriptionElGreekOnly"),
+      )
+      .refine(
+        (val) => val === "" || /\p{Script=Greek}/u.test(val),
+        t("validatorRestaurantDescriptionElNoLetter"),
       ),
     address: z
       .string()

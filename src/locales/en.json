@@ -104,6 +104,8 @@
   "validatorRestaurantNameConsecutiveSpecial": "Name cannot contain consecutive special characters",
   "validatorRestaurantDescriptionEnLatinOnly": "English description cannot contain Greek characters",
   "validatorRestaurantDescriptionElGreekOnly": "Greek description cannot contain Latin characters",
+  "validatorRestaurantDescriptionEnNoLetter": "English description must contain at least one letter",
+  "validatorRestaurantDescriptionElNoLetter": "Greek description must contain at least one Greek letter",
   "validatorRestaurantAddressNoLetter": "Address must contain at least one letter",
   "validatorRestaurantPhoneDigitsOnly": "Phone must contain digits only",
   "validatorRestaurantPhoneTooShort": "Phone must be at least 7 digits",

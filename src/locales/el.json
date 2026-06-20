@@ -104,6 +104,8 @@
   "validatorRestaurantNameConsecutiveSpecial": "Το όνομα δεν μπορεί να περιέχει διαδοχικούς ειδικούς χαρακτήρες",
   "validatorRestaurantDescriptionEnLatinOnly": "Η αγγλική περιγραφή δεν μπορεί να περιέχει ελληνικούς χαρακτήρες",
   "validatorRestaurantDescriptionElGreekOnly": "Η ελληνική περιγραφή δεν μπορεί να περιέχει λατινικούς χαρακτήρες",
+  "validatorRestaurantDescriptionEnNoLetter": "Η αγγλική περιγραφή πρέπει να περιέχει τουλάχιστον ένα γράμμα",
+  "validatorRestaurantDescriptionElNoLetter": "Η ελληνική περιγραφή πρέπει να περιέχει τουλάχιστον ένα ελληνικό γράμμα",
   "validatorRestaurantAddressNoLetter": "Η διεύθυνση πρέπει να περιέχει τουλάχιστον ένα γράμμα",
   "validatorRestaurantPhoneDigitsOnly": "Το τηλέφωνο πρέπει να περιέχει μόνο ψηφία",
   "validatorRestaurantPhoneTooShort": "Το τηλέφωνο πρέπει να έχει τουλάχιστον 7 ψηφία",
