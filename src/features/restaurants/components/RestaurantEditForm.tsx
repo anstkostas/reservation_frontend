@@ -5,7 +5,7 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useUpdateRestaurantMutation } from "@/features/restaurants/queries";
 import { createRestaurantEditSchema, type RestaurantEditFormValues } from "@/features/restaurants/schemas";
-import { resolveErrorMessage } from "@/lib/apiError";
+import { resolveErrorMessage, resolveDetailMessage } from "@/lib/apiError";
 import type { ApiError, RestaurantPrivate } from "@/types/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +18,17 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+
+// Maps backend field names (from ValidationError.details[].field) to form field names.
+// The backend validate middleware uses path[0], so nested description.en/.el both
+// land as "description" — mapped to the EN field as best effort.
+const BACKEND_TO_FORM_FIELD: Partial<Record<string, keyof RestaurantEditFormValues>> = {
+  name: "name",
+  description: "descriptionEn",
+  address: "address",
+  phone: "phone",
+  capacity: "capacity",
+};
 
 interface Props {
   restaurant: RestaurantPrivate;
@@ -67,7 +78,22 @@ export function RestaurantEditForm({ restaurant }: Props) {
         toast.error(res.message || t("restaurantEditError"));
       }
     } catch (err) {
-      toast.error(resolveErrorMessage(t, err as ApiError));
+      const apiError = err as ApiError;
+      const details = apiError.details;
+      if (details && details.length > 0) {
+        let hasUnmapped = false;
+        for (const detail of details) {
+          const formField = BACKEND_TO_FORM_FIELD[detail.field];
+          if (formField) {
+            form.setError(formField, { message: resolveDetailMessage(t, detail) });
+          } else {
+            hasUnmapped = true;
+          }
+        }
+        if (hasUnmapped) toast.error(resolveErrorMessage(t, apiError));
+      } else {
+        toast.error(resolveErrorMessage(t, apiError));
+      }
     }
   };
 
