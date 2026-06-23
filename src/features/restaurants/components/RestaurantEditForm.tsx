@@ -69,11 +69,14 @@ export function RestaurantEditForm({ restaurant }: Props) {
       });
       if (res.success) {
         toast.success(res.message || t("restaurantEditSuccess"));
-        // Re-sync defaults to the saved values so the dirty state resets.
-        // TODO: reset from res.data (server's canonical RestaurantPrivate, re-mapped to the flat
-        // form shape) instead of local `values` — currently safe only because the client `.trim()`
-        // and the backend trim agree, so optimistic local state happens to match the server.
-        form.reset(values);
+        form.reset({
+          name: res.data.name,
+          descriptionEn: res.data.description.en,
+          descriptionEl: res.data.description.el ?? "",
+          address: res.data.address,
+          phone: res.data.phone,
+          capacity: res.data.capacity,
+        });
       } else {
         toast.error(res.message || t("restaurantEditError"));
       }

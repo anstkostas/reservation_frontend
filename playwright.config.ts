@@ -3,7 +3,7 @@ import { loadEnv } from "vite";
 import process from "node:process";
 
 const env = loadEnv("test", process.cwd(), "");
-const frontendPort = env.VITE_PORT || "22101";
+const frontendPort = env.VITE_PORT || "22110";
 const baseURL = `http://localhost:${frontendPort}`;
 
 export default defineConfig({
