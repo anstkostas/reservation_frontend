@@ -11,7 +11,7 @@ export default function SplashPage() {
   const handlePrimaryCTA = () => {
     if (currentUser) {
       if (currentUser.role === Role.OWNER) {
-        navigate("/owner-dashboard");
+        navigate("/owner/dashboard");
       } else {
         navigate("/my-reservations");
       }

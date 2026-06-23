@@ -58,13 +58,13 @@ export default function NavbarDropdownMenu({ currentUser, handleLogout, isLoggin
           {currentUser.role === Role.OWNER ? (
             <>
               <DropdownMenuItem asChild>
-                <Link to="/owner-dashboard" className="cursor-pointer">
+                <Link to="/owner/dashboard" className="cursor-pointer">
                   <LayoutDashboard className="mr-2 h-4 w-4" />
                   {t("navDashboard")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to="/my-restaurant" className="cursor-pointer">
+                <Link to="/owner/my-restaurant" className="cursor-pointer">
                   <Store className="mr-2 h-4 w-4" />
                   {t("navMyRestaurant")}
                 </Link>

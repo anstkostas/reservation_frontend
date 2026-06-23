@@ -34,7 +34,7 @@ export default function ProtectedRoute({ children, role }: ProtectedRouteProps) 
 
   if (role && currentUser.role !== role) {
     // Redirect to the user's own home rather than showing a broken page from a 403 API response
-    const roleHome = currentUser.role === Role.OWNER ? "/owner-dashboard" : "/my-reservations";
+    const roleHome = currentUser.role === Role.OWNER ? "/owner/dashboard" : "/my-reservations";
     return <Navigate to={roleHome} replace />;
   }
 

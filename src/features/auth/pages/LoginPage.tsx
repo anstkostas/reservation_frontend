@@ -20,7 +20,7 @@ export default function LoginPage() {
     if (!isLoadingUser && currentUser) {
       let target: string;
       if (currentUser.role === Role.OWNER) {
-        target = "/owner-dashboard";
+        target = "/owner/dashboard";
       } else {
         target = from === "/" || from === "/login" ? "/my-reservations" : from;
       }

@@ -31,7 +31,7 @@ export function Router() {
             }
           />
           <Route
-            path="/owner-dashboard"
+            path="/owner/dashboard"
             element={
               <ProtectedRoute role={Role.OWNER}>
                 <OwnerDashboard />
@@ -39,7 +39,7 @@ export function Router() {
             }
           />
           <Route
-            path="/my-restaurant"
+            path="/owner/my-restaurant"
             element={
               <ProtectedRoute role={Role.OWNER}>
                 <RestaurantEdit />
