@@ -8,5 +8,8 @@ export default {
     "hue-degree-notation": null,
     // Prefer traditional min-width syntax over CSS Level 4 range notation
     "media-feature-range-notation": null,
+    // stylelint-config-tailwindcss (last published for older stylelint) doesn't yet
+    // exempt @apply's Tailwind class-list prelude from this newer standard-config rule
+    "at-rule-prelude-no-invalid": null,
   },
 };
